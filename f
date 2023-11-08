@@ -1,0 +1,11 @@
+safe.directory=/home/SAE/web
+core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+remote.origin.url=https://github.com/Sacus1/SAE5.git
+remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+user.name=Samy MIDOUNI
+user.email=125686417+smidouni@users.noreply.github.com
+branch.main.remote=origin
+branch.main.merge=refs/heads/main
