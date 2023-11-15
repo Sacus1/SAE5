@@ -19,7 +19,7 @@ public class Main {
 		// create a list of buttons on the side of the frame
 		JPanel leftPanel = new JPanel();
 		// add buttons
-		JButton[] buttons = {new JButton("Depot"), new JButton("Referent"), new JButton("Adresse")};
+		JButton[] buttons = {new JButton("Depot"), new JButton("Referent"), new JButton("Adresse"),new JButton("")};
 		leftPanel.setLayout(new GridLayout(buttons.length, 1));
 		for (JButton button : buttons) {
 			button.addActionListener(e -> {
@@ -31,8 +31,10 @@ public class Main {
 						mainPanel.add(depotView);
 						break;
 					case "Referent":
+						mainPanel.add(new Referent.ReferentView());
 						break;
 					case "Adresse":
+						mainPanel.add(new Adresse.AdresseView());
 						break;
 				}
 				// refresh the frame

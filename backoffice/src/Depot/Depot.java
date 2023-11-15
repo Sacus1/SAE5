@@ -6,15 +6,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import Main.Logger;
 public class Depot {
-	static final String[] fields = {"Adresse id", "Referent id", "Nom", "Telephone", "Presentation", "Image path",
+	static final String[] fields = {"Adresse id", "Referent.Referent id", "Nom", "Telephone", "Presentation", "Image path",
 					"Commentaire", "Mail", "Website"};
 	static final String[] dbFields = {"Adresse_idAdresse", "Referent_idReferent", "nom", "telephone", "presentation", "imagePath",
 					"commentaire", "mail", "website"};
-	static final ArrayList<String> requiredFieldsList = new ArrayList<>(Arrays.asList("Adresse id", "Referent id",
+	static final ArrayList<String> requiredFieldsList = new ArrayList<>(Arrays.asList("Adresse id", "Referent.Referent id",
 					"Nom", "Telephone"));
 	int id, Adresse_idAdresse, Referent_idReferent;
 	boolean isArchived;
 	String nom,telephone,presentation,imagePath, commentaire,mail,website;
+	JourSemaine jourLivraison;
 	static ArrayList<Depot> depots = new ArrayList<>();
 
 	public Depot(int id, int Adresse_idAdresse, int Referent_idReferent, String nom, String telephone, String presentation,
@@ -51,9 +52,8 @@ public class Depot {
 	static void getFromDatabase() {
 		depots.clear();
 		SQL sql = Main.sql;
-		String query = "SELECT * FROM Depot";
 		try {
-			ResultSet res = sql.select(query);
+			ResultSet res = sql.select("SELECT * FROM Depot");
 			while (res.next()) {
 				int id = res.getInt("idDepot");
 				int addressId = res.getInt("Adresse_idAdresse");
@@ -65,14 +65,22 @@ public class Depot {
 				String comment = res.getString("commentaire");
 				String mail = res.getString("mail");
 				String website = res.getString("website");
-				new Depot(id,addressId, referentId, name, telephone, presentation, imagePath, comment, mail, website);
+				Depot d = new Depot(id,addressId, referentId, name, telephone, presentation, imagePath, comment, mail, website);
+				ResultSet res2 = sql.select("SELECT JourSemaine.nom\n" +
+								"FROM JourSemaine\n" +
+								"JOIN Depot_has_JourSemaine ON JourSemaine.idJourSemaine = Depot_has_JourSemaine.JourSemaine_idJourSemaine\n" +
+								"JOIN Depot ON Depot.idDepot = Depot_has_JourSemaine.Depot_idDepot\n" +
+								"WHERE Depot.idDepot = " + d.id + ";");
+				while (res2.next()) d.jourLivraison = JourSemaine.valueOf(res2.getString("nom"));
 			}
+
 		} catch (Exception e) {
 			System.err.println("Main.SQL Exception : " + e.getMessage());
 		}
+
 	}
 
-	void edit(String[] values) {
+	void update(String[] values) {
 		for (int i = 0; i < values.length; i++)
 			if (values[i] != null) switch (i) {
 				case 0:
@@ -118,6 +126,7 @@ public class Depot {
 	static void create(String[] values) {
 		Depot depot = new Depot(Integer.parseInt(values[0]), Integer.parseInt(values[1]), values[2], values[3], values[4],
 						values[5], values[6], values[7], values[8]);
+		depot.jourLivraison = JourSemaine.valueOf(values[9]);
 		StringBuilder query = new StringBuilder("INSERT INTO Depot (`idDepot`, ");
 		for (int i = 0; i < 9; i++) {
 			query.append("`").append(Depot.dbFields[i]).append("`");
@@ -136,6 +145,11 @@ public class Depot {
 		if (Main.sql.executeUpdate(query.toString()))
 			Logger.error("Can't create depot");
 
+		//INSERT INTO Depot_has_JourSemaine (Depot_idDepot, JourSemaine_idJourSemaine) VALUES (ID_Depot, ID_JourSemaine);
+		query = new StringBuilder("INSERT INTO Depot_has_JourSemaine (`Depot_idDepot`, `JourSemaine_idJourSemaine`) VALUES (");
+		query.append(depot.id).append(", ").append(depot.jourLivraison.ordinal()).append(");");
+		if (Main.sql.executeUpdate(query.toString()))
+			Logger.error("Can't create depot");
 	}
 
 	void delete() {

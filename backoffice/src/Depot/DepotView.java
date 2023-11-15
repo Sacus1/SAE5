@@ -1,6 +1,8 @@
 package Depot;
 
+import Adresse.Adresse;
 import Main.Logger;
+import Referent.Referent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -70,13 +72,37 @@ public class DepotView extends JPanel {
 
 	private Panel createCreatePanel() {
 		Panel panel = new Panel();
-		Panel[] panels = new Panel[Depot.fields.length];
-		for (int i = 0; i < Depot.fields.length; i++) {
+		Panel[] panels = new Panel[Depot.fields.length+1];
+		Adresse.getFromDatabase();
+		Referent.getFromDatabase();
+		// adresse choice
+		panels[0] = new Panel();
+		panels[0].setLayout(new GridLayout(1, 2));
+		panels[0].add(new Label("Adresse *"));
+		Choice adresseChoice = new Choice();
+		for (int i = 0; i < Adresse.adresses.size(); i++) adresseChoice.add(Adresse.adresses.get(i).toString());
+		panels[0].add(adresseChoice);
+		panel.add(panels[0]);
+		// referent choice
+		panels[1] = new Panel();
+		panels[1].setLayout(new GridLayout(1, 2));
+		panels[1].add(new Label("Referent *"));
+		Choice referentChoice = new Choice();
+		for (int i = 0; i < Referent.referents.size(); i++) referentChoice.add(Referent.referents.get(i).toString());
+		panels[1].add(referentChoice);
+		panel.add(panels[1]);
+		for (int i = 2; i < Depot.fields.length; i++) {
 			panels[i] = createField(Depot.fields[i], Depot.requiredFieldsList.contains(Depot.fields[i]));
 			panel.add(panels[i]);
 		}
+		panels[Depot.fields.length] = new Panel();
+		panels[Depot.fields.length].setLayout(new GridLayout(1, 2));
+		panels[Depot.fields.length].add(new Label("Jour de livraison"));
+		Choice jourLivraison = new Choice();
+		for (JourSemaine jourSemaine : JourSemaine.values()) jourLivraison.add(jourSemaine.name());
+		panels[Depot.fields.length].add(jourLivraison);
+		panel.add(panels[Depot.fields.length]);
 		panel.setLayout(new GridLayout(panels.length/2 + 1, 2));
-
 		JButton createButton = new JButton("Create");
 		createButton.addActionListener(e -> create(panels));
 
@@ -111,7 +137,7 @@ public class DepotView extends JPanel {
 	}
 	private void create(Panel[] panels) {
 		String[] values = new String[panels.length];
-		for (int i = 0; i < panels.length; i++) {
+		for (int i = 2; i < panels.length-1; i++) {
 			boolean isRequired = Depot.requiredFieldsList.contains(Depot.fields[i]);
 			String textFieldValue = ((TextField) panels[i].getComponent(1)).getText();
 
@@ -123,8 +149,15 @@ public class DepotView extends JPanel {
 			// replace empty strings with “NULL”
 			if (values[i].isEmpty()) values[i] = "NULL";
 		}
+		// adresse
+		values[0] = Integer.toString(Adresse.adresses.get(((Choice) panels[0].getComponent(1)).getSelectedIndex()).id);
+		// referent
+		values[1] = Integer.toString(Referent.referents.get(((Choice) panels[1].getComponent(1)).getSelectedIndex()).id);
+		// jourLivraison
+		values[panels.length-1] = ((Choice) panels[panels.length-1].getComponent(1)).getSelectedItem();
 		Logger.log("Depot created");
 		Depot.create(values);
+		draw(false);
 	}
 
 	private Panel createField(String name, boolean required) {
@@ -166,7 +199,7 @@ public class DepotView extends JPanel {
 				values[i] = textFieldValue.isEmpty() ? null : textFieldValue;
 			}
 			Logger.log("Depot edited");
-			depot.edit(values);
+			depot.update(values);
 		});
 
 		panel.add(createButton);
