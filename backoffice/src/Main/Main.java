@@ -6,14 +6,14 @@ import java.awt.*;
 
 public class Main {
 	public static SQL sql ;
+	public static JFrame frame;
 	static String url = "jdbc:mysql://localhost:3306/SAE";
 	private static void resetSelectedButton(JButton[] buttons) {
 		for (JButton button : buttons) button.setBackground(null);
 	}
 	public static void main(String[] args) {
 		sql = new SQL(url,"root","");
-		DepotView depotView = new DepotView();
-		JFrame frame = new JFrame("Gestion");
+		frame = new JFrame("Gestion");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(800,600);
 		JPanel mainPanel = new JPanel();
@@ -29,7 +29,7 @@ public class Main {
 				// add the view to the frame
 				switch (button.getText()) {
 					case "Depot":
-						mainPanel.add(depotView);
+						mainPanel.add(new DepotView());
 						resetSelectedButton(buttons);
 						button.setBackground(Color.LIGHT_GRAY);
 						break;

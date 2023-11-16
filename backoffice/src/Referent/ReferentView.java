@@ -10,6 +10,9 @@ public class ReferentView extends BaseView {
 		super();
 		Referent.getFromDatabase();
 		setLayout(new BorderLayout());
+		add(topPanel, "North");
+		add(mainPanel, "Center");
+		add(bottomPanel, "South");
 		draw(false);
 	}
 	public void draw(boolean isCreate) {

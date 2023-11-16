@@ -8,6 +8,8 @@ import Referent.Referent;
 import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+
 public class DepotView extends BaseView {
 	boolean showArchived = false;
 	JCheckBox archivedCheckBox;
@@ -15,7 +17,6 @@ public class DepotView extends BaseView {
 		super();
 		Depot.getFromDatabase();
 		setLayout(new BorderLayout());
-		// top panel
 		archivedCheckBox = new JCheckBox("Show archived");
 		archivedCheckBox.addActionListener(e -> {
 			showArchived = !showArchived;
@@ -82,14 +83,28 @@ public class DepotView extends BaseView {
 		panels[Depot.fields.length] = new Panel();
 		panels[Depot.fields.length].setLayout(new GridLayout(1, 2));
 		panels[Depot.fields.length].add(new Label("Jour de livraison"));
-		Choice jourLivraison = new Choice();
-		for (JourSemaine jourSemaine : JourSemaine.values()) jourLivraison.add(jourSemaine.name());
-		panels[Depot.fields.length].add(jourLivraison);
+		// Create components
+		JButton button = new JButton("Select");
+		JPopupMenu popupMenu = new JPopupMenu();
+		ArrayList<JourSemaine> joursLivraisons = new ArrayList<>();
+		JList<String> list = new JList<>(new String[]{"Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"});
+		// Set list to multiple interval selection
+		list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		// Add list to popup
+		popupMenu.add(new JScrollPane(list));
+		// Add action listener to button to show popup
+		button.addActionListener(e -> popupMenu.show(button, 0, button.getHeight()));
+		list.addListSelectionListener(e -> {
+			if (!e.getValueIsAdjusting()) {
+				joursLivraisons.clear();
+				for (int i : list.getSelectedIndices()) joursLivraisons.add(JourSemaine.values()[i]);
+			}
+		});
+		panels[Depot.fields.length].add(button);
 		panel.add(panels[Depot.fields.length]);
 		panel.setLayout(new GridLayout(panels.length/2 + 1, 2));
 		JButton createButton = new JButton("Create");
-		createButton.addActionListener(e -> create(panels));
-
+		createButton.addActionListener(e -> create(panels,joursLivraisons));
 		panel.add(createButton);
 		return panel;
 	}
@@ -119,7 +134,7 @@ public class DepotView extends BaseView {
 		panel.add(deleteButton);
 		return panel;
 	}
-	private void create(Panel[] panels) {
+	private void create(Panel[] panels, ArrayList<JourSemaine> joursLivraisons) {
 		String[] values = new String[panels.length];
 		for (int i = 2; i < panels.length-1; i++) {
 			boolean isRequired = Depot.requiredFieldsList.contains(Depot.fields[i]);
@@ -140,7 +155,10 @@ public class DepotView extends BaseView {
 		// jourLivraison
 		values[panels.length-1] = ((Choice) panels[panels.length-1].getComponent(1)).getSelectedItem();
 		Logger.log("Depot created");
-		Depot.create(values);
+		Depot depot = new Depot(Integer.parseInt(values[0]), Integer.parseInt(values[1]), values[2], values[3], values[4],
+						values[5], values[6], values[7], values[8]);
+		depot.jourLivraison = joursLivraisons.toArray(new JourSemaine[0]);
+		Depot.create(depot);
 		draw(false);
 	}
 
@@ -154,8 +172,24 @@ public class DepotView extends BaseView {
 
 	private Panel createEditPanel(Depot depot) {
 		Panel panel = new Panel();
-		Panel[] panels = new Panel[Depot.fields.length];
-		for (int i = 0; i < Depot.fields.length; i++) {
+		Panel[] panels = new Panel[Depot.fields.length+1];
+		// adresse choice
+		panels[0] = new Panel();
+		panels[0].setLayout(new GridLayout(1, 2));
+		panels[0].add(new Label("Adresse *"));
+		Choice adresseChoice = new Choice();
+		for (int i = 0; i < Adresse.adresses.size(); i++) adresseChoice.add(Adresse.adresses.get(i).toString());
+		panels[0].add(adresseChoice);
+		panel.add(panels[0]);
+		// referent choice
+		panels[1] = new Panel();
+		panels[1].setLayout(new GridLayout(1, 2));
+		panels[1].add(new Label("Referent *"));
+		Choice referentChoice = new Choice();
+		for (int i = 0; i < Referent.referents.size(); i++) referentChoice.add(Referent.referents.get(i).toString());
+		panels[1].add(referentChoice);
+		panel.add(panels[1]);
+		for (int i = 2; i < Depot.fields.length; i++) {
 			panels[i] = createField(Depot.fields[i], Depot.requiredFieldsList.contains(Depot.fields[i]));
 			Field field;
 			try {
@@ -173,6 +207,29 @@ public class DepotView extends BaseView {
 			}
 			panel.add(panels[i]);
 		}
+		// livraison
+		panels[Depot.fields.length] = new Panel();
+		panels[Depot.fields.length].setLayout(new GridLayout(1, 2));
+		panels[Depot.fields.length].add(new Label("Jour de livraison"));
+		// Create components
+		JButton button = new JButton("Select");
+		JPopupMenu popupMenu = new JPopupMenu();
+		ArrayList<JourSemaine> joursLivraisons = new ArrayList<>();
+		JList<String> list = new JList<>(new String[]{"Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"});
+		// Set list to multiple interval selection
+		list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		// Add list to popup
+		popupMenu.add(new JScrollPane(list));
+		// Add action listener to button to show popup
+		button.addActionListener(e -> popupMenu.show(button, 0, button.getHeight()));
+		list.addListSelectionListener(e -> {
+			if (!e.getValueIsAdjusting()) {
+				joursLivraisons.clear();
+				for (int i : list.getSelectedIndices()) joursLivraisons.add(JourSemaine.values()[i]);
+			}
+		});
+		panels[Depot.fields.length].add(button);
+		panel.add(panels[Depot.fields.length]);
 		panel.setLayout(new GridLayout(panels.length/2 + 1, 2));
 
 		JButton createButton = new JButton("Create");
@@ -183,7 +240,17 @@ public class DepotView extends BaseView {
 				values[i] = textFieldValue.isEmpty() ? null : textFieldValue;
 			}
 			Logger.log("Depot edited");
-			depot.update(values);
+			depot.Adresse_idAdresse = Integer.parseInt(values[0]);
+			depot.Referent_idReferent = Integer.parseInt(values[1]);
+			depot.nom = values[2];
+			depot.telephone = values[3];
+			depot.presentation = values[4];
+			depot.imagePath = values[5];
+			depot.commentaire = values[6];
+			depot.mail = values[7];
+			depot.website = values[8];
+			depot.jourLivraison = joursLivraisons.toArray(new JourSemaine[0]);
+			depot.update(depot);
 		});
 
 		panel.add(createButton);

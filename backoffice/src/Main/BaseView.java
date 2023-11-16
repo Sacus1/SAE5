@@ -12,7 +12,6 @@ public abstract class BaseView extends JPanel {
 		setLayout(new BorderLayout());
 		initializePanels();
 		setupCreateButton();
-		draw(false);
 	}
 
 	private void initializePanels() {
@@ -20,9 +19,7 @@ public abstract class BaseView extends JPanel {
 		bottomPanel = new JPanel();
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-		add(topPanel, "North");
-		add(mainPanel, "Center");
-		add(bottomPanel, "South");
+
 	}
 
 	private void setupCreateButton() {
