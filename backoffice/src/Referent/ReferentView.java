@@ -1,37 +1,16 @@
 package Referent;
 
+import Main.BaseView;
+
 import javax.swing.*;
 import java.awt.*;
 
-public class ReferentView extends JPanel {
-	JButton createButton = new JButton("Create");
-	boolean inCreation = false;
-	static JPanel mainPanel,topPanel,bottomPanel;
+public class ReferentView extends BaseView {
 	public ReferentView() {
 		super();
 		Referent.getFromDatabase();
 		setLayout(new BorderLayout());
-		// top panel
-		topPanel = new JPanel();
-		topPanel.add(createButton);
-		createButton.addActionListener(e -> draw(!inCreation));
-		// bottom panel
-		bottomPanel = new JPanel();
-		// a main panel (list of referents or create referent)
-		mainPanel = new JPanel();
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		draw(false);
-		// add panels to the frame
-		add(topPanel, "North");
-		add(mainPanel, "Center");
-		add(bottomPanel, "South");
-	}
-	public static void clear() {
-		mainPanel.removeAll();
-	}
-	public static void refresh() {
-		mainPanel.revalidate();
-		mainPanel.repaint();
 	}
 	public void draw(boolean isCreate) {
 		if (!isCreate) {
@@ -55,11 +34,8 @@ public class ReferentView extends JPanel {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(1, 3));
 		JLabel label = new JLabel(referent.toString());
-		JButton editButton = new JButton("Edit");
-		JButton deleteButton = new JButton("Delete");
 		panel.add(label);
-		panel.add(editButton);
-		panel.add(deleteButton);
+		JButton editButton = new JButton("Edit");
 		editButton.addActionListener(e -> {
 			clear();
 			mainPanel.add(createEditPanel(referent));
@@ -68,10 +44,13 @@ public class ReferentView extends JPanel {
 			createButton.setText("Cancel");
 			inCreation = true;
 		});
+		panel.add(editButton);
+		JButton deleteButton = new JButton("Delete");
 		deleteButton.addActionListener(e -> {
 			Referent.delete(referent);
 			draw(false);
 		});
+		panel.add(deleteButton);
 		return panel;
 	}
 	public JPanel createFormPanel() {

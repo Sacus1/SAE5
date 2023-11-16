@@ -1,5 +1,4 @@
 package Main;
-import Depot.DepotController;
 import Depot.DepotView;
 
 import javax.swing.*;
@@ -8,10 +7,12 @@ import java.awt.*;
 public class Main {
 	public static SQL sql ;
 	static String url = "jdbc:mysql://localhost:3306/SAE";
+	private static void resetSelectedButton(JButton[] buttons) {
+		for (JButton button : buttons) button.setBackground(null);
+	}
 	public static void main(String[] args) {
 		sql = new SQL(url,"root","");
 		DepotView depotView = new DepotView();
-		new DepotController(depotView);
 		JFrame frame = new JFrame("Gestion");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(800,600);
@@ -29,12 +30,18 @@ public class Main {
 				switch (button.getText()) {
 					case "Depot":
 						mainPanel.add(depotView);
+						resetSelectedButton(buttons);
+						button.setBackground(Color.LIGHT_GRAY);
 						break;
 					case "Referent":
 						mainPanel.add(new Referent.ReferentView());
+						resetSelectedButton(buttons);
+						button.setBackground(Color.LIGHT_GRAY);
 						break;
 					case "Adresse":
 						mainPanel.add(new Adresse.AdresseView());
+						resetSelectedButton(buttons);
+						button.setBackground(Color.LIGHT_GRAY);
 						break;
 				}
 				// refresh the frame

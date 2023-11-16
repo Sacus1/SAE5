@@ -1,48 +1,32 @@
 package Depot;
 
 import Adresse.Adresse;
+import Main.BaseView;
 import Main.Logger;
 import Referent.Referent;
 
 import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.Field;
-public class DepotView extends JPanel {
-	JButton createButton = new JButton("Create");
-	boolean inCreation = false;
+public class DepotView extends BaseView {
 	boolean showArchived = false;
-	static JPanel mainPanel,topPanel,bottomPanel;
 	JCheckBox archivedCheckBox;
 	public DepotView() {
 		super();
 		Depot.getFromDatabase();
 		setLayout(new BorderLayout());
 		// top panel
-		topPanel = new JPanel();
-		topPanel.add(createButton);
 		archivedCheckBox = new JCheckBox("Show archived");
 		archivedCheckBox.addActionListener(e -> {
 			showArchived = !showArchived;
 			draw(false);
 		});
 		topPanel.add(archivedCheckBox);
-		// bottom panel
-		bottomPanel = new JPanel();
-		// a main panel (list of depots or create depot)
-		mainPanel = new JPanel();
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-		draw(false);
 		// add panels to the frame
 		add(topPanel, "North");
 		add(mainPanel, "Center");
 		add(bottomPanel, "South");
-	}
-	public static void clear() {
-		mainPanel.removeAll();
-	}
-	public static void refresh() {
-		mainPanel.revalidate();
-		mainPanel.repaint();
+		draw(false);
 	}
 	public void draw(boolean isCreate) {
 		if (!isCreate) {
@@ -131,8 +115,8 @@ public class DepotView extends JPanel {
 			draw(false);
 		});
 		panel.add(editButton);
-		panel.add(deleteButton);
 		panel.add(archiveButton);
+		panel.add(deleteButton);
 		return panel;
 	}
 	private void create(Panel[] panels) {
