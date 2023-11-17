@@ -103,6 +103,7 @@ public class DepotView extends BaseView {
 			}
 		});
 		panels[Depot.fields.length].add(button);
+		panel.add(panels[Depot.fields.length]);
 		// add image chooser
 		panels[Depot.fields.length+1] = new Panel();
 		panels[Depot.fields.length+1].setLayout(new GridLayout(1, 2));
@@ -113,10 +114,14 @@ public class DepotView extends BaseView {
 			JFileChooser fileChooser = new JFileChooser();
 			fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
 			int result = fileChooser.showOpenDialog(this);
-			if (result == JFileChooser.APPROVE_OPTION) image.set(fileChooser.getSelectedFile());
+			if (result == JFileChooser.APPROVE_OPTION) {
+				image.set(fileChooser.getSelectedFile());
+				imageButton.setText(image.get().getName());
+			}
 		});
-		panel.add(panels[Depot.fields.length]);
-		panel.setLayout(new GridLayout(panels.length/2 + 1, 2));
+		panels[Depot.fields.length+1].add(imageButton);
+		panel.add(panels[Depot.fields.length+1]);
+		panel.setLayout(new GridLayout(panels.length/2 + 2, 2));
 		JButton createButton = new JButton("Create");
 		createButton.addActionListener(e -> create(panels,joursLivraisons, image.get()));
 		panel.add(createButton);
@@ -126,7 +131,14 @@ public class DepotView extends BaseView {
 	private Panel createListPanel(Depot depot) {
 		Panel panel = new Panel();
 		panel.setLayout(new GridLayout(1, 3));
-		panel.add(new Label(depot.nom));
+		// add image if exists
+		if (depot.image != null) {
+			Panel panel2 = new Panel();
+			panel2.setLayout(new GridLayout(2, 1));
+			panel2.add(new JLabel(depot.nom, JLabel.CENTER));
+			panel2.add(new JLabel(new ImageIcon(depot.image.getPath())));
+			panel.add(panel2);
+		} else panel.add(new JLabel(depot.nom, JLabel.CENTER));
 		JButton editButton = new JButton("Edit");
 		editButton.addActionListener(e -> {
 			clear();
@@ -150,7 +162,7 @@ public class DepotView extends BaseView {
 	}
 	private void create(Panel[] panels, ArrayList<JourSemaine> joursLivraisons, File image) {
 		String[] values = new String[panels.length];
-		for (int i = 2; i < panels.length-1; i++) {
+		for (int i = 2; i < Depot.fields.length; i++) {
 			boolean isRequired = Depot.requiredFieldsList.contains(Depot.fields[i]);
 			String textFieldValue = ((TextField) panels[i].getComponent(1)).getText();
 
@@ -166,9 +178,6 @@ public class DepotView extends BaseView {
 		values[0] = Integer.toString(Adresse.adresses.get(((Choice) panels[0].getComponent(1)).getSelectedIndex()).id);
 		// referent
 		values[1] = Integer.toString(Referent.referents.get(((Choice) panels[1].getComponent(1)).getSelectedIndex()).id);
-		// jourLivraison
-		values[panels.length-1] = ((Choice) panels[panels.length-1].getComponent(1)).getSelectedItem();
-		Logger.log("Depot created");
 		Depot depot = new Depot(Integer.parseInt(values[0]), Integer.parseInt(values[1]), values[2], values[3], values[4],
 						values[5], values[6], values[7], image);
 		depot.jourLivraison = joursLivraisons.toArray(new JourSemaine[0]);

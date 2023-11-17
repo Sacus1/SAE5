@@ -30,17 +30,16 @@ public class Adresse {
 	}
 
 	public static void update(Adresse adresse) {
-		SQL sql = Main.sql;
-		sql.updatePreparedStatement("Adresse", new String[]{"adresse", "ville", "codePostal"},
+		if (!(Main.sql.updatePreparedStatement("Adresse", new String[]{"adresse", "ville", "codePostal"},
 						new Object[]{adresse.adresse, adresse.ville, adresse.codePostal},
-						new String[]{"idAdresse = " + adresse.id});
+						new String[]{"idAdresse = " + adresse.id}))) System.out.println("Update failed");
 		getFromDatabase();
 	}
 
 	static void delete(Adresse adresse) {
-		SQL sql = Main.sql;
-		sql.deletePrepareStatement("Adresse", new String[]{"idAdresse = " + adresse.id});
-		getFromDatabase();
+		if (!Main.sql.deletePrepareStatement("Adresse", new String[]{"idAdresse = " + adresse.id}))
+			System.out.println("Delete failed");
+		adresses.remove(adresse);
 	}
 
 	public String toString() {
@@ -65,9 +64,9 @@ public class Adresse {
 
 	}
 	public static void create(Adresse adresse) {
-		SQL sql = Main.sql;
-		sql.createPrepareStatement("Adresse", new String[]{"idAdresse", "adresse", "ville", "codePostal"},
-						new Object[]{adresse.id, adresse.adresse, adresse.ville, adresse.codePostal});
+		if (!Main.sql.createPrepareStatement("Adresse", new String[]{"idAdresse", "adresse", "ville", "codePostal"},
+						new Object[]{adresse.id, adresse.adresse, adresse.ville, adresse.codePostal}))
+			System.out.println("Create failed");
 		getFromDatabase();
 	}
 

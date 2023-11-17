@@ -78,6 +78,7 @@ public class Main {
 	}
 
 	public static File convertInputStreamToImage(InputStream inputStream) throws IOException {
+		if (inputStream == null) return null;
     File tempFile = File.createTempFile("image", ".png");
     tempFile.deleteOnExit();
     try (OutputStream out = new FileOutputStream(tempFile)) {

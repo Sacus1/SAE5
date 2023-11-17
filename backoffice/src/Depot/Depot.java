@@ -94,45 +94,50 @@ public class Depot extends JPanel {
 	}
 
 	private static void insertDeliveryDays(Depot depot) {
-		for (JourSemaine jourSemaine : depot.jourLivraison) {
-			if (Main.sql.createPrepareStatement("JourSemaine_idJourSemaine", new String[]{"Depot_idDepot"},
+		for (JourSemaine jourSemaine : depot.jourLivraison)
+			if (!Main.sql.createPrepareStatement("JourSemaine_idJourSemaine", new String[]{"Depot_idDepot"},
 							new Object[]{jourSemaine.ordinal(), depot.id}))
-				Logger.error("Can't create depot");
-		}
+				Logger.error("Can't create depot because of delivery days");
+		getFromDatabase();
 	}
 
 	static void update(Depot depot) {
-		Main.sql.updatePreparedStatement("Depot", new String[]{
+		if(!Main.sql.updatePreparedStatement("Depot", new String[]{
 										"Adresse_idAdresse", "Referent_idReferent", "nom", "telephone", "presentation",
 										"commentaire", "mail", "website","image"},
 						new Object[]{depot.Adresse_idAdresse, depot.Referent_idReferent, depot.nom, depot.telephone,
 										depot.presentation, depot.commentaire, depot.mail, depot.website,depot.image},
-						new String[]{"idDepot = " + depot.id});
+						new String[]{"idDepot = " + depot.id}))
+			Logger.error("Failed to update depot");
 		// update jourLivraison
-		if (Main.sql.deletePrepareStatement("Depot_has_JourSemaine", new String[]{"Depot_idDepot = " + depot.id}))
+		if (!Main.sql.deletePrepareStatement("Depot_has_JourSemaine", new String[]{"Depot_idDepot = " + depot.id}))
 			Logger.error("Failed to update depot");
 		insertDeliveryDays(depot);
 	}
 
 	static void create(Depot depot) {
-		Main.sql.createPrepareStatement("Depot", new String[]{"idDepot",
+		if (!Main.sql.createPrepareStatement("Depot", new String[]{"idDepot",
 										"Adresse_idAdresse", "Referent_idReferent", "nom", "telephone", "presentation",
 										"commentaire", "mail", "website","image"},
 						new Object[]{depot.id,depot.Adresse_idAdresse, depot.Referent_idReferent, depot.nom, depot.telephone,
-										depot.presentation, depot.commentaire, depot.mail, depot.website,depot.image});
+										depot.presentation, depot.commentaire, depot.mail, depot.website,depot.image})) {
+			Logger.error("Can't create depot");
+			return;
+		}
 		insertDeliveryDays(depot);
+
 	}
 
 	public void delete() {
-		if (Main.sql.deletePrepareStatement("Depot", new String[]{"idDepot = " + this.id}))
+		if (!Main.sql.deletePrepareStatement("Depot", new String[]{"idDepot = " + this.id}))
 			Logger.error("Can't delete depot");
-		if (Main.sql.deletePrepareStatement("Depot_has_JourSemaine", new String[]{"Depot_idDepot = " + this.id}))
-			Logger.error("Can't delete depot");
+		if (!Main.sql.deletePrepareStatement("Depot_has_JourSemaine", new String[]{"Depot_idDepot = " + this.id}))
+			Logger.error("Can't delete depot because of delivery days");
 		depots.remove(this);
 	}
 
 	void archive() {
-		if (Main.sql.updatePreparedStatement("Depot", new String[]{"estArchive"}, new Object[]{this.isArchived ? 0 : 1},
+		if (!Main.sql.updatePreparedStatement("Depot", new String[]{"estArchive"}, new Object[]{this.isArchived ? 0 : 1},
 						new String[]{"idDepot = " + this.id}))
 			Logger.error("Can't archive depot");
 		this.isArchived = !this.isArchived;

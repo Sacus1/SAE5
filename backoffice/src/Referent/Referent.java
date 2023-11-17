@@ -2,7 +2,7 @@ package Referent;
 
 import Main.Main;
 import Main.SQL;
-
+import Main.Logger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -52,21 +52,24 @@ public class Referent {
 	}
 
 	public static void update(Referent referent) {
-		SQL sql = Main.sql;
-		sql.updatePreparedStatement("Referent", new String[]{"nom", "telephone", "mail"},
+		if (!Main.sql.updatePreparedStatement("Referent", new String[]{"nom", "telephone", "mail"},
 						new Object[]{referent.nom, referent.telephone, referent.mail},
-						new String[]{"idReferent = "+referent.id});
+						new String[]{"idReferent = "+referent.id}))
+			Logger.error("Failed to update Referent");
+		getFromDatabase();
 	}
 
 	public static void delete(Referent referent) {
-		SQL sql = Main.sql;
-		sql.deletePrepareStatement("Referent", new String[]{"idReferent = " + referent.id});
+		if (!Main.sql.deletePrepareStatement("Referent", new String[]{"idReferent = " + referent.id}))
+			Logger.error("Failed to delete Referent");
+		referents.remove(referent);
 	}
 
 	public static void create(Referent referent) {
-		SQL sql = Main.sql;
-		sql.createPrepareStatement("Referent", new String[]{"nom", "telephone", "mail"},
-						new Object[]{referent.nom, referent.telephone, referent.mail});
+		if (!Main.sql.createPrepareStatement("Referent", new String[]{"nom", "telephone", "mail"},
+						new Object[]{referent.nom, referent.telephone, referent.mail}))
+			Logger.error("Failed to create Referent");
+		getFromDatabase();
 	}
 
 }
