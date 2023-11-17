@@ -84,9 +84,20 @@ public class Depot extends JPanel {
 		}
 
 	}
+	private static void insertDeliveryDays(Depot depot) {
+		for (JourSemaine jourSemaine : depot.jourLivraison) {
+			StringBuilder query = new StringBuilder("INSERT INTO Depot_has_JourSemaine (Depot_idDepot, " +
+							"JourSemaine_idJourSemaine) " +
+							"VALUES (");
+			query.append(depot.id).append(", ");
+			query.append(jourSemaine.ordinal()).append(");");
+			if (Main.sql.executeUpdate(query.toString()))
+				Logger.error("Can't create depot");
+		}
+	}
 
-	static void update(Depot depot) {
-		StringBuilder query = new StringBuilder("UPDATE Depot SET ");
+	private static void constructDepotSQLQuery(Depot depot, String s) {
+		StringBuilder query = new StringBuilder(s);
 		query.append("idDepot, ");
 		for (int i = 0; i < dbFields.length; i++) {
 			query.append(dbFields[i]);
@@ -105,51 +116,22 @@ public class Depot extends JPanel {
 		query.append("'").append(depot.website).append("');");
 		if (Main.sql.executeUpdate(query.toString()))
 			Logger.error("Can't create depot");
+	}
+
+	static void update(Depot depot) {
+		constructDepotSQLQuery(depot, "UPDATE Depot SET ");
+		StringBuilder query;
 
 		// update jourLivraison
 		query = new StringBuilder("DELETE FROM Depot_has_JourSemaine WHERE `Depot_idDepot` = " + depot.id + ";");
 		if (Main.sql.executeUpdate(query.toString()))
-			Logger.error("Can't create depot");
-		for (JourSemaine jourSemaine : depot.jourLivraison) {
-			query = new StringBuilder("INSERT INTO Depot_has_JourSemaine (Depot_idDepot, JourSemaine_idJourSemaine) VALUES (");
-			query.append(depot.id).append(", ");
-			query.append(jourSemaine.ordinal()).append(");");
-			if (Main.sql.executeUpdate(query.toString()))
-				Logger.error("Can't create depot");
-		}
-
-
-		if (Main.sql.executeUpdate(query.toString()))
-			Logger.error("Can't create depot");
+			Logger.error("Failed to update depot");
+		insertDeliveryDays(depot);
 	}
-	static void create(Depot depot) {
-		StringBuilder query = new StringBuilder("INSERT INTO Depot (");
-		query.append("idDepot, ");
-		for (int i = 0; i < dbFields.length; i++) {
-			query.append(dbFields[i]);
-			if (i != dbFields.length - 1) query.append(", ");
-		}
-		query.append(") VALUES (");
-		query.append(depot.id).append(", ");
-		query.append(depot.Adresse_idAdresse).append(", ");
-		query.append(depot.Referent_idReferent).append(", ");
-		query.append("'").append(depot.nom).append("', ");
-		query.append("'").append(depot.telephone).append("', ");
-		query.append("'").append(depot.presentation).append("', ");
-		query.append("'").append(depot.imagePath).append("', ");
-		query.append("'").append(depot.commentaire).append("', ");
-		query.append("'").append(depot.mail).append("', ");
-		query.append("'").append(depot.website).append("');");
-		if (Main.sql.executeUpdate(query.toString()))
-			Logger.error("Can't create depot");
 
-		for (JourSemaine jourSemaine : depot.jourLivraison) {
-			query = new StringBuilder("INSERT INTO Depot_has_JourSemaine (Depot_idDepot, JourSemaine_idJourSemaine) VALUES (");
-			query.append(depot.id).append(", ");
-			query.append(jourSemaine.ordinal()).append(");");
-			if (Main.sql.executeUpdate(query.toString()))
-				Logger.error("Can't create depot");
-		}
+	static void create(Depot depot) {
+		constructDepotSQLQuery(depot, "INSERT INTO Depot (");
+		insertDeliveryDays(depot);
 	}
 
 	public void delete() {
