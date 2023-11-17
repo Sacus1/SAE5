@@ -35,7 +35,7 @@ public class Referent {
 	public static void getFromDatabase() {
 		SQL sql = Main.sql;
 		referents.clear();
-		ResultSet res = sql.select("SELECT * FROM Referent");
+		ResultSet res = sql.select("Referent");
 		try {
 			while (res.next())
 			{
@@ -53,33 +53,20 @@ public class Referent {
 
 	public static void update(Referent referent) {
 		SQL sql = Main.sql;
-		sql.executeUpdate(
-						"UPDATE Referent SET " +
-										"idReferent = " + referent.id + ", " +
-										"nom = '" + referent.nom + "', " +
-										"telephone = '" + referent.telephone + "', " +
-										"mail = '" + referent.mail + "' " +
-										"WHERE idReferent = " + referent.id + ";"
-		);
-		getFromDatabase();
+		sql.updatePreparedStatement("Referent", new String[]{"nom", "telephone", "mail"},
+						new Object[]{referent.nom, referent.telephone, referent.mail},
+						new String[]{"idReferent = "+referent.id});
 	}
 
 	public static void delete(Referent referent) {
 		SQL sql = Main.sql;
-		sql.executeUpdate("DELETE FROM Referent WHERE idReferent = " + referent.id + ";");
-		getFromDatabase();
+		sql.deletePrepareStatement("Referent", new String[]{"idReferent = " + referent.id});
 	}
 
 	public static void create(Referent referent) {
 		SQL sql = Main.sql;
-		sql.executeUpdate(
-						"INSERT INTO Referent (idReferent, nom, telephone, mail) VALUES (" +
-										"'" + referent.id + "', " +
-										"'" + referent.nom + "', " +
-										"'" + referent.telephone + "', " +
-										"'" + referent.mail + "');"
-		);
-		getFromDatabase();
+		sql.createPrepareStatement("Referent", new String[]{"nom", "telephone", "mail"},
+						new Object[]{referent.nom, referent.telephone, referent.mail});
 	}
 
 }

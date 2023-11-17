@@ -1,62 +1,72 @@
 package Depot;
+
 import Main.Main;
 import Main.SQL;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+
 import Main.Logger;
 
 import javax.swing.*;
 
 public class Depot extends JPanel {
-	static final String[] fields = {"Adresse id", "Referent.Referent id", "Nom", "Telephone", "Presentation", "Image path",
+	static final String[] fields = {"Adresse id", "Referent.Referent id", "Nom", "Telephone", "Presentation",
 					"Commentaire", "Mail", "Website"};
-	static final String[] dbFields = {"Adresse_idAdresse", "Referent_idReferent", "nom", "telephone", "presentation", "imagePath",
+	static final String[] dbFields = {"Adresse_idAdresse", "Referent_idReferent", "nom", "telephone", "presentation",
 					"commentaire", "mail", "website"};
 	static final ArrayList<String> requiredFieldsList = new ArrayList<>(Arrays.asList("Adresse id", "Referent.Referent id",
 					"Nom", "Telephone"));
-	int id,Adresse_idAdresse, Referent_idReferent;
+	int id, Adresse_idAdresse, Referent_idReferent;
 	boolean isArchived;
-	String nom,telephone,presentation,imagePath, commentaire,mail,website;
+	String nom, telephone, presentation, commentaire, mail, website;
+	File image;
 	JourSemaine[] jourLivraison;
 	static ArrayList<Depot> depots = new ArrayList<>();
 
 	public Depot(int id, int Adresse_idAdresse, int Referent_idReferent, String nom, String telephone, String presentation,
-	             String imagePath, String commentaire, String mail, String website) {
+	             String commentaire, String mail, String website, File image) {
 		this.id = id;
 		this.Adresse_idAdresse = Adresse_idAdresse;
 		this.Referent_idReferent = Referent_idReferent;
 		this.nom = nom;
 		this.telephone = telephone;
 		this.presentation = presentation;
-		this.imagePath = imagePath;
 		this.commentaire = commentaire;
 		this.mail = mail;
 		this.website = website;
 		this.isArchived = false;
+		this.image = image;
 		depots.add(this);
 	}
 
 	public Depot(int Adresse_idAdresse, int Referent_idReferent, String nom, String telephone, String presentation,
-	             String imagePath, String commentaire, String mail, String website) {
+	             String commentaire, String mail, String website, File image) {
 		this.id = depots.size();
 		this.Adresse_idAdresse = Adresse_idAdresse;
 		this.Referent_idReferent = Referent_idReferent;
 		this.nom = nom;
 		this.telephone = telephone;
 		this.presentation = presentation;
-		this.imagePath = imagePath;
 		this.commentaire = commentaire;
 		this.mail = mail;
 		this.website = website;
 		this.isArchived = false;
+		this.image = image;
 		depots.add(this);
 	}
+
 	public static void getFromDatabase() {
 		depots.clear();
 		SQL sql = Main.sql;
 		try {
-			ResultSet res = sql.select("SELECT * FROM Depot");
+			ResultSet res = sql.select("Depot");
 			while (res.next()) {
 				int id = res.getInt("idDepot");
 				int addressId = res.getInt("Adresse_idAdresse");
@@ -64,16 +74,14 @@ public class Depot extends JPanel {
 				String name = res.getString("nom");
 				String telephone = res.getString("telephone");
 				String presentation = res.getString("presentation");
-				String imagePath = res.getString("imagePath");
 				String comment = res.getString("commentaire");
 				String mail = res.getString("mail");
 				String website = res.getString("website");
-				Depot d = new Depot(id,addressId, referentId, name, telephone, presentation, imagePath, comment, mail, website);
-				ResultSet res2 = sql.select("SELECT JourSemaine.nom\n" +
-								"FROM JourSemaine\n" +
-								"JOIN Depot_has_JourSemaine ON JourSemaine.idJourSemaine = Depot_has_JourSemaine.JourSemaine_idJourSemaine\n" +
-								"JOIN Depot ON Depot.idDepot = Depot_has_JourSemaine.Depot_idDepot\n" +
-								"WHERE Depot.idDepot = " + d.id + ";");
+				InputStream imageStream = res.getBinaryStream("image");
+				File image = Main.convertInputStreamToImage(imageStream);
+				Depot d = new Depot(id, addressId, referentId, name, telephone, presentation, comment, mail, website, image);
+				String query = "SELECT * FROM JourSemaine JOIN Depot_has_JourSemaine ON JourSemaine.idJourSemaine = Depot_has_JourSemaine.JourSemaine_idJourSemaine JOIN Depot ON Depot.idDepot = Depot_has_JourSemaine.Depot_idDepot WHERE Depot.idDepot = " + d.id + ";";
+				ResultSet res2 = sql.selectRaw(query);
 				ArrayList<JourSemaine> joursLivraisons = new ArrayList<>();
 				while (res2.next()) joursLivraisons.add(JourSemaine.valueOf(res2.getString("nom")));
 				d.jourLivraison = joursLivraisons.toArray(new JourSemaine[0]);
@@ -84,69 +92,48 @@ public class Depot extends JPanel {
 		}
 
 	}
+
 	private static void insertDeliveryDays(Depot depot) {
 		for (JourSemaine jourSemaine : depot.jourLivraison) {
-			StringBuilder query = new StringBuilder("INSERT INTO Depot_has_JourSemaine (Depot_idDepot, " +
-							"JourSemaine_idJourSemaine) " +
-							"VALUES (");
-			query.append(depot.id).append(", ");
-			query.append(jourSemaine.ordinal()).append(");");
-			if (Main.sql.executeUpdate(query.toString()))
+			if (Main.sql.createPrepareStatement("JourSemaine_idJourSemaine", new String[]{"Depot_idDepot"},
+							new Object[]{jourSemaine.ordinal(), depot.id}))
 				Logger.error("Can't create depot");
 		}
 	}
 
-	private static void constructDepotSQLQuery(Depot depot, String s) {
-		StringBuilder query = new StringBuilder(s);
-		query.append("idDepot, ");
-		for (int i = 0; i < dbFields.length; i++) {
-			query.append(dbFields[i]);
-			if (i != dbFields.length - 1) query.append(", ");
-		}
-		query.append(") VALUES (");
-		query.append(depot.id).append(", ");
-		query.append(depot.Adresse_idAdresse).append(", ");
-		query.append(depot.Referent_idReferent).append(", ");
-		query.append("'").append(depot.nom).append("', ");
-		query.append("'").append(depot.telephone).append("', ");
-		query.append("'").append(depot.presentation).append("', ");
-		query.append("'").append(depot.imagePath).append("', ");
-		query.append("'").append(depot.commentaire).append("', ");
-		query.append("'").append(depot.mail).append("', ");
-		query.append("'").append(depot.website).append("');");
-		if (Main.sql.executeUpdate(query.toString()))
-			Logger.error("Can't create depot");
-	}
-
 	static void update(Depot depot) {
-		constructDepotSQLQuery(depot, "UPDATE Depot SET ");
-		StringBuilder query;
-
+		Main.sql.updatePreparedStatement("Depot", new String[]{
+										"Adresse_idAdresse", "Referent_idReferent", "nom", "telephone", "presentation",
+										"commentaire", "mail", "website","image"},
+						new Object[]{depot.Adresse_idAdresse, depot.Referent_idReferent, depot.nom, depot.telephone,
+										depot.presentation, depot.commentaire, depot.mail, depot.website,depot.image},
+						new String[]{"idDepot = " + depot.id});
 		// update jourLivraison
-		query = new StringBuilder("DELETE FROM Depot_has_JourSemaine WHERE `Depot_idDepot` = " + depot.id + ";");
-		if (Main.sql.executeUpdate(query.toString()))
+		if (Main.sql.deletePrepareStatement("Depot_has_JourSemaine", new String[]{"Depot_idDepot = " + depot.id}))
 			Logger.error("Failed to update depot");
 		insertDeliveryDays(depot);
 	}
 
 	static void create(Depot depot) {
-		constructDepotSQLQuery(depot, "INSERT INTO Depot (");
+		Main.sql.createPrepareStatement("Depot", new String[]{"idDepot",
+										"Adresse_idAdresse", "Referent_idReferent", "nom", "telephone", "presentation",
+										"commentaire", "mail", "website","image"},
+						new Object[]{depot.id,depot.Adresse_idAdresse, depot.Referent_idReferent, depot.nom, depot.telephone,
+										depot.presentation, depot.commentaire, depot.mail, depot.website,depot.image});
 		insertDeliveryDays(depot);
 	}
 
 	public void delete() {
-		String query = "DELETE FROM Depot WHERE `idDepot` = " + this.id + ";";
-		if (Main.sql.executeUpdate(query))
+		if (Main.sql.deletePrepareStatement("Depot", new String[]{"idDepot = " + this.id}))
 			Logger.error("Can't delete depot");
-		String query2 = "DELETE FROM Depot_has_JourSemaine WHERE `Depot_idDepot` = " + this.id + ";";
-		if (Main.sql.executeUpdate(query2))
+		if (Main.sql.deletePrepareStatement("Depot_has_JourSemaine", new String[]{"Depot_idDepot = " + this.id}))
 			Logger.error("Can't delete depot");
 		depots.remove(this);
 	}
 
 	void archive() {
-		String query = "UPDATE Depot SET `estArchive` = " + (this.isArchived?0:1) + " WHERE `idDepot` = " + this.id + ";";
-		if (Main.sql.executeUpdate(query))
+		if (Main.sql.updatePreparedStatement("Depot", new String[]{"estArchive"}, new Object[]{this.isArchived ? 0 : 1},
+						new String[]{"idDepot = " + this.id}))
 			Logger.error("Can't archive depot");
 		this.isArchived = !this.isArchived;
 	}

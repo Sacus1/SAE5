@@ -31,18 +31,15 @@ public class Adresse {
 
 	public static void update(Adresse adresse) {
 		SQL sql = Main.sql;
-		String query = "UPDATE Adresse SET " + "adresse = '" + adresse.adresse.replace("'", "''") + "', " +
-						"ville = '" + adresse.ville.replace("'", "''") + "', " +
-						"codePostal = '" + adresse.codePostal + "' " +
-						"WHERE idAdresse = " + adresse.id + ";";
-
-		sql.executeUpdate(query);
+		sql.updatePreparedStatement("Adresse", new String[]{"adresse", "ville", "codePostal"},
+						new Object[]{adresse.adresse, adresse.ville, adresse.codePostal},
+						new String[]{"idAdresse = " + adresse.id});
 		getFromDatabase();
 	}
 
 	static void delete(Adresse adresse) {
 		SQL sql = Main.sql;
-		sql.executeUpdate("DELETE FROM Adresse WHERE idAdresse = " + adresse.id + ";");
+		sql.deletePrepareStatement("Adresse", new String[]{"idAdresse = " + adresse.id});
 		getFromDatabase();
 	}
 
@@ -54,7 +51,7 @@ public class Adresse {
 		SQL sql = Main.sql;
 		adresses.clear();
 		try {
-			ResultSet res = sql.select("SELECT * FROM Adresse");
+			ResultSet res = sql.select("Adresse");
 			while (res.next()) {
 				int id = res.getInt("idAdresse");
 				String adresse = res.getString("adresse");
@@ -65,15 +62,12 @@ public class Adresse {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
 	}
 	public static void create(Adresse adresse) {
 		SQL sql = Main.sql;
-		System.out.println(adresse.id + " " + adresse.adresse + " " + adresse.ville + " " + adresse.codePostal);
-		String query = "INSERT INTO Adresse (idAdresse, adresse, ville, codePostal) VALUES ('" + adresse.id + "', '" +
-						adresse.adresse.replace("'", "''") + "', '" +
-						adresse.ville + "', '" +
-						adresse.codePostal + "');";
-		sql.executeUpdate(query);
+		sql.createPrepareStatement("Adresse", new String[]{"idAdresse", "adresse", "ville", "codePostal"},
+						new Object[]{adresse.id, adresse.adresse, adresse.ville, adresse.codePostal});
 		getFromDatabase();
 	}
 

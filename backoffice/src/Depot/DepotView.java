@@ -7,8 +7,10 @@ import Referent.Referent;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class DepotView extends BaseView {
 	boolean showArchived = false;
@@ -57,7 +59,7 @@ public class DepotView extends BaseView {
 
 	private Panel createCreatePanel() {
 		Panel panel = new Panel();
-		Panel[] panels = new Panel[Depot.fields.length+1];
+		Panel[] panels = new Panel[Depot.fields.length+2];
 		Adresse.getFromDatabase();
 		Referent.getFromDatabase();
 		// adresse choice
@@ -101,10 +103,22 @@ public class DepotView extends BaseView {
 			}
 		});
 		panels[Depot.fields.length].add(button);
+		// add image chooser
+		panels[Depot.fields.length+1] = new Panel();
+		panels[Depot.fields.length+1].setLayout(new GridLayout(1, 2));
+		panels[Depot.fields.length+1].add(new Label("Image"));
+		JButton imageButton = new JButton("Select");
+		AtomicReference<File> image = new AtomicReference<>();
+		imageButton.addActionListener(e -> {
+			JFileChooser fileChooser = new JFileChooser();
+			fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+			int result = fileChooser.showOpenDialog(this);
+			if (result == JFileChooser.APPROVE_OPTION) image.set(fileChooser.getSelectedFile());
+		});
 		panel.add(panels[Depot.fields.length]);
 		panel.setLayout(new GridLayout(panels.length/2 + 1, 2));
 		JButton createButton = new JButton("Create");
-		createButton.addActionListener(e -> create(panels,joursLivraisons));
+		createButton.addActionListener(e -> create(panels,joursLivraisons, image.get()));
 		panel.add(createButton);
 		return panel;
 	}
@@ -134,7 +148,7 @@ public class DepotView extends BaseView {
 		panel.add(deleteButton);
 		return panel;
 	}
-	private void create(Panel[] panels, ArrayList<JourSemaine> joursLivraisons) {
+	private void create(Panel[] panels, ArrayList<JourSemaine> joursLivraisons, File image) {
 		String[] values = new String[panels.length];
 		for (int i = 2; i < panels.length-1; i++) {
 			boolean isRequired = Depot.requiredFieldsList.contains(Depot.fields[i]);
@@ -156,7 +170,7 @@ public class DepotView extends BaseView {
 		values[panels.length-1] = ((Choice) panels[panels.length-1].getComponent(1)).getSelectedItem();
 		Logger.log("Depot created");
 		Depot depot = new Depot(Integer.parseInt(values[0]), Integer.parseInt(values[1]), values[2], values[3], values[4],
-						values[5], values[6], values[7], values[8]);
+						values[5], values[6], values[7], image);
 		depot.jourLivraison = joursLivraisons.toArray(new JourSemaine[0]);
 		Depot.create(depot);
 		draw(false);
@@ -172,13 +186,19 @@ public class DepotView extends BaseView {
 
 	private Panel createEditPanel(Depot depot) {
 		Panel panel = new Panel();
-		Panel[] panels = new Panel[Depot.fields.length+1];
+		Panel[] panels = new Panel[Depot.fields.length+2];
 		// adresse choice
 		panels[0] = new Panel();
 		panels[0].setLayout(new GridLayout(1, 2));
 		panels[0].add(new Label("Adresse *"));
 		Choice adresseChoice = new Choice();
 		for (int i = 0; i < Adresse.adresses.size(); i++) adresseChoice.add(Adresse.adresses.get(i).toString());
+		// select adresse
+		for (int i = 0; i < Adresse.adresses.size(); i++)
+			if (Adresse.adresses.get(i).id == depot.Adresse_idAdresse) {
+				adresseChoice.select(i);
+				break;
+			}
 		panels[0].add(adresseChoice);
 		panel.add(panels[0]);
 		// referent choice
@@ -188,6 +208,12 @@ public class DepotView extends BaseView {
 		Choice referentChoice = new Choice();
 		for (int i = 0; i < Referent.referents.size(); i++) referentChoice.add(Referent.referents.get(i).toString());
 		panels[1].add(referentChoice);
+		// select referent
+		for (int i = 0; i < Referent.referents.size(); i++)
+			if (Referent.referents.get(i).id == depot.Referent_idReferent) {
+				referentChoice.select(i);
+				break;
+			}
 		panel.add(panels[1]);
 		for (int i = 2; i < Depot.fields.length; i++) {
 			panels[i] = createField(Depot.fields[i], Depot.requiredFieldsList.contains(Depot.fields[i]));
@@ -218,6 +244,9 @@ public class DepotView extends BaseView {
 		JList<String> list = new JList<>(new String[]{"Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"});
 		// Set list to multiple interval selection
 		list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		// select joursLivraisons
+		for (int i = 0; i < depot.jourLivraison.length; i++)
+			list.setSelectedIndex(depot.jourLivraison[i].ordinal());
 		// Add list to popup
 		popupMenu.add(new JScrollPane(list));
 		// Add action listener to button to show popup
@@ -229,28 +258,45 @@ public class DepotView extends BaseView {
 			}
 		});
 		panels[Depot.fields.length].add(button);
+		// add image chooser
+		panels[Depot.fields.length+1] = new Panel();
+		panels[Depot.fields.length+1].setLayout(new GridLayout(1, 2));
+		panels[Depot.fields.length+1].add(new Label("Image"));
+		JButton imageButton = new JButton("Select");
+		AtomicReference<File> image = new AtomicReference<>();
+		imageButton.addActionListener(e -> {
+			JFileChooser fileChooser = new JFileChooser();
+			fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+			int result = fileChooser.showOpenDialog(this);
+			if (result == JFileChooser.APPROVE_OPTION) image.set(fileChooser.getSelectedFile());
+		});
 		panel.add(panels[Depot.fields.length]);
 		panel.setLayout(new GridLayout(panels.length/2 + 1, 2));
 
 		JButton createButton = new JButton("Create");
 		createButton.addActionListener(e -> {
 			String[] values = new String[panels.length];
-			for (int i = 0; i < panels.length; i++) {
+			for (int i = 2; i < panels.length; i++) {
 				String textFieldValue = ((TextField) panels[i].getComponent(1)).getText();
 				values[i] = textFieldValue.isEmpty() ? null : textFieldValue;
 			}
-			Logger.log("Depot edited");
+			// adresse
+			values[0] = Integer.toString(Adresse.adresses.get(((Choice) panels[0].getComponent(1)).getSelectedIndex()).id);
+			// referent
+			values[1] = Integer.toString(Referent.referents.get(((Choice) panels[1].getComponent(1)).getSelectedIndex()).id);
 			depot.Adresse_idAdresse = Integer.parseInt(values[0]);
 			depot.Referent_idReferent = Integer.parseInt(values[1]);
 			depot.nom = values[2];
 			depot.telephone = values[3];
 			depot.presentation = values[4];
-			depot.imagePath = values[5];
-			depot.commentaire = values[6];
-			depot.mail = values[7];
-			depot.website = values[8];
+			depot.commentaire = values[5];
+			depot.mail = values[6];
+			depot.website = values[7];
+			depot.image = image.get();
 			depot.jourLivraison = joursLivraisons.toArray(new JourSemaine[0]);
-			depot.update(depot);
+			Depot.update(depot);
+			Logger.log("Depot edited");
+
 		});
 
 		panel.add(createButton);
