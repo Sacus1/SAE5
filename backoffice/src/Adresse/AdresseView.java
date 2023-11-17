@@ -61,7 +61,6 @@ public class AdresseView extends BaseView {
 		JTextField villeField = new JTextField();
 		JTextField codePostalField = new JTextField();
 		JButton submitButton = new JButton("Submit");
-		JButton cancelButton = new JButton("Cancel");
 		panel.add(new JLabel("Adresse *"));
 		panel.add(adresseField);
 		panel.add(new JLabel("Ville *"));
@@ -69,18 +68,21 @@ public class AdresseView extends BaseView {
 		panel.add(new JLabel("Code Postal *"));
 		panel.add(codePostalField);
 		panel.add(submitButton);
-		panel.add(cancelButton);
 		submitButton.addActionListener(e -> {
 			// check all field are filled
 			if (adresseField.getText().isEmpty() || villeField.getText().isEmpty() || codePostalField.getText().isEmpty()) {
 				Main.Logger.error("All fields must be filled");
 				return;
 			}
+			// check if postal code is a number and is 5 digits long
+			if (!codePostalField.getText().matches("[0-9]+") || codePostalField.getText().length() != 5) {
+				Main.Logger.error("Code postal must be a number and 5 digits long");
+				return;
+			}
 			Adresse adresse = new Adresse(adresseField.getText(), villeField.getText(), codePostalField.getText());
 			Adresse.create(adresse);
 			draw(false);
 		});
-		cancelButton.addActionListener(e -> draw(false));
 		return panel;
 	}
 
@@ -104,6 +106,11 @@ public class AdresseView extends BaseView {
 			// check all field are filled
 			if (adresseField.getText().isEmpty() || villeField.getText().isEmpty() || codePostalField.getText().isEmpty()) {
 				Main.Logger.error("All fields must be filled");
+				return;
+			}
+			// check if postal code is a number and is 5 digits long
+			if (!codePostalField.getText().matches("[0-9]+") || codePostalField.getText().length() != 5) {
+				Main.Logger.error("Code postal must be a number and 5 digits long");
 				return;
 			}
 			adresse.adresse = adresseField.getText();
