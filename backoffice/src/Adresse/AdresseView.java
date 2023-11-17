@@ -9,6 +9,9 @@ public class AdresseView extends BaseView {
 	public AdresseView() {
 		super();
 		Adresse.getFromDatabase();
+		add(topPanel, "North");
+		add(mainPanel, "Center");
+		add(bottomPanel, "South");
 		draw(false);
 	}
 	public void draw(boolean isCreate) {
