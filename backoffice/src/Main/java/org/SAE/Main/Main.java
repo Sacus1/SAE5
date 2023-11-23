@@ -1,5 +1,5 @@
-package Main;
-import Depot.DepotView;
+package org.SAE.Main;
+import org.SAE.Depot.DepotView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -38,22 +38,22 @@ public class Main {
 						button.setBackground(Color.LIGHT_GRAY);
 						break;
 					case "Referent":
-						mainPanel.add(new Referent.ReferentView());
+						mainPanel.add(new org.SAE.Referent.ReferentView());
 						resetSelectedButton(buttons);
 						button.setBackground(Color.LIGHT_GRAY);
 						break;
 					case "Adresse":
-						mainPanel.add(new Adresse.AdresseView());
+						mainPanel.add(new org.SAE.Adresse.AdresseView());
 						resetSelectedButton(buttons);
 						button.setBackground(Color.LIGHT_GRAY);
 						break;
 					case "Unité":
-						mainPanel.add(new Unite.UniteView());
+						mainPanel.add(new org.SAE.Unite.UniteView());
 						resetSelectedButton(buttons);
 						button.setBackground(Color.LIGHT_GRAY);
 						break;
 					case "Produit":
-						mainPanel.add(new Produit.ProduitView());
+						mainPanel.add(new org.SAE.Produit.ProduitView());
 						resetSelectedButton(buttons);
 						button.setBackground(Color.LIGHT_GRAY);
 						break;
@@ -77,6 +77,13 @@ public class Main {
 		});
 	}
 
+	/**
+	 * Converts an InputStream to an image file.
+	 *
+	 * @param inputStream The InputStream to convert.
+	 * @return The image file.
+	 * @throws IOException If an I/O error occurs.
+	 */
 	public static File convertInputStreamToImage(InputStream inputStream) throws IOException {
 		if (inputStream == null) return null;
     File tempFile = File.createTempFile("image", ".png");

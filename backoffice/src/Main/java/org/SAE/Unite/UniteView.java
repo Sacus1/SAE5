@@ -1,6 +1,6 @@
-package Unite;
+package org.SAE.Unite;
 
-import Main.BaseView;
+import org.SAE.Main.BaseView;
 import javax.swing.*;
 import java.awt.*;
 

@@ -1,6 +1,6 @@
-package Referent;
+package org.SAE.Referent;
 
-import Main.BaseView;
+import org.SAE.Main.BaseView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -79,17 +79,17 @@ public class ReferentView extends BaseView {
 		createButton.addActionListener(e -> {
 			// check if all required fields are filled
 			if (nomField.getText().isEmpty() || telephoneField.getText().isEmpty() || emailField.getText().isEmpty()) {
-				Main.Logger.error("All fields must be filled");
+				org.SAE.Main.Logger.error("All fields must be filled");
 				return;
 			}
 			// check if the email is valid
 			if (!emailField.getText().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
-				Main.Logger.error("Invalid email");
+				org.SAE.Main.Logger.error("Invalid email");
 				return;
 			}
 			// check if the telephone is valid
 			if (!telephoneField.getText().matches("^(?:(?:\\+|00)33|0)[1-9](?:\\s?\\d{2}){4}$")) {
-				Main.Logger.error("Invalid telephone");
+				org.SAE.Main.Logger.error("Invalid telephone");
 				return;
 			}
 			Referent r = new Referent(nomField.getText(), telephoneField.getText(), emailField.getText());
@@ -123,17 +123,17 @@ public class ReferentView extends BaseView {
 		createButton.addActionListener(e -> {
 			// check if all required fields are filled
 			if (nomField.getText().isEmpty() || telephoneField.getText().isEmpty() || emailField.getText().isEmpty()) {
-				Main.Logger.error("All fields must be filled");
+				org.SAE.Main.Logger.error("All fields must be filled");
 				return;
 			}
 			// check if the email is valid
 			if (!emailField.getText().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$\n")) {
-				Main.Logger.error("Invalid email");
+				org.SAE.Main.Logger.error("Invalid email");
 				return;
 			}
 			// check if the telephone is valid
 			if (!telephoneField.getText().matches("^(?:(?:\\+|00)33|0)[1-9](?:\\s?\\d{2}){4}$\n")) {
-				Main.Logger.error("Invalid telephone");
+				org.SAE.Main.Logger.error("Invalid telephone");
 				return;
 			}
 			referent.nom = nomField.getText();

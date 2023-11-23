@@ -1,8 +1,8 @@
-package Referent;
+package org.SAE.Referent;
 
-import Main.Main;
-import Main.SQL;
-import Main.Logger;
+import org.SAE.Main.Main;
+import org.SAE.Main.SQL;
+import org.SAE.Main.Logger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;

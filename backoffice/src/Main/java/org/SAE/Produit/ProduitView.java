@@ -1,6 +1,6 @@
-package Produit;
-import Main.BaseView;
-import Unite.Unite;
+package org.SAE.Produit;
+import org.SAE.Main.BaseView;
+import org.SAE.Unite.Unite;
 
 import javax.swing.*;
 import java.awt.*;

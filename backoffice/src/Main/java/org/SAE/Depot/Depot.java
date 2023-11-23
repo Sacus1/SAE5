@@ -1,7 +1,7 @@
-package Depot;
+package org.SAE.Depot;
 
-import Main.Main;
-import Main.SQL;
+import org.SAE.Main.Main;
+import org.SAE.Main.SQL;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,10 +12,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import Main.Logger;
+import org.SAE.Main.Logger;
 
 import javax.swing.*;
 
+/**
+ * This class represents a Depot which is a JPanel.
+ * It contains information about the Depot and methods for database operations.
+ */
 public class Depot extends JPanel {
 	static final String[] fields = {"Adresse id", "Referent.Referent id", "Nom", "Telephone", "Presentation",
 					"Commentaire", "Mail", "Website"};
@@ -30,6 +34,10 @@ public class Depot extends JPanel {
 	JourSemaine[] jourLivraison;
 	static ArrayList<Depot> depots = new ArrayList<>();
 
+  /**
+  * Constructor for the Depot class.
+  * It initializes the Depot object and adds it to the depots list.
+  */
 	public Depot(int id, int Adresse_idAdresse, int Referent_idReferent, String nom, String telephone, String presentation,
 	             String commentaire, String mail, String website, File image) {
 		this.id = id;
@@ -46,6 +54,9 @@ public class Depot extends JPanel {
 		depots.add(this);
 	}
 
+ /**
+  * This method fetches the Depot data from the database and creates Depot objects.
+  */
 	public Depot(int Adresse_idAdresse, int Referent_idReferent, String nom, String telephone, String presentation,
 	             String commentaire, String mail, String website, File image) {
 		this.id = depots.size();
@@ -62,6 +73,9 @@ public class Depot extends JPanel {
 		depots.add(this);
 	}
 
+ /**
+  * This method fetches the Depot data from the database and creates Depot objects.
+  */
 	public static void getFromDatabase() {
 		depots.clear();
 		SQL sql = Main.sql;
@@ -101,6 +115,10 @@ public class Depot extends JPanel {
 		getFromDatabase();
 	}
 
+  /**
+  * This method updates the Depot data in the database.
+  * @param depot The Depot object to be updated.
+  */
 	static void update(Depot depot) {
 		if(!Main.sql.updatePreparedStatement("Depot", new String[]{
 										"Adresse_idAdresse", "Referent_idReferent", "nom", "telephone", "presentation",
@@ -115,6 +133,10 @@ public class Depot extends JPanel {
 		insertDeliveryDays(depot);
 	}
 
+  /**
+   * This method creates a new Depot in the database.
+   * @param depot The Depot object to be created.
+   */
 	static void create(Depot depot) {
 		if (!Main.sql.createPrepareStatement("Depot", new String[]{"idDepot",
 										"Adresse_idAdresse", "Referent_idReferent", "nom", "telephone", "presentation",
@@ -128,6 +150,9 @@ public class Depot extends JPanel {
 
 	}
 
+ /**
+  * This method deletes a Depot from the database.
+  */
 	public void delete() {
 		if (!Main.sql.deletePrepareStatement("Depot", new String[]{"idDepot = " + this.id}))
 			Logger.error("Can't delete depot");
@@ -136,6 +161,9 @@ public class Depot extends JPanel {
 		depots.remove(this);
 	}
 
+ /**
+  * This method archives a Depot.
+  */
 	void archive() {
 		if (!Main.sql.updatePreparedStatement("Depot", new String[]{"estArchive"}, new Object[]{this.isArchived ? 0 : 1},
 						new String[]{"idDepot = " + this.id}))

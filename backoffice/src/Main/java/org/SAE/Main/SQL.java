@@ -1,4 +1,4 @@
-package Main;
+package org.SAE.Main;
 
 import java.io.File;
 import java.io.FileInputStream;

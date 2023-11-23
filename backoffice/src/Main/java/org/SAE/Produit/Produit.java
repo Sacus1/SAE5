@@ -1,7 +1,7 @@
-package Produit;
-import Main.Logger;
-import Main.Main;
-import Main.SQL;
+package org.SAE.Produit;
+import org.SAE.Main.Logger;
+import org.SAE.Main.Main;
+import org.SAE.Main.SQL;
 
 import java.io.File;
 import java.sql.ResultSet;

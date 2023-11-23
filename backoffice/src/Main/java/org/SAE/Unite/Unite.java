@@ -1,8 +1,8 @@
-package Unite;
+package org.SAE.Unite;
 
-import Main.Logger;
-import Main.Main;
-import Main.SQL;
+import org.SAE.Main.Logger;
+import org.SAE.Main.Main;
+import org.SAE.Main.SQL;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;

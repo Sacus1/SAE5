@@ -1,9 +1,9 @@
-package Depot;
+package org.SAE.Depot;
 
-import Adresse.Adresse;
-import Main.BaseView;
-import Main.Logger;
-import Referent.Referent;
+import org.SAE.Adresse.Adresse;
+import org.SAE.Main.BaseView;
+import org.SAE.Main.Logger;
+import org.SAE.Referent.Referent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,10 +11,17 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
-
+/**
+ * This class represents the view for the Depot module.
+ * It extends the BaseView class and provides the UI for managing depots.
+ */
 public class DepotView extends BaseView {
 	boolean showArchived = false;
 	JCheckBox archivedCheckBox;
+	/**
+	 * Constructor for DepotView.
+	 * Initializes the UI components and layout.
+	 */
 	public DepotView() {
 		super();
 		Depot.getFromDatabase();
@@ -31,6 +38,13 @@ public class DepotView extends BaseView {
 		add(bottomPanel, "South");
 		draw(false);
 	}
+
+	/**
+	 * Draws the view based on the isCreate flag.
+	 * If isCreate is false, it shows the list of depots.
+	 * If isCreate is true, it shows the form to create a new depot.
+	 * @param isCreate Flag to determine whether to show the create form or the list of depots.
+	 */
 	public void draw(boolean isCreate) {
 		if (!isCreate) {
 			// show archived checkbox
@@ -57,6 +71,10 @@ public class DepotView extends BaseView {
 		}
 	}
 
+	/**
+	 * Creates and returns a panel for creating a new depot.
+	 * @return Panel for creating a new depot.
+	 */
 	private Panel createCreatePanel() {
 		Panel panel = new Panel();
 		Panel[] panels = new Panel[Depot.fields.length+2];
@@ -128,6 +146,11 @@ public class DepotView extends BaseView {
 		return panel;
 	}
 
+	/**
+	 * Creates and returns a panel for listing a depot.
+	 * @param depot The depot to be listed.
+	 * @return Panel for listing a depot.
+	 */
 	private Panel createListPanel(Depot depot) {
 		Panel panel = new Panel();
 		panel.setLayout(new GridLayout(1, 3));
@@ -160,6 +183,13 @@ public class DepotView extends BaseView {
 		panel.add(deleteButton);
 		return panel;
 	}
+
+	/**
+	 * Creates a new depot based on the data entered in the form.
+	 * @param panels The panels containing the data.
+	 * @param joursLivraisons The days of delivery.
+	 * @param image The image of the depot.
+	 */
 	private void create(Panel[] panels, ArrayList<JourSemaine> joursLivraisons, File image) {
 		String[] values = new String[panels.length];
 		for (int i = 2; i < Depot.fields.length; i++) {
@@ -185,6 +215,12 @@ public class DepotView extends BaseView {
 		draw(false);
 	}
 
+	/**
+	 * Creates and returns a panel for a field.
+	 * @param name The name of the field.
+	 * @param required Whether the field is required or not.
+	 * @return Panel for a field.
+	 */
 	private Panel createField(String name, boolean required) {
 		Panel panel = new Panel();
 		panel.setLayout(new GridLayout(1, 2));
@@ -193,6 +229,11 @@ public class DepotView extends BaseView {
 		return panel;
 	}
 
+	/**
+	 * Creates and returns a panel for editing a depot.
+	 * @param depot The depot to be edited.
+	 * @return Panel for editing a depot.
+	 */
 	private Panel createEditPanel(Depot depot) {
 		Panel panel = new Panel();
 		Panel[] panels = new Panel[Depot.fields.length+2];
