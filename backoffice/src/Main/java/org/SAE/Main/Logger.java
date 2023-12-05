@@ -6,7 +6,7 @@ import java.awt.*;
  * Logger class for displaying messages in a JFrame.
  */
 public class Logger {
-
+	private Logger() {}
 	/**
 	 * Logs a message with a specified color and duration.
 	 *
@@ -15,13 +15,13 @@ public class Logger {
 	 * @param time    The duration for which the message is displayed (in seconds).
 	 */
 	public static void log(String message, Color color, float time) {
-		// make a jframe to display the message
+		// make a frame to display the message
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		// set size to fit the message
 		frame.setSize(message.length() * 11, 100);
 		frame.setVisible(true);
-		// make a jlabel to display the message
+		// make a label to display the message
 		JLabel label = new JLabel(message);
 		label.setForeground(color);
 		// set font size

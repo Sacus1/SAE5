@@ -13,10 +13,10 @@ public class ReferentView extends BaseView {
 		add(topPanel, "North");
 		add(mainPanel, "Center");
 		add(bottomPanel, "South");
-		draw(false);
+		displayView(false);
 	}
-	public void draw(boolean isCreate) {
-		if (!isCreate) {
+	public void displayView(boolean isCreateMode) {
+		if (!isCreateMode) {
 			clear();
 			for (Referent referent : Referent.referents) mainPanel.add(createListPanel(referent));
 			refresh();
@@ -51,7 +51,7 @@ public class ReferentView extends BaseView {
 		JButton deleteButton = new JButton("Delete");
 		deleteButton.addActionListener(e -> {
 			Referent.delete(referent);
-			draw(false);
+			displayView(false);
 		});
 		panel.add(deleteButton);
 		return panel;
@@ -75,6 +75,12 @@ public class ReferentView extends BaseView {
 		panel.add(emailLabel);
 		panel.add(emailField);
 		// add a button to create the referent
+		JButton createButton = getCreateButton(nomField, telephoneField, emailField);
+		panel.add(createButton);
+		return panel;
+	}
+
+	private JButton getCreateButton(JTextField nomField, JTextField telephoneField, JTextField emailField) {
 		JButton createButton = new JButton("Create");
 		createButton.addActionListener(e -> {
 			// check if all required fields are filled
@@ -94,10 +100,9 @@ public class ReferentView extends BaseView {
 			}
 			Referent r = new Referent(nomField.getText(), telephoneField.getText(), emailField.getText());
 			Referent.create(r);
-			draw(false);
+			displayView(false);
 		});
-		panel.add(createButton);
-		return panel;
+		return createButton;
 	}
 
 	public JPanel createEditPanel(Referent referent) {
@@ -140,7 +145,7 @@ public class ReferentView extends BaseView {
 			referent.telephone = telephoneField.getText();
 			referent.mail = emailField.getText();
 			Referent.update(referent);
-			draw(false);
+			displayView(false);
 		});
 		panel.add(createButton);
 		return panel;

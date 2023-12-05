@@ -6,11 +6,14 @@ import org.SAE.Main.Logger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Referent {
-	public int id;
-	String nom, telephone, mail;
-	public static ArrayList<Referent> referents = new ArrayList<>();
+	public final int id;
+	String nom;
+	String telephone;
+	String mail;
+	public static final List<Referent> referents = new ArrayList<>();
 
 	public Referent(int id, String nom, String telephone, String mail) {
 		this.id = id;
@@ -60,13 +63,13 @@ public class Referent {
 	}
 
 	public static void delete(Referent referent) {
-		if (!Main.sql.deletePrepareStatement("Referent", new String[]{"idReferent = " + referent.id}))
+		if (Main.sql.deletePrepareStatement("Referent", new String[]{"idReferent = " + referent.id}))
 			Logger.error("Failed to delete Referent");
 		referents.remove(referent);
 	}
 
 	public static void create(Referent referent) {
-		if (!Main.sql.createPrepareStatement("Referent", new String[]{"nom", "telephone", "mail"},
+		if (Main.sql.createPrepareStatement("Referent", new String[]{"nom", "telephone", "mail"},
 						new Object[]{referent.nom, referent.telephone, referent.mail}))
 			Logger.error("Failed to create Referent");
 		getFromDatabase();

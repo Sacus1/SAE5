@@ -16,10 +16,10 @@ public class ProduitView extends BaseView{
 		add(topPanel, "North");
 		add(mainPanel, "Center");
 		add(bottomPanel, "South");
-		draw(false);
+		displayView(false);
 	}
-	public void draw(boolean isCreate) {
-		if (!isCreate) {
+	public void displayView(boolean isCreateMode) {
+		if (!isCreateMode) {
 			clear();
 			for (Produit produit : Produit.produits) mainPanel.add(createListPanel(produit));
 			refresh();
@@ -54,7 +54,7 @@ public class ProduitView extends BaseView{
 		JButton deleteButton = new JButton("Delete");
 		deleteButton.addActionListener(e -> {
 			Produit.delete(produit);
-			draw(false);
+			displayView(false);
 		});
 		panel.add(deleteButton);
 		return panel;
@@ -93,7 +93,8 @@ public class ProduitView extends BaseView{
 		JButton createButton = new JButton("Create");
 		createButton.addActionListener(e -> {
 			Produit produit = new Produit(nomField.getText(), descriptionField.getText(), Double.parseDouble(prixField.getText()), Unite.unites.get(uniteChoice.getSelectedIndex()).id, image.get());
-			draw(false);
+			Produit.create(produit);
+			displayView(false);
 		});
 		panel.add(createButton);
 		return panel;
@@ -143,7 +144,7 @@ public class ProduitView extends BaseView{
 			produit.idUnite = Unite.unites.get(uniteChoice.getSelectedIndex()).id;
 			produit.image = image.get();
 			Produit.update(produit);
-			draw(false);
+			displayView(false);
 		});
 		panel.add(updateButton);
 		return panel;

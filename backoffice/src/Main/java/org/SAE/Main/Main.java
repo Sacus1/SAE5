@@ -10,17 +10,17 @@ import java.util.Comparator;
 public class Main {
 	public static SQL sql ;
 	public static JFrame frame;
-	static String url = "jdbc:mysql://localhost:3306/SAE";
+	static final String url = "jdbc:mysql://localhost:3306/SAE";
 	private static void resetSelectedButton(JButton[] buttons) {
 		for (JButton button : buttons) button.setBackground(null);
 	}
 	public static void main(String[] args) {
 		sql = new SQL(url,"root","");
 		frame = new JFrame("Gestion");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.setSize(800,600);
 		JPanel mainPanel = new JPanel();
-		// create a list of buttons on the side of the frame
+		// create a list of buttons on the side of the frame.
 		JPanel leftPanel = new JPanel();
 		// add buttons
 		JButton[] buttons = {new JButton("Depot"), new JButton("Referent"), new JButton("Adresse"),new JButton("Unité"),new JButton("Produit")};
@@ -57,6 +57,8 @@ public class Main {
 						resetSelectedButton(buttons);
 						button.setBackground(Color.LIGHT_GRAY);
 						break;
+					default:
+						break;
 				}
 				// refresh the frame
 				frame.revalidate();
@@ -86,6 +88,7 @@ public class Main {
 	 */
 	public static File convertInputStreamToImage(InputStream inputStream) throws IOException {
 		if (inputStream == null) return null;
+
     File tempFile = File.createTempFile("image", ".png");
     tempFile.deleteOnExit();
     try (OutputStream out = new FileOutputStream(tempFile)) {
@@ -94,5 +97,12 @@ public class Main {
         while ((length = inputStream.read(buffer)) != -1) out.write(buffer, 0, length);
     }
     return tempFile;
+	}
+
+	public static String[] addStringToArray(String[] tableColumns, String column) {
+		String[] newTableColumns = new String[tableColumns.length + 1];
+		System.arraycopy(tableColumns, 0, newTableColumns, 0, tableColumns.length);
+		newTableColumns[tableColumns.length] = column;
+		return newTableColumns;
 	}
 }

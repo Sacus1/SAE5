@@ -5,18 +5,20 @@ import java.awt.*;
 
 /**
  * This abstract class represents a base view with a layout and some panels.
- * It extends JPanel, which is a generic lightweight container.
+ * It extends JPanel, a generic lightweight container.
  */
 public abstract class BaseView extends JPanel {
-	public JButton createButton = new JButton("Create");
-	public boolean inCreation = false;
-	protected static JPanel mainPanel, topPanel, bottomPanel;
+	public final JButton createButton = new JButton("Create");
+	public static boolean inCreation = false;
+	protected static JPanel mainPanel;
+	protected static JPanel topPanel;
+	protected static JPanel bottomPanel;
 
 	/**
 	 * Constructor for BaseView.
-	 * Sets up the layout and initializes the panels and the create button.
+	 * Sets up the layout and initializes the panels, and the create button.
 	 */
-	public BaseView() {
+	protected BaseView() {
 		setLayout(new BorderLayout());
 		initializePanels();
 		setupCreateButton();
@@ -25,7 +27,7 @@ public abstract class BaseView extends JPanel {
 	/**
 	 * This method initializes the panels used in the view.
 	 */
-	private void initializePanels() {
+	private static void initializePanels() {
 		topPanel = new JPanel();
 		bottomPanel = new JPanel();
 		mainPanel = new JPanel();
@@ -38,16 +40,16 @@ public abstract class BaseView extends JPanel {
 	 */
 	private void setupCreateButton() {
 		topPanel.add(createButton);
-		createButton.addActionListener(e -> draw(!inCreation));
+		createButton.addActionListener(e -> displayView(!inCreation));
 	}
 
 	/**
 	 * Abstract method to be implemented by subclasses.
 	 * It is triggered when the create button is clicked.
 	 *
-	 * @param isCreate A boolean indicating whether to create or not.
+	 * @param isCreateMode A boolean indicating whether to create or not.
 	 */
-	public abstract void draw(boolean isCreate);
+	public abstract void displayView(boolean isCreateMode);
 
 	/**
 	 * This method clears all components from the main panel.

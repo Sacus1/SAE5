@@ -8,11 +8,13 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class Produit {
-	int id, idUnite;
-	String nom,description;
+	final int id;
+	int idUnite;
+	String nom;
+	String description;
 	File image;
 	double prix;
-	static ArrayList<Produit> produits = new ArrayList<>();
+	static final ArrayList<Produit> produits = new ArrayList<>();
 	public Produit(int id, String nom, String description, double prix, int idUnite,File image) {
 		this.id = id;
 		this.nom = nom;
@@ -60,13 +62,13 @@ public class Produit {
 		getFromDatabase();
 	}
 	public static void create(Produit produit) {
-		if (!Main.sql.createPrepareStatement("Produit", new String[]{"nom", "image", "description", "prix", "Unite_idUnite"},
+		if (Main.sql.createPrepareStatement("Produit", new String[]{"nom", "image", "description", "prix", "Unite_idUnite"},
 						new Object[]{produit.nom, produit.image, produit.description, produit.prix, produit.idUnite}))
 			Logger.error("Create failed");
 		getFromDatabase();
 	}
 	public static void delete(Produit produit) {
-		if (!Main.sql.deletePrepareStatement("Produit", new String[]{"idProduit = " + produit.id}))
+		if (Main.sql.deletePrepareStatement("Produit", new String[]{"idProduit = " + produit.id}))
 			Logger.error("Delete failed");
 		produits.remove(produit);
 	}

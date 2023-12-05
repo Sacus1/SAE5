@@ -25,7 +25,7 @@ public class SQL {
 			// chargement de la classe par son nom lié au driver
 			Class.forName("com.mysql.cj.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
-			// levée d'exception si le driver n'est pas trouvé
+			// levée d’exception si le driver n’est pas trouvé
 			System.err.println("Class not found : " + e.getMessage());
 		}
 		try {
@@ -71,7 +71,7 @@ public class SQL {
 				}
 			return stmt.executeUpdate() != 0;
 		} catch (SQLException e) {
-			System.err.println("Main.SQL Exception : " + e.getMessage() + "\n" + query.toString() + "\n" + Arrays.toString(attr));
+			System.err.println("Main.SQL Exception : " + e.getMessage() + "\n" + query + "\n" + Arrays.toString(attr));
 		} catch (FileNotFoundException e) {
 			throw new RuntimeException(e);
 		}
@@ -96,21 +96,27 @@ public class SQL {
 		try {
 			PreparedStatement stmt = con.prepareStatement(query.toString());
 			for (int i = 0; i < attr.length; i++)
-				if (attr[i] instanceof String) stmt.setString(i + 1, (String) attr[i]);
-				else if (attr[i] instanceof Integer) stmt.setInt(i + 1, (Integer) attr[i]);
-				else if (attr[i] instanceof Double) stmt.setDouble(i + 1, (Double) attr[i]);
-				else if (attr[i] instanceof File file) if (file.exists()) {
-					InputStream inputStream = new FileInputStream(file);
-					stmt.setBinaryStream(i + 1, inputStream, (int) file.length());
-				} else stmt.setNull(i + 1, Types.BLOB);
-				else if (attr[i] == null) stmt.setNull(i + 1, Types.BLOB);
-			return stmt.executeUpdate() != 0;
+				switch (attr[i]) {
+					case String s -> stmt.setString(i + 1, s);
+					case Integer integer -> stmt.setInt(i + 1, integer);
+					case Double v -> stmt.setDouble(i + 1, v);
+					case File file -> {
+						if (file.exists()) {
+							InputStream inputStream = new FileInputStream(file);
+							stmt.setBinaryStream(i + 1, inputStream, (int) file.length());
+						} else stmt.setNull(i + 1, Types.BLOB);
+					}
+					case null -> stmt.setNull(i + 1, Types.BLOB);
+					default -> {
+					}
+				}
+			return stmt.executeUpdate() == 0;
 		} catch (SQLException e) {
-			System.err.println("Main.SQL Exception : " + e.getMessage() + "\n" + query.toString() + "\n" + Arrays.toString(attr));
+			System.err.println("Main.SQL Exception : " + e.getMessage() + "\n" + query + "\n" + Arrays.toString(attr));
 		} catch (FileNotFoundException e) {
 			throw new RuntimeException(e);
 		}
-		return false;
+		return true;
 	}
 
 	private StringBuilder buildPartialQuery(String tableName, String[] columnNames, String initialQuery,
@@ -135,11 +141,11 @@ public class SQL {
 		StringBuilder query = buildPartialQuery(table, whereCond, "DELETE FROM ", " WHERE ", " AND ", ";");
 		try {
 			PreparedStatement stmt = con.prepareStatement(query.toString());
-			return stmt.executeUpdate() != 0;
+			return stmt.executeUpdate() == 0;
 		} catch (SQLException e) {
 			System.err.println("Main.SQL Exception : " + e.getMessage() + "\n" + query);
 		}
-		return false;
+		return true;
 	}
 
 	/**
@@ -154,7 +160,7 @@ public class SQL {
 		try {
 			return con.prepareStatement(query.toString()).executeQuery();
 		} catch (SQLException e) {
-			System.err.println("Main.SQL Exception : " + e.getMessage() + "\n" + query.toString());
+			System.err.println("Main.SQL Exception : " + e.getMessage() + "\n" + query);
 		}
 		return null;
 	}

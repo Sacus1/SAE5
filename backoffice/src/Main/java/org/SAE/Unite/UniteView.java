@@ -13,10 +13,10 @@ public class UniteView extends BaseView{
 		add(topPanel, "North");
 		add(mainPanel, "Center");
 		add(bottomPanel, "South");
-		draw(false);
+		displayView(false);
 	}
-	public void draw(boolean isCreate) {
-		if (!isCreate) {
+	public void displayView(boolean isCreateMode) {
+		if (!isCreateMode) {
 			clear();
 			for (Unite unite : Unite.unites) mainPanel.add(createListPanel(unite));
 			refresh();
@@ -52,7 +52,7 @@ public class UniteView extends BaseView{
 		JButton deleteButton = new JButton("Delete");
 		deleteButton.addActionListener(e -> {
 			Unite.delete(unite);
-			draw(false);
+			displayView(false);
 		});
 		panel.add(deleteButton);
 		return panel;
@@ -71,7 +71,7 @@ public class UniteView extends BaseView{
 		updateButton.addActionListener(e -> {
 			unite.nom = nomField.getText();
 			Unite.update(unite);
-			draw(false);
+			displayView(false);
 		});
 		panel.add(updateButton);
 		return panel;
@@ -90,7 +90,7 @@ public class UniteView extends BaseView{
 		createButton.addActionListener(e -> {
 			Unite unite = new Unite(nomField.getText());
 			Unite.create(unite);
-			draw(false);
+			displayView(false);
 		});
 		panel.add(createButton);
 		return panel;

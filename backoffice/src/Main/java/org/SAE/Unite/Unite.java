@@ -6,10 +6,11 @@ import org.SAE.Main.SQL;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.List;
 public class Unite {
-	public int id;
+	public final int id;
 	String nom;
-	public static ArrayList<Unite> unites = new ArrayList<>();
+	public static final List<Unite> unites = new ArrayList<>();
 	public Unite(int id, String nom) {
 		this.id = id;
 		this.nom = nom;
@@ -44,13 +45,13 @@ public class Unite {
 		getFromDatabase();
 	}
 	public static void create(Unite unite) {
-		if (!Main.sql.createPrepareStatement("Unite", new String[]{"idUnite", "nom"},
+		if (Main.sql.createPrepareStatement("Unite", new String[]{"idUnite", "nom"},
 						new Object[]{unite.id, unite.nom}))
 			Logger.error("Failed to insert Unite");
 		getFromDatabase();
 	}
 	public static void delete(Unite unite) {
-		if (!Main.sql.deletePrepareStatement("Unite", new String[]{"idUnite = " + unite.id}))
+		if (Main.sql.deletePrepareStatement("Unite", new String[]{"idUnite = " + unite.id}))
 			Logger.error("Failed to delete Unite");
 		unites.remove(unite);
 	}

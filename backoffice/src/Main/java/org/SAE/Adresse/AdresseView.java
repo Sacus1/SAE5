@@ -19,16 +19,17 @@ public class AdresseView extends BaseView {
 		add(topPanel, "North");
 		add(mainPanel, "Center");
 		add(bottomPanel, "South");
-		draw(false);
+		displayView(false);
 	}
 
 	/**
 	 * This method is used to draw the UI components on the screen.
 	 * It takes a boolean parameter to decide whether to create a new Adresse or display the existing ones.
-	 * @param isCreate A boolean value to decide the mode of operation.
+	 *
+	 * @param isCreateMode A boolean value to decide the mode of operation.
 	 */
-	public void draw(boolean isCreate) {
-		if (isCreate) {
+	public void displayView(boolean isCreateMode) {
+		if (isCreateMode) {
 			clear();
 			mainPanel.add(createFormPanel());
 			refresh();
@@ -64,7 +65,7 @@ public class AdresseView extends BaseView {
 		JButton deleteButton = new JButton("Delete");
 		deleteButton.addActionListener(e -> {
 			Adresse.delete(adresse);
-			draw(false);
+			displayView(false);
 		});
 		panel.add(label);
 		panel.add(editButton);
@@ -74,7 +75,7 @@ public class AdresseView extends BaseView {
 
 	/**
 	 * This method creates a form for creating a new Adresse.
-	 * It includes text fields for the Adresse details and a submit button to create the Adresse.
+	 * It includes text fields for the Adresse details, and a submit button to create the Adresse.
 	 * @return A JPanel with the form for creating a new Adresse.
 	 */
 	public JPanel createFormPanel() {
@@ -97,14 +98,14 @@ public class AdresseView extends BaseView {
 				org.SAE.Main.Logger.error("All fields must be filled");
 				return;
 			}
-			// check if postal code is a number and is 5 digits long
-			if (!codePostalField.getText().matches("[0-9]+") || codePostalField.getText().length() != 5) {
+			// check if postal code is a number and is 5 digits long.
+			if (!codePostalField.getText().matches("\\d+") || codePostalField.getText().length() != 5) {
 				org.SAE.Main.Logger.error("Code postal must be a number and 5 digits long");
 				return;
 			}
 			Adresse adresse = new Adresse(adresseField.getText(), villeField.getText(), codePostalField.getText());
 			Adresse.create(adresse);
-			draw(false);
+			displayView(false);
 		});
 		return panel;
 	}
@@ -118,7 +119,7 @@ public class AdresseView extends BaseView {
 	private Panel createEditPanel(Adresse adresse) {
 		Panel panel = new Panel();
 		panel.setLayout(new GridLayout(4, 2));
-		JTextField adresseField = new JTextField(adresse.adresse);
+		JTextField adresseField = new JTextField(adresse.rue);
 		JTextField villeField = new JTextField(adresse.ville);
 		JTextField codePostalField = new JTextField(adresse.codePostal);
 		JButton submitButton = new JButton("Submit");
@@ -137,16 +138,16 @@ public class AdresseView extends BaseView {
 				org.SAE.Main.Logger.error("All fields must be filled");
 				return;
 			}
-			// check if postal code is a number and is 5 digits long
-			if (!codePostalField.getText().matches("[0-9]+") || codePostalField.getText().length() != 5) {
+			// check if postal code is a number and is 5 digits long.
+			if (!codePostalField.getText().matches("\\d+") || codePostalField.getText().length() != 5) {
 				org.SAE.Main.Logger.error("Code postal must be a number and 5 digits long");
 				return;
 			}
-			adresse.adresse = adresseField.getText();
+			adresse.rue = adresseField.getText();
 			adresse.ville = villeField.getText();
 			adresse.codePostal = codePostalField.getText();
 			Adresse.update(adresse);
-			draw(false);
+			displayView(false);
 		});
 		return panel;
 	}

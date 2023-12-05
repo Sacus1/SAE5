@@ -6,25 +6,30 @@ import org.SAE.Main.SQL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
- * This class represents an address with properties like id, address, city, and postal code.
+ * This class represents an address with properties like ID, address, city, and postal code.
  * It provides methods to create, update, delete, and retrieve addresses from the database.
  */
 public class Adresse {
- public int id;
- String adresse,ville,codePostal;
+ public static final String TABLE_NAME = "Adresse";
+ protected static final String[] TABLE_COLUMNS = {"adresse", "ville", "codePostal"};
+ public final int id;
+ String rue;
+ String ville;
+ String codePostal;
 
  // A static list to hold all the addresses
- public static ArrayList<Adresse> adresses = new ArrayList<>();
+ public static final List<Adresse> adresses = new ArrayList<>();
 
  /**
-  * Constructor to create an address object with id, address, city, and postal code.
+  * Constructor to create an address object with an ID, address, city, and postal code.
   * The address object is then added to the static list of addresses.
   */
- public Adresse(int id, String adresse, String ville, String codePostal) {
+ public Adresse(int id, String rue, String ville, String codePostal) {
   this.id = id;
-  this.adresse = adresse;
+  this.rue = rue;
   this.ville = ville;
   this.codePostal = codePostal;
   adresses.add(this);
@@ -32,12 +37,12 @@ public class Adresse {
 
  /**
   * Constructor to create an address object with address, city, and postal code.
-  * The id is automatically set to the current size of the static list of addresses.
+  * The ID is automatically set to the current size of the static list of addresses.
   * The address object is then added to the static list of addresses.
   */
- public Adresse(String adresse, String ville, String codePostal) {
+ public Adresse(String rue, String ville, String codePostal) {
   this.id = adresses.size();
-  this.adresse = adresse;
+  this.rue = rue;
   this.ville = ville;
   this.codePostal = codePostal;
   adresses.add(this);
@@ -48,9 +53,9 @@ public class Adresse {
   * If the update fails, it prints “Update failed” to the console.
   */
  public static void update(Adresse adresse) {
-  if (!(Main.sql.updatePreparedStatement("Adresse", new String[]{"adresse", "ville", "codePostal"},
-      new Object[]{adresse.adresse, adresse.ville, adresse.codePostal},
-      new String[]{"idAdresse = " + adresse.id}))) System.out.println("Update failed");
+  if (!(Main.sql.updatePreparedStatement(TABLE_NAME, TABLE_COLUMNS,
+      new Object[]{adresse.rue, adresse.ville, adresse.codePostal},
+      new String[]{"idAdresse = " + adresse.id}))) org.SAE.Main.Logger.log("Update failed");
   getFromDatabase();
  }
 
@@ -59,8 +64,8 @@ public class Adresse {
   * If the deletion fails, it prints “Delete failed” to the console.
   */
  static void delete(Adresse adresse) {
-  if (!Main.sql.deletePrepareStatement("Adresse", new String[]{"idAdresse = " + adresse.id}))
-   System.out.println("Delete failed");
+  if (Main.sql.deletePrepareStatement(TABLE_NAME, new String[]{"idAdresse = " + adresse.id}))
+   org.SAE.Main.Logger.log("Delete failed");
   adresses.remove(adresse);
  }
 
@@ -68,7 +73,7 @@ public class Adresse {
   * Method to return a string representation of the address object.
   */
  public String toString() {
-  return adresse + ", " + ville;
+  return rue + ", " + ville;
  }
 
  /**
@@ -78,7 +83,7 @@ public class Adresse {
   SQL sql = Main.sql;
   adresses.clear();
   try {
-   ResultSet res = sql.select("Adresse");
+   ResultSet res = sql.select(TABLE_NAME);
    while (res.next()) {
     int id = res.getInt("idAdresse");
     String adresse = res.getString("adresse");
@@ -97,9 +102,11 @@ public class Adresse {
   * If the creation fails, it prints “Create failed” to the console.
   */
  public static void create(Adresse adresse) {
-  if (!Main.sql.createPrepareStatement("Adresse", new String[]{"idAdresse", "adresse", "ville", "codePostal"},
-      new Object[]{adresse.id, adresse.adresse, adresse.ville, adresse.codePostal}))
-   System.out.println("Create failed");
+  String[] tableColumns = {"idAdresse"};
+  for (String column : TABLE_COLUMNS) tableColumns = Main.addStringToArray(tableColumns, column);
+  if (Main.sql.createPrepareStatement(TABLE_NAME, tableColumns,
+          new Object[]{adresse.id, adresse.rue, adresse.ville, adresse.codePostal}))
+   org.SAE.Main.Logger.log("Create failed");
   getFromDatabase();
  }
 }
