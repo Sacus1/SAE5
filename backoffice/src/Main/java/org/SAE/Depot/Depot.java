@@ -179,4 +179,8 @@ public class Depot extends Base {
 			Logger.error("Can't archive depot");
 		this.isArchived = !this.isArchived;
 	}
+	@Override
+	public void loadFromDatabase(){
+		getFromDatabase();
+	}
 }

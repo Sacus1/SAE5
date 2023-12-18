@@ -10,6 +10,7 @@ import org.SAE.Main.UButton;
 import javax.swing.*;
 import java.awt.*;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Properties;
 
@@ -23,6 +24,11 @@ public class ClientView extends BaseView<Client> {
 		add(mainPanel, "Center");
 		add(bottomPanel, "South");
 		displayView(false);
+	}
+
+	@Override
+	protected ArrayList<Client> GetList() {
+		return (ArrayList<Client>) Client.clients;
 	}
 
 	@Override

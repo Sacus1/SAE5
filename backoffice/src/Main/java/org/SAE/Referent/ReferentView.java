@@ -5,6 +5,7 @@ import org.SAE.Main.UButton;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class ReferentView extends BaseView<Referent> {
 	public ReferentView() {
@@ -16,6 +17,12 @@ public class ReferentView extends BaseView<Referent> {
 		add(bottomPanel, "South");
 		displayView(false);
 	}
+
+	@Override
+	protected ArrayList<Referent> GetList() {
+		return (ArrayList<Referent>) Referent.referents;
+	}
+
 	@Override
 	protected JPanel createFormPanel() {
 		JPanel panel = new JPanel();

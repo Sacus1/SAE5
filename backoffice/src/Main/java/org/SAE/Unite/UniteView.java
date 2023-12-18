@@ -5,6 +5,7 @@ import org.SAE.Main.UButton;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class UniteView extends BaseView<Unite> {
 	public UniteView() {
@@ -16,6 +17,11 @@ public class UniteView extends BaseView<Unite> {
 		add(mainPanel, "Center");
 		add(bottomPanel, "South");
 		displayView(false);
+	}
+
+	@Override
+	protected ArrayList<Unite> GetList() {
+		return (ArrayList<Unite>) Unite.unites;
 	}
 
 	@Override

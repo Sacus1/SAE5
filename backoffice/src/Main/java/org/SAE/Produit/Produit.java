@@ -7,6 +7,7 @@ import org.SAE.Main.SQL;
 import java.io.File;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Produit extends Base {
 	static final String TABLE_NAME = "Produit";
@@ -16,7 +17,7 @@ public class Produit extends Base {
 	String description;
 	File image;
 	double prix;
-	static final ArrayList<Produit> produits = new ArrayList<>();
+	static final List<Produit> produits = new ArrayList<>();
 	public Produit(int id, String nom, String description, double prix, int idUnite,File image) {
 		this.id = id;
 		this.nom = nom;
@@ -74,5 +75,9 @@ public class Produit extends Base {
 		if (Main.sql.deletePrepareStatement("Produit", new String[]{"idProduit = " + id}))
 			Logger.error("Delete failed");
 		produits.remove(this);
+	}
+	@Override
+	public void loadFromDatabase(){
+		getFromDatabase();
 	}
 }

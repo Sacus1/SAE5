@@ -5,6 +5,8 @@ import org.SAE.Main.UButton;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+
 /**
  * This class represents the view for the Adresse module.
  * It extends the BaseView class and provides methods for creating and managing the UI components related to Adresse.
@@ -21,6 +23,11 @@ public class AdresseView extends BaseView<Adresse> {
 		add(mainPanel, "Center");
 		add(bottomPanel, "South");
 		displayView(false);
+	}
+
+	@Override
+	protected ArrayList<Adresse> GetList() {
+		return (ArrayList<Adresse>) Adresse.adresses;
 	}
 
 

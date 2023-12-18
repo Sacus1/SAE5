@@ -55,6 +55,10 @@ public class Referent extends Base {
 		}
 
 	}
+	@Override
+	public void loadFromDatabase(){
+		getFromDatabase();
+	}
 
 	public static void update(Referent referent) {
 		if (!Main.sql.updatePreparedStatement("Referent", new String[]{"nom", "telephone", "mail"},

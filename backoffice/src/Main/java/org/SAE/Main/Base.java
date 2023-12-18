@@ -4,7 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Base {
-	static List<Base> list = new ArrayList<>();
+
+	/**
+	 * call the static method getFromDatabase() of all the classes that extends Base
+	 */
+	public abstract void loadFromDatabase() ;
+
 	protected abstract void delete();
+
 
 }

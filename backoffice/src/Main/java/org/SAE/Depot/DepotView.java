@@ -41,6 +41,15 @@ public class DepotView extends BaseView<Depot> {
 		displayView(false);
 	}
 
+	@Override
+	protected ArrayList<Depot> GetList() {
+		ArrayList<Depot> list = new ArrayList<>();
+		for (Depot depot : Depot.depots) {
+			if (showArchived || !depot.isArchived) list.add(depot);
+		}
+		return list;
+	}
+
 
 	/**
 	 * Creates and returns a panel for creating a new depot.
@@ -208,9 +217,9 @@ public class DepotView extends BaseView<Depot> {
 			int result = fileChooser.showOpenDialog(this);
 			if (result == JFileChooser.APPROVE_OPTION) image.set(fileChooser.getSelectedFile());
 		});
-		parentPanel.add(fieldPanels[Depot.fields.length]);
+		fieldPanels[Depot.fields.length+1].add(imageButton);
+		parentPanel.add(fieldPanels[Depot.fields.length+1]);
 		parentPanel.setLayout(new GridLayout(fieldPanels.length/2 + 1, 2));
-		parentPanel.add(imageButton);
 		return image;
 
 	}

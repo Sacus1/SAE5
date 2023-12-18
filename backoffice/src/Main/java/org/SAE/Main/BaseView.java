@@ -1,7 +1,5 @@
 package org.SAE.Main;
 
-import org.SAE.Unite.Unite;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -47,15 +45,18 @@ public abstract class BaseView<T extends Base> extends JPanel {
 	}
 
 	/**
-	 * Abstract method to be implemented by subclasses.
-	 * It is triggered when the create button is clicked.
-	 *
-	 * @param isCreateMode A boolean indicating whether to create or not.
+	 * This method is used to display the view based on the mode.
+	 * If the mode is not create mode, it will display a list of Base objects.
+	 * If the mode is create mode, it will display a form for creating a new Base object.
+	 * @param isCreateMode a boolean indicating whether the view is in create mode or not.
 	 */
 	public void displayView(boolean isCreateMode){
 		if (!isCreateMode) {
 			clear();
-			for (Base t : Base.list) mainPanel.add(createListPanel((T) t));
+			ArrayList<T> list = GetList();
+			for (T t : list) {
+				mainPanel.add(createListPanel(t));
+			}
 			refresh();
 			// rename cancel button to create
 			createButton.setText("Create");
@@ -71,8 +72,19 @@ public abstract class BaseView<T extends Base> extends JPanel {
 		}
 	}
 
+	protected abstract ArrayList<T> GetList();
 
+
+	/**
+	 * This method is used to create a list panel for a given Base object.
+	 * The list panel contains a label displaying the Base object, an edit button, and a delete button.
+	 * The edit button, when clicked, will display an edit panel for the Base object.
+	 * The delete button, when clicked, will delete the Base object and refresh the view.
+	 * @param t the Base object for which the list panel is created.
+	 * @return the created list panel.
+	 */
 	protected JPanel createListPanel(T t){
+		t.loadFromDatabase();
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(1, 3));
 		JLabel label = new JLabel(t.toString());

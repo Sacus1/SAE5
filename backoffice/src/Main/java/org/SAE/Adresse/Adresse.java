@@ -112,4 +112,8 @@ public class Adresse extends Base {
    org.SAE.Main.Logger.log("Create failed");
   getFromDatabase();
  }
+ @Override
+ public void loadFromDatabase(){
+  getFromDatabase();
+ }
 }

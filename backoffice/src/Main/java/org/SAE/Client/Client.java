@@ -105,4 +105,8 @@ public class Client extends Base {
 	public String toString() {
 		return nom + " " + prenom;
 	}
+	@Override
+	public void loadFromDatabase(){
+		getFromDatabase();
+	}
 }

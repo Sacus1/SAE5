@@ -57,6 +57,9 @@ public class Unite extends Base {
 			Logger.error("Failed to delete Unite");
 		unites.remove(this);
 	}
-
+	@Override
+	public void loadFromDatabase(){
+		getFromDatabase();
+	}
 
 }

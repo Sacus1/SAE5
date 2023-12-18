@@ -6,6 +6,7 @@ import org.SAE.Unite.Unite;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ProduitView extends BaseView<Produit>{
@@ -19,6 +20,12 @@ public class ProduitView extends BaseView<Produit>{
 		add(bottomPanel, "South");
 		displayView(false);
 	}
+
+	@Override
+	protected ArrayList<Produit> GetList() {
+		return (ArrayList<Produit>) Produit.produits;
+	}
+
 	@Override
 	protected JPanel createFormPanel() {
 		JPanel panel = new JPanel();
