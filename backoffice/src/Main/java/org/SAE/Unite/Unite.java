@@ -1,5 +1,6 @@
 package org.SAE.Unite;
 
+import org.SAE.Main.Base;
 import org.SAE.Main.Logger;
 import org.SAE.Main.Main;
 import org.SAE.Main.SQL;
@@ -7,7 +8,7 @@ import org.SAE.Main.SQL;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-public class Unite {
+public class Unite extends Base {
 	public final int id;
 	String nom;
 	public static final List<Unite> unites = new ArrayList<>();
@@ -51,10 +52,10 @@ public class Unite {
 			Logger.error("Failed to insert Unite");
 		getFromDatabase();
 	}
-	public static void delete(Unite unite) {
-		if (Main.sql.deletePrepareStatement("Unite", new String[]{"idUnite = " + unite.id}))
+	protected void delete() {
+		if (Main.sql.deletePrepareStatement("Unite", new String[]{"idUnite = " + id}))
 			Logger.error("Failed to delete Unite");
-		unites.remove(unite);
+		unites.remove(this);
 	}
 
 

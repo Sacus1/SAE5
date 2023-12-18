@@ -1,5 +1,6 @@
 package org.SAE.Produit;
 import org.SAE.Main.BaseView;
+import org.SAE.Main.UButton;
 import org.SAE.Unite.Unite;
 
 import javax.swing.*;
@@ -7,7 +8,7 @@ import java.awt.*;
 import java.io.File;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class ProduitView extends BaseView{
+public class ProduitView extends BaseView<Produit>{
 	public ProduitView() {
 		super();
 		Produit.getFromDatabase();
@@ -18,49 +19,8 @@ public class ProduitView extends BaseView{
 		add(bottomPanel, "South");
 		displayView(false);
 	}
-	public void displayView(boolean isCreateMode) {
-		if (!isCreateMode) {
-			clear();
-			for (Produit produit : Produit.produits) mainPanel.add(createListPanel(produit));
-			refresh();
-			// rename cancel button to create
-			createButton.setText("Create");
-			inCreation = false;
-		}
-		else {
-			clear();
-			mainPanel.add(createCreatePanel());
-			refresh();
-			// rename create button to cancel
-			createButton.setText("Cancel");
-			inCreation = true;
-		}
-	}
-	private JPanel createListPanel(Produit produit) {
-		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(1, 3));
-		JLabel label = new JLabel(produit.toString());
-		panel.add(label);
-		Button editButton = new Button("Edit");
-		editButton.addActionListener(e -> {
-			clear();
-			mainPanel.add(createEditPanel(produit));
-			refresh();
-			// rename create button to cancel
-			createButton.setText("Cancel");
-			inCreation = true;
-		});
-		panel.add(editButton);
-		Button deleteButton = new Button("Delete");
-		deleteButton.addActionListener(e -> {
-			Produit.delete(produit);
-			displayView(false);
-		});
-		panel.add(deleteButton);
-		return panel;
-	}
-
-	public JPanel createCreatePanel() {
+	@Override
+	protected JPanel createFormPanel() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(6, 1));
 		// create the form
@@ -79,7 +39,7 @@ public class ProduitView extends BaseView{
 		panel.add(new JLabel("Unite"));
 		panel.add(uniteChoice);
 		// image choice
-		Button imageButton = new Button("Choose image");
+		UButton imageButton = new UButton("Choose image");
 		AtomicReference<File> image = new AtomicReference<>();
 		imageButton.addActionListener(e -> {
 			JFileChooser fileChooser = new JFileChooser();
@@ -90,7 +50,7 @@ public class ProduitView extends BaseView{
 			}
 		});
 		// create a button to create the produit
-		Button createButton = new Button("Create");
+		UButton createButton = new UButton("Create");
 		createButton.addActionListener(e -> {
 			Produit produit = new Produit(nomField.getText(), descriptionField.getText(), Double.parseDouble(prixField.getText()), Unite.unites.get(uniteChoice.getSelectedIndex()).id, image.get());
 			Produit.create(produit);
@@ -99,8 +59,9 @@ public class ProduitView extends BaseView{
 		panel.add(createButton);
 		return panel;
 	}
-	private Panel createEditPanel(Produit produit) {
-		Panel panel = new Panel();
+	@Override
+	protected JPanel createEditPanel(Produit produit) {
+		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(5, 2));
 		// nom
 		Label nomLabel = new Label("nom");
@@ -125,7 +86,7 @@ public class ProduitView extends BaseView{
 		uniteChoice.select(produit.idUnite);
 		panel.add(uniteChoice);
 		// image choice
-		Button imageButton = new Button("Choose image");
+		UButton imageButton = new UButton("Choose image");
 		AtomicReference<File> image = new AtomicReference<>();
 		imageButton.addActionListener(e -> {
 			JFileChooser fileChooser = new JFileChooser();
@@ -136,7 +97,7 @@ public class ProduitView extends BaseView{
 			}
 		});
 		// create button
-		Button updateButton = new Button("Update");
+		UButton updateButton = new UButton("Update");
 		updateButton.addActionListener(e -> {
 			produit.nom = nomField.getText();
 			produit.description = descriptionField.getText();

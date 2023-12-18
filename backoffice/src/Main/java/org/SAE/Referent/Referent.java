@@ -1,5 +1,6 @@
 package org.SAE.Referent;
 
+import org.SAE.Main.Base;
 import org.SAE.Main.Main;
 import org.SAE.Main.SQL;
 import org.SAE.Main.Logger;
@@ -8,7 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Referent {
+public class Referent extends Base {
 	public final int id;
 	String nom;
 	String telephone;
@@ -63,10 +64,10 @@ public class Referent {
 		getFromDatabase();
 	}
 
-	public static void delete(Referent referent) {
-		if (Main.sql.deletePrepareStatement("Referent", new String[]{"idReferent = " + referent.id}))
+	protected void delete() {
+		if (Main.sql.deletePrepareStatement("Referent", new String[]{"idReferent = " + id}))
 			Logger.error("Failed to delete Referent");
-		referents.remove(referent);
+		referents.remove(this);
 	}
 
 	public static void create(Referent referent) {

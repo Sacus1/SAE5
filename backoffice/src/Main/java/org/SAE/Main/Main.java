@@ -58,11 +58,11 @@ public class Main {
 						resetSelectedButton(UButtons);
 						UButton.setBackground(Color.LIGHT_GRAY);
 						break;
-				/*	case "Panier":
+					case "Panier":
 						mainPanel.add(new org.SAE.Panier.PanierView());
-						resetSelectedButton(buttons);
-						button.setBackground(Color.LIGHT_GRAY);
-						break;*/
+						resetSelectedButton(UButtons);
+						UButton.setBackground(Color.LIGHT_GRAY);
+						break;
 					case "Abonnement":
 						mainPanel.add(new org.SAE.Abonnement.AbonnementView());
 						resetSelectedButton(UButtons);

@@ -4,6 +4,7 @@ import org.SAE.Adresse.Adresse;
 import org.SAE.Error.CannotAccessFieldException;
 import org.SAE.Main.BaseView;
 import org.SAE.Main.Logger;
+import org.SAE.Main.UButton;
 import org.SAE.Referent.Referent;
 
 import javax.swing.*;
@@ -16,7 +17,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * This class represents the view for the Depot module.
  * It extends the BaseView class and provides the UI for managing depots.
  */
-public class DepotView extends BaseView {
+public class DepotView extends BaseView<Depot> {
 	boolean showArchived = false;
 	final JCheckBox archivedCheckBox;
 	/**
@@ -40,50 +41,19 @@ public class DepotView extends BaseView {
 		displayView(false);
 	}
 
-	/**
-	 * Draws the view based on the isCreate flag.
-	 * If isCreate is false, it shows the list of depots.
-	 * If isCreate is true, it shows the form to create a new depot.
-	 *
-	 * @param isCreateMode Flag to determine whether to show the create form or the list of depots.
-	 */
-	public void displayView(boolean isCreateMode) {
-		if (!isCreateMode) {
-			// show archived checkbox
-			archivedCheckBox.setVisible(true);
-			clear();
-			for (Depot depot : Depot.depots) {
-				if (depot.isArchived && !showArchived) continue;
-				mainPanel.add(createListPanel(depot));
-			}
-			refresh();
-			// rename cancel button to create
-			createButton.setText("Create");
-			inCreation = false;
-		}
-		else {
-			// hide archived checkbox
-			archivedCheckBox.setVisible(false);
-			clear();
-			mainPanel.add(createCreatePanel());
-			refresh();
-			// rename create button to cancel
-			createButton.setText("Cancel");
-			inCreation = true;
-		}
-	}
 
 	/**
 	 * Creates and returns a panel for creating a new depot.
-	 * @return Panel for creating a new depot.
+	 * @return JPanel for creating a new depot.
 	 */
-	private Panel createCreatePanel() {
-		Panel panel = new Panel();
-		Panel[] panels = new Panel[Depot.fields.length+2];
+	@Override
+	protected JPanel createFormPanel() {
+		JPanel panel = new JPanel();
+		JPanel[] panels = new JPanel[Depot.fields.length+2];
 		Adresse.getFromDatabase();
 		Referent.getFromDatabase();
 		// adresse choice
-		panels[0] = new Panel();
+		panels[0] = new JPanel();
 		panels[0].setLayout(new GridLayout(1, 2));
 		panels[0].add(new Label("Adresse *"));
 		Choice adresseChoice = new Choice();
@@ -91,7 +61,7 @@ public class DepotView extends BaseView {
 		panels[0].add(adresseChoice);
 		panel.add(panels[0]);
 		// referent choice
-		panels[1] = new Panel();
+		panels[1] = new JPanel();
 		panels[1].setLayout(new GridLayout(1, 2));
 		panels[1].add(new Label("Referent *"));
 		Choice referentChoice = new Choice();
@@ -102,7 +72,7 @@ public class DepotView extends BaseView {
 			panels[i] = createFieldPanel(Depot.fields[i], Depot.requiredFieldsList.contains(Depot.fields[i]));
 			panel.add(panels[i]);
 		}
-		panels[Depot.fields.length] = new Panel();
+		panels[Depot.fields.length] = new JPanel();
 		panels[Depot.fields.length].setLayout(new GridLayout(1, 2));
 		panels[Depot.fields.length].add(new Label("Jour de livraison"));
 		// Create components
@@ -110,49 +80,12 @@ public class DepotView extends BaseView {
 		// add image chooser
 		AtomicReference<File> image = createImageChooserPanel(panels, panel);
 		panel.setLayout(new GridLayout(panels.length/2 + 2, 2));
-		Button createButton = new Button("Create");
+		UButton createButton = new UButton("Create");
 		createButton.addActionListener(e -> createDepot(panels,joursLivraisons, image.get()));
 		panel.add(createButton);
 		return panel;
 	}
 
-	/**
-	 * Creates and returns a panel for listing a depot.
-	 * @param depot The depot to be listed.
-	 * @return Panel for listing a depot.
-	 */
-	private Panel createListPanel(Depot depot) {
-		Panel panel = new Panel();
-		panel.setLayout(new GridLayout(1, 3));
-		// add image if exists
-		if (depot.image != null) {
-			Panel panel2 = new Panel();
-			panel2.setLayout(new GridLayout(2, 1));
-			panel2.add(new JLabel(depot.nom, SwingConstants.CENTER));
-			panel2.add(new JLabel(new ImageIcon(depot.image.getPath())));
-			panel.add(panel2);
-		} else panel.add(new JLabel(depot.nom, SwingConstants.CENTER));
-		Button editButton = new Button("Edit");
-		editButton.addActionListener(e -> {
-			clear();
-			mainPanel.add(createEditPanel(depot));
-			refresh();
-		});
-		Button deleteButton = new Button("Delete");
-		deleteButton.addActionListener(e -> {
-			depot.delete();
-			displayView(false);
-		});
-		Button archiveButton = new Button(depot.isArchived ? "Unarchive" : "Archive");
-		archiveButton.addActionListener(e -> {
-			depot.archive();
-			displayView(false);
-		});
-		panel.add(editButton);
-		panel.add(archiveButton);
-		panel.add(deleteButton);
-		return panel;
-	}
 
 	/**
 	 * Creates a new depot based on the data entered in the form.
@@ -161,7 +94,7 @@ public class DepotView extends BaseView {
 	 * @param deliveryDays The days of delivery.
 	 * @param depotImage   The image of the depot.
 	 */
-	private void createDepot(Panel[] fieldPanels, ArrayList<JourSemaine> deliveryDays, File depotImage) {
+	private void createDepot(JPanel[] fieldPanels, ArrayList<JourSemaine> deliveryDays, File depotImage) {
 		String[] values = new String[fieldPanels.length];
 		for (int i = 2; i < Depot.fields.length; i++) {
 			boolean isRequired = Depot.requiredFieldsList.contains(Depot.fields[i]);
@@ -190,10 +123,10 @@ public class DepotView extends BaseView {
 	 * Creates and returns a panel for a field.
 	 * @param fieldName The name of the field.
 	 * @param isRequired Whether the field is required or not.
-	 * @return Panel for a field.
+	 * @return JPanel for a field.
 	 */
-	private Panel createFieldPanel(String fieldName, boolean isRequired) {
-		Panel panel = new Panel();
+	private JPanel createFieldPanel(String fieldName, boolean isRequired) {
+		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(1, 2));
 		panel.add(new Label(fieldName + (isRequired ? " *" : "")));
 		panel.add(new TextField());
@@ -203,19 +136,20 @@ public class DepotView extends BaseView {
 	/**
 	 * Creates and returns a panel for editing a depot.
 	 * @param depotToEdit The depot to be edited.
-	 * @return Panel for editing a depot.
+	 * @return JPanel for editing a depot.
 	 */
-	private Panel createEditPanel(Depot depotToEdit) {
-		Panel panel = new Panel();
-		Panel[] panels = new Panel[Depot.fields.length+2];
+	@Override
+	protected JPanel createEditPanel(Depot depotToEdit) {
+		JPanel panel = new JPanel();
+		JPanel[] panels = new JPanel[Depot.fields.length+2];
 		// adresse choice
-		panels[0] = new Panel();
+		panels[0] = new JPanel();
 		panels[0].setLayout(new GridLayout(1, 2));
 		panels[0].add(new Label("Adresse *"));
 		panels[0].add(createAddressChoiceComponent(depotToEdit));
 		panel.add(panels[0]);
 		// referent choice
-		panels[1] = new Panel();
+		panels[1] = new JPanel();
 		panels[1].setLayout(new GridLayout(1, 2));
 		panels[1].add(new Label("Referent *"));
 		panels[1].add(createReferentChoiceComponent(depotToEdit));
@@ -225,7 +159,7 @@ public class DepotView extends BaseView {
 		ArrayList<JourSemaine> joursLivraisons = createDeliveryDaysPanel(panels, panel, depotToEdit);
 		// add image chooser
 		AtomicReference<File> image = createImageChooserPanel(panels, panel);
-		Button createButton = new Button("Create");
+		UButton createButton = new UButton("Create");
 		createButton.addActionListener(e -> {
 			String[] values = new String[panels.length];
 			for (int i = 2; i < panels.length; i++) {
@@ -262,11 +196,11 @@ public class DepotView extends BaseView {
 	 * @param parentPanel The panel to which the image chooser is added.
 	 * @return An AtomicReference<File> containing the selected image file.
 	 */
-	private AtomicReference<File> createImageChooserPanel(Panel[] fieldPanels, Panel parentPanel) {
-		fieldPanels[Depot.fields.length+1] = new Panel();
+	private AtomicReference<File> createImageChooserPanel(JPanel[] fieldPanels, JPanel parentPanel) {
+		fieldPanels[Depot.fields.length+1] = new JPanel();
 		fieldPanels[Depot.fields.length+1].setLayout(new GridLayout(1, 2));
 		fieldPanels[Depot.fields.length+1].add(new Label("Image"));
-		Button imageButton = new Button("Select");
+		UButton imageButton = new UButton("Select");
 		AtomicReference<File> image = new AtomicReference<>();
 		imageButton.addActionListener(e -> {
 			JFileChooser fileChooser = new JFileChooser();
@@ -290,12 +224,12 @@ public class DepotView extends BaseView {
 	 * @param depotToEdit The depot to be edited.
 	 * @return An ArrayList<JourSemaine> containing the selected delivery days.
 	 */
-	private ArrayList<JourSemaine> createDeliveryDaysPanel(Panel[] fieldPanels, Panel parentPanel, Depot depotToEdit) {
-		fieldPanels[Depot.fields.length] = new Panel();
+	private ArrayList<JourSemaine> createDeliveryDaysPanel(JPanel[] fieldPanels, JPanel parentPanel, Depot depotToEdit) {
+		fieldPanels[Depot.fields.length] = new JPanel();
 		fieldPanels[Depot.fields.length].setLayout(new GridLayout(1, 2));
 		fieldPanels[Depot.fields.length].add(new Label("Jour de livraison"));
 		// Create components
-		Button button = new Button("Select");
+		UButton button = new UButton("Select");
 		JPopupMenu popupMenu = new JPopupMenu();
 		ArrayList<JourSemaine> joursLivraisons = new ArrayList<>();
 		JList<String> list = new JList<>(new String[]{"Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"});
@@ -326,7 +260,7 @@ public class DepotView extends BaseView {
 	 * @param fieldPanels The panels containing the data.
 	 * @param parentPanel The panel to which the fields are added.
 	 */
-	private void populateFields(Depot depot, Panel[] fieldPanels, Panel parentPanel) {
+	private void populateFields(Depot depot, JPanel[] fieldPanels, JPanel parentPanel) {
 		for (int i = 2; i < Depot.fields.length; i++) {
 	    fieldPanels[i] = createFieldPanel(Depot.fields[i], Depot.requiredFieldsList.contains(Depot.fields[i]));
 	    try {

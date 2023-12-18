@@ -1,11 +1,12 @@
 package org.SAE.Referent;
 
 import org.SAE.Main.BaseView;
+import org.SAE.Main.UButton;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class ReferentView extends BaseView {
+public class ReferentView extends BaseView<Referent> {
 	public ReferentView() {
 		super();
 		Referent.getFromDatabase();
@@ -15,48 +16,8 @@ public class ReferentView extends BaseView {
 		add(bottomPanel, "South");
 		displayView(false);
 	}
-	public void displayView(boolean isCreateMode) {
-		if (!isCreateMode) {
-			clear();
-			for (Referent referent : Referent.referents) mainPanel.add(createListPanel(referent));
-			refresh();
-			// rename cancel button to create
-			createButton.setText("Create");
-			inCreation = false;
-		}
-		else {
-			clear();
-			mainPanel.add(createFormPanel());
-			refresh();
-			// rename create button to cancel
-			createButton.setText("Cancel");
-			inCreation = true;
-		}
-	}
-	public JPanel createListPanel(Referent referent) {
-		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(1, 3));
-		JLabel label = new JLabel(referent.toString());
-		panel.add(label);
-		Button editButton = new Button("Edit");
-		editButton.addActionListener(e -> {
-			clear();
-			mainPanel.add(createEditPanel(referent));
-			refresh();
-			// rename create button to cancel
-			createButton.setText("Cancel");
-			inCreation = true;
-		});
-		panel.add(editButton);
-		Button deleteButton = new Button("Delete");
-		deleteButton.addActionListener(e -> {
-			Referent.delete(referent);
-			displayView(false);
-		});
-		panel.add(deleteButton);
-		return panel;
-	}
-	public JPanel createFormPanel() {
+	@Override
+	protected JPanel createFormPanel() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(2, 2));
 		// create text fields
@@ -75,13 +36,13 @@ public class ReferentView extends BaseView {
 		panel.add(emailLabel);
 		panel.add(emailField);
 		// add a button to create the referent
-		Button createButton = getCreateButton(nomField, telephoneField, emailField);
+		UButton createButton = getCreateButton(nomField, telephoneField, emailField);
 		panel.add(createButton);
 		return panel;
 	}
 
-	private Button getCreateButton(JTextField nomField, JTextField telephoneField, JTextField emailField) {
-		Button createButton = new Button("Create");
+	private UButton getCreateButton(JTextField nomField, JTextField telephoneField, JTextField emailField) {
+		UButton createButton = new UButton("Create");
 		createButton.addActionListener(e -> {
 			// check if all required fields are filled
 			if (nomField.getText().isEmpty() || telephoneField.getText().isEmpty() || emailField.getText().isEmpty()) {
@@ -105,7 +66,8 @@ public class ReferentView extends BaseView {
 		return createButton;
 	}
 
-	public JPanel createEditPanel(Referent referent) {
+	@Override
+	protected JPanel createEditPanel(Referent referent) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(2, 2));
 		// create text fields
@@ -124,7 +86,7 @@ public class ReferentView extends BaseView {
 		panel.add(emailLabel);
 		panel.add(emailField);
 		// add a button to create the referent
-		Button createButton = new Button("Edit");
+		UButton createButton = new UButton("Edit");
 		createButton.addActionListener(e -> {
 			// check if all required fields are filled
 			if (nomField.getText().isEmpty() || telephoneField.getText().isEmpty() || emailField.getText().isEmpty()) {

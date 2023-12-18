@@ -1,4 +1,5 @@
 package org.SAE.Produit;
+import org.SAE.Main.Base;
 import org.SAE.Main.Logger;
 import org.SAE.Main.Main;
 import org.SAE.Main.SQL;
@@ -7,7 +8,7 @@ import java.io.File;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-public class Produit {
+public class Produit extends Base {
 	static final String TABLE_NAME = "Produit";
 	final int id;
 	int idUnite;
@@ -69,9 +70,9 @@ public class Produit {
 			Logger.error("Create failed");
 		getFromDatabase();
 	}
-	public static void delete(Produit produit) {
-		if (Main.sql.deletePrepareStatement("Produit", new String[]{"idProduit = " + produit.id}))
+	protected void delete() {
+		if (Main.sql.deletePrepareStatement("Produit", new String[]{"idProduit = " + id}))
 			Logger.error("Delete failed");
-		produits.remove(produit);
+		produits.remove(this);
 	}
 }

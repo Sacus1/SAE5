@@ -1,5 +1,6 @@
 package org.SAE.Depot;
 
+import org.SAE.Main.Base;
 import org.SAE.Main.Logger;
 import org.SAE.Main.Main;
 import org.SAE.Main.SQL;
@@ -15,7 +16,7 @@ import java.util.Arrays;
  * This class represents a Depot, a JPanel.
  * It contains information about the Depot and methods for database operations.
  */
-public class Depot extends JPanel {
+public class Depot extends Base {
 	static final String TABLE_NAME = "Depot";
 	static final String[] fields = {"Adresse id", "Referent.Referent id", "Nom", "Telephone", "Presentation",
 					"Commentaire", "Mail", "Website"};
@@ -157,7 +158,7 @@ public class Depot extends JPanel {
  /**
   * This method deletes a Depot from the database.
   */
-	public void delete() {
+	protected void delete() {
 		if (Main.sql.deletePrepareStatement(TABLE_NAME, new String[]{"idDepot = " + this.id})) {
 			Logger.error("Can't delete depot");
 			return;

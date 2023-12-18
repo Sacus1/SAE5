@@ -1,10 +1,12 @@
 package org.SAE.Unite;
 
 import org.SAE.Main.BaseView;
+import org.SAE.Main.UButton;
 
+import javax.swing.*;
 import java.awt.*;
 
-public class UniteView extends BaseView{
+public class UniteView extends BaseView<Unite> {
 	public UniteView() {
 		super();
 		Unite.getFromDatabase();
@@ -15,51 +17,10 @@ public class UniteView extends BaseView{
 		add(bottomPanel, "South");
 		displayView(false);
 	}
-	public void displayView(boolean isCreateMode) {
-		if (!isCreateMode) {
-			clear();
-			for (Unite unite : Unite.unites) mainPanel.add(createListPanel(unite));
-			refresh();
-			// rename cancel button to create
-			createButton.setText("Create");
-			inCreation = false;
-		}
-		else {
-			clear();
-			mainPanel.add(createCreatePanel());
-			refresh();
-			// rename create button to cancel
-			createButton.setText("Cancel");
-			inCreation = true;
-		}
-	}
 
-	private Panel createListPanel(Unite unite) {
-		Panel panel = new Panel();
-		panel.setLayout(new GridLayout(1, 3));
-		Label label = new Label(unite.toString());
-		panel.add(label);
-		Button editButton = new Button("Edit");
-		editButton.addActionListener(e -> {
-			clear();
-			mainPanel.add(createEditPanel(unite));
-			refresh();
-			// rename create button to cancel
-			createButton.setText("Cancel");
-			inCreation = true;
-		});
-		panel.add(editButton);
-		Button deleteButton = new Button("Delete");
-		deleteButton.addActionListener(e -> {
-			Unite.delete(unite);
-			displayView(false);
-		});
-		panel.add(deleteButton);
-		return panel;
-	}
-
-	private Panel createEditPanel(Unite unite) {
-		Panel panel = new Panel();
+	@Override
+	protected JPanel createEditPanel(Unite unite) {
+		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(1, 2));
 		// nom
 		Label nomLabel = new Label("nom");
@@ -67,7 +28,7 @@ public class UniteView extends BaseView{
 		TextField nomField = new TextField(unite.nom);
 		panel.add(nomField);
 		// create button
-		Button updateButton = new Button("Update");
+		UButton updateButton = new UButton("Update");
 		updateButton.addActionListener(e -> {
 			unite.nom = nomField.getText();
 			Unite.update(unite);
@@ -77,8 +38,9 @@ public class UniteView extends BaseView{
 		return panel;
 	}
 
-	private Panel createCreatePanel() {
-		Panel panel = new Panel();
+	@Override
+	protected JPanel createFormPanel() {
+		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(2, 2));
 		// nom
 		Label nomLabel = new Label("nom");
@@ -86,7 +48,7 @@ public class UniteView extends BaseView{
 		TextField nomField = new TextField();
 		panel.add(nomField);
 		// create button
-		Button createButton = new Button("Create");
+		UButton createButton = new UButton("Create");
 		createButton.addActionListener(e -> {
 			Unite unite = new Unite(nomField.getText());
 			Unite.create(unite);

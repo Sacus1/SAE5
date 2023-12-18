@@ -3,6 +3,7 @@ package org.SAE.Client;
 import org.SAE.Adresse.Adresse;
 import org.SAE.Client.Client;
 import org.SAE.Depot.JourSemaine;
+import org.SAE.Main.Base;
 import org.SAE.Main.Logger;
 import org.SAE.Main.Main;
 import org.SAE.Main.SQL;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Client {
+public class Client extends Base {
 	static final String TABLE_NAME = "Client";
 	static final String[] dbFields = {"Adresse_idAdresse", "raisonSociale", "civilite", "nom", "prenom", "telephone"
 					, "telephone2", "telephone3", "mail", "profession", "dateNaissance", "estDispense"};
@@ -94,9 +95,10 @@ public class Client {
 	}
 
 
-	public static void delete(Client client) {
-		if (!Main.sql.deletePrepareStatement(TABLE_NAME, new String[]{"idClient = " + client.id}))
+	protected void delete() {
+		if (!Main.sql.deletePrepareStatement(TABLE_NAME, new String[]{"idClient = " + id}))
 			Logger.error("Can't delete client");
+		clients.remove(this);
 	}
 
 	@Override

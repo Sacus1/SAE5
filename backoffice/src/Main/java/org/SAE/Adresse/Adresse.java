@@ -1,5 +1,6 @@
 package org.SAE.Adresse;
 
+import org.SAE.Main.Base;
 import org.SAE.Main.Main;
 import org.SAE.Main.SQL;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * This class represents an address with properties like ID, address, city, and postal code.
  * It provides methods to create, update, delete, and retrieve addresses from the database.
  */
-public class Adresse {
+public class Adresse extends Base {
  public static final String TABLE_NAME = "Adresse";
  protected static final String[] TABLE_COLUMNS = {"adresse", "ville", "codePostal"};
  public final int id;
@@ -63,10 +64,11 @@ public class Adresse {
   * Method to delete an address from the database.
   * If the deletion fails, it prints “Delete failed” to the console.
   */
- static void delete(Adresse adresse) {
-  if (Main.sql.deletePrepareStatement(TABLE_NAME, new String[]{"idAdresse = " + adresse.id}))
+ @Override
+ protected void delete() {
+  if (Main.sql.deletePrepareStatement(TABLE_NAME, new String[]{"idAdresse = " + id}))
    org.SAE.Main.Logger.log("Delete failed");
-  adresses.remove(adresse);
+  adresses.remove(this);
  }
 
  /**

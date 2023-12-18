@@ -13,7 +13,7 @@ import java.sql.Date;
 import java.util.Objects;
 import java.util.Properties;
 
-public class ClientView extends BaseView {
+public class ClientView extends BaseView<Client> {
 
 	public ClientView() {
 		super();
@@ -25,35 +25,14 @@ public class ClientView extends BaseView {
 		displayView(false);
 	}
 
-	public void displayView(boolean isCreateMode) {
-		inCreation = false;
-		clear();
-		for (Client client : Client.clients) mainPanel.add(createListPanel(client));
-		refresh();
+	@Override
+	protected JPanel createFormPanel() {
+		return null;
 	}
 
-	private JPanel createListPanel(Client client) {
-		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(1, 3));
-		JLabel label = new JLabel(client.toString());
-		UButton editUButton = new UButton("Edit");
-		editUButton.addActionListener(e -> {
-			clear();
-			mainPanel.add(createEditPanel(client));
-			refresh();
-		});
-		UButton deleteUButton = new UButton("Delete");
-		deleteUButton.addActionListener(e -> {
-			Client.delete(client);
-			displayView(false);
-		});
-		panel.add(label);
-		panel.add(editUButton);
-		panel.add(deleteUButton);
-		return panel;
-	}
 
-	private JPanel createEditPanel(Client client) {
+	@Override
+	protected JPanel createEditPanel(Client client) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(0, 2));
 		Adresse.getFromDatabase();
