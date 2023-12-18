@@ -110,7 +110,7 @@ public class DepotView extends BaseView {
 		// add image chooser
 		AtomicReference<File> image = createImageChooserPanel(panels, panel);
 		panel.setLayout(new GridLayout(panels.length/2 + 2, 2));
-		JButton createButton = new JButton("Create");
+		Button createButton = new Button("Create");
 		createButton.addActionListener(e -> createDepot(panels,joursLivraisons, image.get()));
 		panel.add(createButton);
 		return panel;
@@ -132,18 +132,18 @@ public class DepotView extends BaseView {
 			panel2.add(new JLabel(new ImageIcon(depot.image.getPath())));
 			panel.add(panel2);
 		} else panel.add(new JLabel(depot.nom, SwingConstants.CENTER));
-		JButton editButton = new JButton("Edit");
+		Button editButton = new Button("Edit");
 		editButton.addActionListener(e -> {
 			clear();
 			mainPanel.add(createEditPanel(depot));
 			refresh();
 		});
-		JButton deleteButton = new JButton("Delete");
+		Button deleteButton = new Button("Delete");
 		deleteButton.addActionListener(e -> {
 			depot.delete();
 			displayView(false);
 		});
-		JButton archiveButton = new JButton(depot.isArchived ? "Unarchive" : "Archive");
+		Button archiveButton = new Button(depot.isArchived ? "Unarchive" : "Archive");
 		archiveButton.addActionListener(e -> {
 			depot.archive();
 			displayView(false);
@@ -225,7 +225,7 @@ public class DepotView extends BaseView {
 		ArrayList<JourSemaine> joursLivraisons = createDeliveryDaysPanel(panels, panel, depotToEdit);
 		// add image chooser
 		AtomicReference<File> image = createImageChooserPanel(panels, panel);
-		JButton createButton = new JButton("Create");
+		Button createButton = new Button("Create");
 		createButton.addActionListener(e -> {
 			String[] values = new String[panels.length];
 			for (int i = 2; i < panels.length; i++) {
@@ -266,7 +266,7 @@ public class DepotView extends BaseView {
 		fieldPanels[Depot.fields.length+1] = new Panel();
 		fieldPanels[Depot.fields.length+1].setLayout(new GridLayout(1, 2));
 		fieldPanels[Depot.fields.length+1].add(new Label("Image"));
-		JButton imageButton = new JButton("Select");
+		Button imageButton = new Button("Select");
 		AtomicReference<File> image = new AtomicReference<>();
 		imageButton.addActionListener(e -> {
 			JFileChooser fileChooser = new JFileChooser();
@@ -295,7 +295,7 @@ public class DepotView extends BaseView {
 		fieldPanels[Depot.fields.length].setLayout(new GridLayout(1, 2));
 		fieldPanels[Depot.fields.length].add(new Label("Jour de livraison"));
 		// Create components
-		JButton button = new JButton("Select");
+		Button button = new Button("Select");
 		JPopupMenu popupMenu = new JPopupMenu();
 		ArrayList<JourSemaine> joursLivraisons = new ArrayList<>();
 		JList<String> list = new JList<>(new String[]{"Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"});

@@ -40,6 +40,7 @@ public class Referent {
 		referents.clear();
 		ResultSet res = sql.select("Referent");
 		try {
+			if (res == null) return;
 			while (res.next())
 			{
 				int id = res.getInt("idReferent");

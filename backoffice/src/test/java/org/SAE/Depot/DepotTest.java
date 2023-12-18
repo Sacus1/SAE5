@@ -1,3 +1,5 @@
+package org.SAE.Depot;
+
 import org.SAE.Depot.Depot;
 import org.SAE.Main.Logger;
 import org.SAE.Main.Main;
@@ -16,14 +18,15 @@ import static org.mockito.Mockito.times;
 class DepotTest {
 	Depot depot;
 	SQL sqlMock;
-	Logger loggerMock;
-	Main mainMock;
 
 	@BeforeEach
 	void setUp() {
 		sqlMock = Mockito.mock(SQL.class);
-		mainMock = Mockito.mock(Main.class);
 		Main.sql = sqlMock;
+		Mockito.when(sqlMock.select(Mockito.anyString())).thenReturn(null);
+		Mockito.when(sqlMock.createPrepareStatement(Mockito.anyString(), Mockito.any(), Mockito.any())).thenReturn(true);
+		Mockito.when(sqlMock.updatePreparedStatement(Mockito.anyString(), Mockito.any(), Mockito.any(),
+						Mockito.any())).thenReturn(true);
 		depot = new Depot(1, 1, 1, "Test Depot", "1234567890", "Test Presentation", "Test Comment", "test@mail.com", "www.test.com", new File("test.jpg"));
 	}
 
@@ -40,48 +43,69 @@ class DepotTest {
 	void createDepotFailure() {
 		Mockito.when(sqlMock.createPrepareStatement(Mockito.anyString(), Mockito.any(), Mockito.any())).thenReturn(true);
 		Depot.create(depot);
-		Mockito.verify(loggerMock).error("Can't create depot");
+		try (MockedStatic<Logger> mockLogger = Mockito.mockStatic(Logger.class)) {
+			Depot.create(depot);
+			mockLogger.verify(() -> Logger.error(anyString()), times(1));
+		}
 	}
 
 	@Test
 	void updateDepotSuccessfully() {
 		Mockito.when(sqlMock.updatePreparedStatement(Mockito.anyString(), Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(true);
 		Depot.update(depot);
-		Mockito.verify(loggerMock, Mockito.never()).error(Mockito.anyString());
+		try (MockedStatic<Logger> mockLogger = Mockito.mockStatic(Logger.class)) {
+			Depot.update(depot);
+			mockLogger.verify(() -> Logger.error(anyString()), times(0));
+		}
 	}
 
 	@Test
 	void updateDepotFailure() {
 		Mockito.when(sqlMock.updatePreparedStatement(Mockito.anyString(), Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(false);
 		Depot.update(depot);
-		Mockito.verify(loggerMock).error("Failed to update depot");
+		try (MockedStatic<Logger> mockLogger = Mockito.mockStatic(Logger.class)) {
+			Depot.update(depot);
+			mockLogger.verify(() -> Logger.error(anyString()), times(1));
+		}
 	}
 
 	@Test
 	void deleteDepotSuccessfully() {
 		Mockito.when(sqlMock.deletePrepareStatement(Mockito.anyString(), Mockito.any())).thenReturn(false);
 		depot.delete();
-		Mockito.verify(loggerMock, Mockito.never()).error(Mockito.anyString());
+		try (MockedStatic<Logger> mockLogger = Mockito.mockStatic(Logger.class)) {
+			depot.delete();
+			mockLogger.verify(() -> Logger.error(anyString()), times(0));
+		}
 	}
 
 	@Test
 	void deleteDepotFailure() {
 		Mockito.when(sqlMock.deletePrepareStatement(Mockito.anyString(), Mockito.any())).thenReturn(true);
 		depot.delete();
-		Mockito.verify(loggerMock).error("Can't delete depot");
+		try (MockedStatic<Logger> mockLogger = Mockito.mockStatic(Logger.class)) {
+			depot.delete();
+			mockLogger.verify(() -> Logger.error(anyString()), times(1));
+		}
 	}
 
 	@Test
 	void archiveDepotSuccessfully() {
 		Mockito.when(sqlMock.updatePreparedStatement(Mockito.anyString(), Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(true);
 		depot.archive();
-		Mockito.verify(loggerMock, Mockito.never()).error(Mockito.anyString());
+		try (MockedStatic<Logger> mockLogger = Mockito.mockStatic(Logger.class)) {
+			depot.archive();
+			mockLogger.verify(() -> Logger.error(anyString()), times(0));
+		}
 	}
 
 	@Test
 	void archiveDepotFailure() {
 		Mockito.when(sqlMock.updatePreparedStatement(Mockito.anyString(), Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(false);
 		depot.archive();
-		Mockito.verify(loggerMock).error("Can't archive depot");
+		try (MockedStatic<Logger> mockLogger = Mockito.mockStatic(Logger.class)) {
+			depot.archive();
+			mockLogger.verify(() -> Logger.error(anyString()), times(1));
+		}
 	}
 }

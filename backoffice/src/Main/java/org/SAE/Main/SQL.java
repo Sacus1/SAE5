@@ -53,7 +53,7 @@ public class SQL {
 		}
 		query.append(" WHERE ");
 		for (int i = 0; i < whereCond.length; i++) {
-			query.append(whereCond[i]).append(" = ?");
+			query.append(whereCond[i]);
 			if (i != whereCond.length - 1) query.append(" AND ");
 		}
 		query.append(";");
@@ -69,6 +69,9 @@ public class SQL {
 					if (file.delete()) System.out.println("File deleted successfully");
 					else System.out.println("Failed to delete the file");
 				}
+				else if (attr[i] instanceof Date date) stmt.setDate(i + 1, date);
+				else if (attr[i] instanceof Boolean bool) stmt.setBoolean(i + 1, bool);
+				else stmt.setNull(i + 1, Types.BLOB);
 			return stmt.executeUpdate() != 0;
 		} catch (SQLException e) {
 			System.err.println("Main.SQL Exception : " + e.getMessage() + "\n" + query + "\n" + Arrays.toString(attr));

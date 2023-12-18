@@ -8,7 +8,7 @@ import java.awt.*;
  * It extends JPanel, a generic lightweight container.
  */
 public abstract class BaseView extends JPanel {
-	public final JButton createButton = new JButton("Create");
+	public final UButton createButton = new UButton("Create");
 	public static boolean inCreation = false;
 	protected static JPanel mainPanel;
 	protected static JPanel topPanel;

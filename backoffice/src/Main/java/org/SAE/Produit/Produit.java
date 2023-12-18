@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class Produit {
+	static final String TABLE_NAME = "Produit";
 	final int id;
 	int idUnite;
 	String nom;
@@ -41,6 +42,7 @@ public class Produit {
 		SQL sql = Main.sql;
 		try {
 			ResultSet res = sql.select("Produit");
+			if (res == null) return;
 			while (res.next()) {
 				int id = res.getInt("idProduit");
 				String nom = res.getString("nom");

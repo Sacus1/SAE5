@@ -41,7 +41,7 @@ public class ProduitView extends BaseView{
 		panel.setLayout(new GridLayout(1, 3));
 		JLabel label = new JLabel(produit.toString());
 		panel.add(label);
-		JButton editButton = new JButton("Edit");
+		Button editButton = new Button("Edit");
 		editButton.addActionListener(e -> {
 			clear();
 			mainPanel.add(createEditPanel(produit));
@@ -51,7 +51,7 @@ public class ProduitView extends BaseView{
 			inCreation = true;
 		});
 		panel.add(editButton);
-		JButton deleteButton = new JButton("Delete");
+		Button deleteButton = new Button("Delete");
 		deleteButton.addActionListener(e -> {
 			Produit.delete(produit);
 			displayView(false);
@@ -79,7 +79,7 @@ public class ProduitView extends BaseView{
 		panel.add(new JLabel("Unite"));
 		panel.add(uniteChoice);
 		// image choice
-		JButton imageButton = new JButton("Choose image");
+		Button imageButton = new Button("Choose image");
 		AtomicReference<File> image = new AtomicReference<>();
 		imageButton.addActionListener(e -> {
 			JFileChooser fileChooser = new JFileChooser();
@@ -90,7 +90,7 @@ public class ProduitView extends BaseView{
 			}
 		});
 		// create a button to create the produit
-		JButton createButton = new JButton("Create");
+		Button createButton = new Button("Create");
 		createButton.addActionListener(e -> {
 			Produit produit = new Produit(nomField.getText(), descriptionField.getText(), Double.parseDouble(prixField.getText()), Unite.unites.get(uniteChoice.getSelectedIndex()).id, image.get());
 			Produit.create(produit);
@@ -125,7 +125,7 @@ public class ProduitView extends BaseView{
 		uniteChoice.select(produit.idUnite);
 		panel.add(uniteChoice);
 		// image choice
-		JButton imageButton = new JButton("Choose image");
+		Button imageButton = new Button("Choose image");
 		AtomicReference<File> image = new AtomicReference<>();
 		imageButton.addActionListener(e -> {
 			JFileChooser fileChooser = new JFileChooser();
@@ -136,7 +136,7 @@ public class ProduitView extends BaseView{
 			}
 		});
 		// create button
-		JButton updateButton = new JButton("Update");
+		Button updateButton = new Button("Update");
 		updateButton.addActionListener(e -> {
 			produit.nom = nomField.getText();
 			produit.description = descriptionField.getText();

@@ -11,8 +11,8 @@ public class Main {
 	public static SQL sql ;
 	public static JFrame frame;
 	static final String url = "jdbc:mysql://localhost:3306/SAE";
-	private static void resetSelectedButton(JButton[] buttons) {
-		for (JButton button : buttons) button.setBackground(null);
+	private static void resetSelectedButton(UButton[] UButtons) {
+		for (UButton UButton : UButtons) UButton.setBackground(null);
 	}
 	public static void main(String[] args) {
 		sql = new SQL(url,"root","");
@@ -23,40 +23,62 @@ public class Main {
 		// create a list of buttons on the side of the frame.
 		JPanel leftPanel = new JPanel();
 		// add buttons
-		JButton[] buttons = {new JButton("Depot"), new JButton("Referent"), new JButton("Adresse"),new JButton("Unité"),new JButton("Produit")};
-		Arrays.sort(buttons, Comparator.comparing(JButton::getText));
-		leftPanel.setLayout(new GridLayout(buttons.length, 1));
-		for (JButton button : buttons) {
-			button.addActionListener(e -> {
+		UButton[] UButtons = {new UButton("Depot"), new UButton("Referent"), new UButton("Adresse"),new UButton("Unité"),
+						new UButton("Produit"),new UButton("Panier"),new UButton("Abonnement"),new UButton("Jardin"),new UButton("Client")};
+		Arrays.sort(UButtons, Comparator.comparing(UButton::getText));
+		leftPanel.setLayout(new GridLayout(UButtons.length, 1));
+		for (UButton UButton : UButtons) {
+			UButton.addActionListener(e -> {
 				// clear the frame
 				mainPanel.removeAll();
 				// add the view to the frame
-				switch (button.getText()) {
+				switch (UButton.getText()) {
 					case "Depot":
 						mainPanel.add(new DepotView());
-						resetSelectedButton(buttons);
-						button.setBackground(Color.LIGHT_GRAY);
+						resetSelectedButton(UButtons);
+						UButton.setBackground(Color.LIGHT_GRAY);
 						break;
 					case "Referent":
 						mainPanel.add(new org.SAE.Referent.ReferentView());
-						resetSelectedButton(buttons);
-						button.setBackground(Color.LIGHT_GRAY);
+						resetSelectedButton(UButtons);
+						UButton.setBackground(Color.LIGHT_GRAY);
 						break;
 					case "Adresse":
 						mainPanel.add(new org.SAE.Adresse.AdresseView());
-						resetSelectedButton(buttons);
-						button.setBackground(Color.LIGHT_GRAY);
+						resetSelectedButton(UButtons);
+						UButton.setBackground(Color.LIGHT_GRAY);
 						break;
 					case "Unité":
 						mainPanel.add(new org.SAE.Unite.UniteView());
-						resetSelectedButton(buttons);
-						button.setBackground(Color.LIGHT_GRAY);
+						resetSelectedButton(UButtons);
+						UButton.setBackground(Color.LIGHT_GRAY);
 						break;
 					case "Produit":
 						mainPanel.add(new org.SAE.Produit.ProduitView());
+						resetSelectedButton(UButtons);
+						UButton.setBackground(Color.LIGHT_GRAY);
+						break;
+				/*	case "Panier":
+						mainPanel.add(new org.SAE.Panier.PanierView());
 						resetSelectedButton(buttons);
 						button.setBackground(Color.LIGHT_GRAY);
+						break;*/
+					case "Abonnement":
+						mainPanel.add(new org.SAE.Abonnement.AbonnementView());
+						resetSelectedButton(UButtons);
+						UButton.setBackground(Color.LIGHT_GRAY);
 						break;
+					/*case "Jardin":
+						mainPanel.add(new org.SAE.Jardin.JardinView());
+						resetSelectedButton(buttons);
+						button.setBackground(Color.LIGHT_GRAY);
+						break;*/
+					case "Client":
+						mainPanel.add(new org.SAE.Client.ClientView());
+						resetSelectedButton(UButtons);
+						UButton.setBackground(Color.LIGHT_GRAY);
+						break;
+
 					default:
 						break;
 				}
@@ -65,7 +87,7 @@ public class Main {
 				frame.repaint();
 			});
 			// change the size of the button to fit the frame
-			leftPanel.add(button);
+			leftPanel.add(UButton);
 		}
 		frame.add(leftPanel, "West");
 		frame.add(mainPanel, "Center");

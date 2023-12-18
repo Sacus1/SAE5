@@ -27,7 +27,7 @@ public class Adresse {
   * Constructor to create an address object with an ID, address, city, and postal code.
   * The address object is then added to the static list of addresses.
   */
- public Adresse(int id, String rue, String ville, String codePostal) {
+ Adresse(int id, String rue, String ville, String codePostal) {
   this.id = id;
   this.rue = rue;
   this.ville = ville;
@@ -52,7 +52,7 @@ public class Adresse {
   * Method to update an address in the database.
   * If the update fails, it prints “Update failed” to the console.
   */
- public static void update(Adresse adresse) {
+ static void update(Adresse adresse) {
   if (!(Main.sql.updatePreparedStatement(TABLE_NAME, TABLE_COLUMNS,
       new Object[]{adresse.rue, adresse.ville, adresse.codePostal},
       new String[]{"idAdresse = " + adresse.id}))) org.SAE.Main.Logger.log("Update failed");
@@ -84,6 +84,7 @@ public class Adresse {
   adresses.clear();
   try {
    ResultSet res = sql.select(TABLE_NAME);
+   if (res == null) return;
    while (res.next()) {
     int id = res.getInt("idAdresse");
     String adresse = res.getString("adresse");
@@ -101,7 +102,7 @@ public class Adresse {
   * Method to create an address in the database.
   * If the creation fails, it prints “Create failed” to the console.
   */
- public static void create(Adresse adresse) {
+ static void create(Adresse adresse) {
   String[] tableColumns = {"idAdresse"};
   for (String column : TABLE_COLUMNS) tableColumns = Main.addStringToArray(tableColumns, column);
   if (Main.sql.createPrepareStatement(TABLE_NAME, tableColumns,

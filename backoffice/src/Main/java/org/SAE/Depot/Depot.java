@@ -111,6 +111,7 @@ public class Depot extends JPanel {
 	}
 
 	private static void insertDeliveryDays(Depot depot) {
+		if (depot.jourLivraison == null) return;
 		for (JourSemaine jourSemaine : depot.jourLivraison)
 			if (Main.sql.createPrepareStatement("JourSemaine_idJourSemaine", new String[]{"Depot_idDepot"},
 							new Object[]{jourSemaine.ordinal(), depot.id}))
@@ -157,10 +158,14 @@ public class Depot extends JPanel {
   * This method deletes a Depot from the database.
   */
 	public void delete() {
-		if (Main.sql.deletePrepareStatement(TABLE_NAME, new String[]{"idDepot = " + this.id}))
+		if (Main.sql.deletePrepareStatement(TABLE_NAME, new String[]{"idDepot = " + this.id})) {
 			Logger.error("Can't delete depot");
-		if (Main.sql.deletePrepareStatement("Depot_has_JourSemaine", new String[]{"Depot_idDepot = " + this.id}))
+			return;
+		}
+		if (Main.sql.deletePrepareStatement("Depot_has_JourSemaine", new String[]{"Depot_idDepot = " + this.id})) {
 			Logger.error("Can't delete depot because of delivery days");
+			return;
+		}
 		depots.remove(this);
 	}
 

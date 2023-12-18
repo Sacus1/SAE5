@@ -56,13 +56,13 @@ public class AdresseView extends BaseView {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(1, 3));
 		JLabel label = new JLabel(adresse.toString());
-		JButton editButton = new JButton("Edit");
+		Button editButton = new Button("Edit");
 		editButton.addActionListener(e -> {
 			clear();
 			mainPanel.add(createEditPanel(adresse));
 			refresh();
 		});
-		JButton deleteButton = new JButton("Delete");
+		Button deleteButton = new Button("Delete");
 		deleteButton.addActionListener(e -> {
 			Adresse.delete(adresse);
 			displayView(false);
@@ -84,7 +84,7 @@ public class AdresseView extends BaseView {
 		JTextField adresseField = new JTextField();
 		JTextField villeField = new JTextField();
 		JTextField codePostalField = new JTextField();
-		JButton submitButton = new JButton("Submit");
+		Button submitButton = new Button("Submit");
 		panel.add(new JLabel("Adresse *"));
 		panel.add(adresseField);
 		panel.add(new JLabel("Ville *"));
@@ -122,8 +122,8 @@ public class AdresseView extends BaseView {
 		JTextField adresseField = new JTextField(adresse.rue);
 		JTextField villeField = new JTextField(adresse.ville);
 		JTextField codePostalField = new JTextField(adresse.codePostal);
-		JButton submitButton = new JButton("Submit");
-		JButton cancelButton = new JButton("Cancel");
+		Button submitButton = new Button("Submit");
+		Button cancelButton = new Button("Cancel");
 		panel.add(new Label("Adresse *"));
 		panel.add(adresseField);
 		panel.add(new Label("Ville *"));

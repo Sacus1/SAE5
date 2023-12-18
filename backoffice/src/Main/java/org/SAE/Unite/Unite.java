@@ -29,6 +29,7 @@ public class Unite {
 		SQL sql = Main.sql;
 		try {
 			ResultSet res = sql.select("Unite");
+			if (res == null) return;
 			while (res.next()) {
 				int id = res.getInt("idUnite");
 				String nom = res.getString("nom");
