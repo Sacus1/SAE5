@@ -1,5 +1,7 @@
 package org.SAE.Main;
 
+import org.SAE.Depot.Depot;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -51,25 +53,25 @@ public abstract class BaseView<T extends Base> extends JPanel {
 	 * @param isCreateMode a boolean indicating whether the view is in create mode or not.
 	 */
 	public void displayView(boolean isCreateMode){
-		if (!isCreateMode) {
-			clear();
-			ArrayList<T> list = GetList();
-			for (T t : list) {
-				mainPanel.add(createListPanel(t));
-			}
-			refresh();
-			// rename cancel button to create
-			createButton.setText("Create");
-			inCreation = false;
-		}
-		else {
+		if (isCreateMode) {
 			clear();
 			mainPanel.add(createFormPanel());
 			refresh();
 			// rename create button to cancel
 			createButton.setText("Cancel");
 			inCreation = true;
+			return;
 		}
+		clear();
+		ArrayList<T> list = GetList();
+		for (T t : list) {
+			mainPanel.add(createListPanel(t));
+		}
+		refresh();
+		// rename cancel button to create
+		createButton.setText("Create");
+		inCreation = false;
+
 	}
 
 	protected abstract ArrayList<T> GetList();
@@ -97,6 +99,7 @@ public abstract class BaseView<T extends Base> extends JPanel {
 		UButton deleteButton = new UButton("Delete");
 		deleteButton.addActionListener(e -> {
 			t.delete();
+			t.loadFromDatabase();
 			displayView(false);
 		});
 		panel.add(label);
@@ -108,7 +111,7 @@ public abstract class BaseView<T extends Base> extends JPanel {
 	/**
 	 * This method clears all components from the main panel.
 	 */
-	public static void clear() {
+	public void clear() {
 		mainPanel.removeAll();
 	}
 
@@ -121,4 +124,17 @@ public abstract class BaseView<T extends Base> extends JPanel {
 	}
 	protected abstract JPanel createFormPanel();
 	protected abstract JPanel createEditPanel(T object);
+	/**
+	 * Creates and returns a panel for a field.
+	 * @param fieldName The name of the field.
+	 * @param isRequired Whether the field is required or not.
+	 * @return JPanel for a field.
+	 */
+	protected JPanel createFieldPanel(String fieldName, boolean isRequired) {
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(1, 2));
+		panel.add(new Label(fieldName + (isRequired ? " *" : "")));
+		panel.add(new TextField());
+		return panel;
+	}
 }
