@@ -27,7 +27,7 @@ public class DepotView extends BaseView<Depot> {
 	 * Initializes the UI components and layout.
 	 */
 	public DepotView() {
-		super();
+		super("Depot");
 		Depot.getFromDatabase();
 		setLayout(new BorderLayout());
 		archivedCheckBox = new JCheckBox("Show archived");

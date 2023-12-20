@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class ProduitView extends BaseView<Produit>{
 	public ProduitView() {
-		super();
+		super("Produit");
 		Produit.getFromDatabase();
 		setLayout(new BorderLayout());
 		// add panels to the frame

@@ -17,7 +17,7 @@ import java.util.Properties;
 public class ClientView extends BaseView<Client> {
 
 	public ClientView() {
-		super();
+		super("Client");
 		Client.getFromDatabase();
 		topPanel.remove(createButton);
 		add(topPanel, "North");

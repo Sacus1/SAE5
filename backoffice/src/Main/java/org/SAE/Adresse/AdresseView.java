@@ -17,7 +17,7 @@ public class AdresseView extends BaseView<Adresse> {
 	 * It initializes the UI components and fetches the Adresse data from the database.
 	 */
 	public AdresseView() {
-		super();
+		super("Adresse");
 		Adresse.getFromDatabase();
 		add(topPanel, "North");
 		add(mainPanel, "Center");

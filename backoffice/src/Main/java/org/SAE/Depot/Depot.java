@@ -67,7 +67,6 @@ public class Depot extends Base {
 	public Depot(int adresseIdAdresse, int referentIdReferent, String nom, String telephone, String presentation,
 	             String commentaire, String mail, String website, File image) {
 		this.id = Main.sql.getNextId(TABLE_NAME);
-		System.out.println();
 		this.adresseIdAdresse = adresseIdAdresse;
 		this.referentIdReferent = referentIdReferent;
 		this.nom = nom;

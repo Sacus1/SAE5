@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class ReferentView extends BaseView<Referent> {
 	public ReferentView() {
-		super();
+		super("Referent");
 		Referent.getFromDatabase();
 		setLayout(new BorderLayout());
 		add(topPanel, "North");

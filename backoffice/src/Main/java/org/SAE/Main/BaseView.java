@@ -11,17 +11,20 @@ import java.util.ArrayList;
  * It extends JPanel, a generic lightweight container.
  */
 public abstract class BaseView<T extends Base> extends JPanel {
-	public final UButton createButton = new UButton("Create");
+	public final UButton createButton;
 	public static boolean inCreation = false;
 	protected static JPanel mainPanel;
 	protected static JPanel topPanel;
 	protected static JPanel bottomPanel;
+	private String name;
 
 	/**
 	 * Constructor for BaseView.
 	 * Sets up the layout and initializes the panels, and the create button.
 	 */
-	protected BaseView() {
+	protected BaseView(String name) {
+		this.name = name;
+		createButton = new UButton("Create " + name);
 		setLayout(new BorderLayout());
 		initializePanels();
 		setupCreateButton();
@@ -55,23 +58,26 @@ public abstract class BaseView<T extends Base> extends JPanel {
 	public void displayView(boolean isCreateMode){
 		if (isCreateMode) {
 			clear();
-			mainPanel.add(createFormPanel());
+			JPanel formPanel = createFormPanel();
+			if (formPanel != null) {
+				mainPanel.add(formPanel);
+			}
 			refresh();
-			// rename create button to cancel
 			createButton.setText("Cancel");
 			inCreation = true;
 			return;
 		}
 		clear();
-		ArrayList<T> list = GetList();
+		ArrayList<T> list = new ArrayList<>(GetList());
 		for (T t : list) {
-			mainPanel.add(createListPanel(t));
+			JPanel listPanel = createListPanel(t);
+			if (listPanel != null) {
+				mainPanel.add(listPanel);
+			}
 		}
 		refresh();
-		// rename cancel button to create
-		createButton.setText("Create");
+		createButton.setText("Create " + name);
 		inCreation = false;
-
 	}
 
 	protected abstract ArrayList<T> GetList();
