@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 public class Unite extends Base {
+	private static final String TABLE_NAME = "Unite" ;
 	public final int id;
 	String nom;
 	public static final List<Unite> unites = new ArrayList<>();
@@ -18,7 +19,7 @@ public class Unite extends Base {
 		unites.add(this);
 	}
 	public Unite(String nom) {
-		this.id = unites.size();
+		this.id = Main.sql.getNextId(TABLE_NAME);;
 		this.nom = nom;
 		unites.add(this);
 	}
@@ -29,7 +30,7 @@ public class Unite extends Base {
 		unites.clear();
 		SQL sql = Main.sql;
 		try {
-			ResultSet res = sql.select("Unite");
+			ResultSet res = sql.select(TABLE_NAME);
 			if (res == null) return;
 			while (res.next()) {
 				int id = res.getInt("idUnite");
@@ -41,19 +42,19 @@ public class Unite extends Base {
 		}
 	}
 	public static void update(Unite unite) {
-		if (!Main.sql.updatePreparedStatement("Unite", new String[]{"idUnite", "nom"},
+		if (!Main.sql.updatePreparedStatement(TABLE_NAME, new String[]{"idUnite", "nom"},
 						new Object[]{unite.id, unite.nom},
 						new String[]{"idUnite = " +unite.id})) Logger.error("Failed to update Unite");
 		getFromDatabase();
 	}
 	public static void create(Unite unite) {
-		if (Main.sql.createPrepareStatement("Unite", new String[]{"idUnite", "nom"},
+		if (Main.sql.createPrepareStatement(TABLE_NAME, new String[]{"idUnite", "nom"},
 						new Object[]{unite.id, unite.nom}))
 			Logger.error("Failed to insert Unite");
 		getFromDatabase();
 	}
 	protected void delete() {
-		if (Main.sql.deletePrepareStatement("Unite", new String[]{"idUnite = " + id}))
+		if (Main.sql.deletePrepareStatement(TABLE_NAME, new String[]{"idUnite = " + id}))
 			Logger.error("Failed to delete Unite");
 		unites.remove(this);
 	}

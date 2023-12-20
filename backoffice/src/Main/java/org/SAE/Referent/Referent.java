@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Referent extends Base {
+	private static final String TABLE_NAME = "Referent" ;
 	public final int id;
 	String nom;
 	String telephone;
@@ -25,7 +26,7 @@ public class Referent extends Base {
 	}
 
 	public Referent(String nom, String telephone, String mail) {
-		this.id = referents.size();
+		this.id = Main.sql.getNextId(TABLE_NAME);
 		this.nom = nom;
 		this.telephone = telephone;
 		this.mail = mail;

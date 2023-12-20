@@ -65,5 +65,6 @@ public class Logger {
 	 */
 	public static void error(String message) {
 		log(message, Color.RED);
+		System.err.println(message);
 	}
 }

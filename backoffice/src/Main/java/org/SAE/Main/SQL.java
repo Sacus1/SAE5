@@ -73,10 +73,8 @@ public class SQL {
 				else if (attr[i] instanceof Boolean bool) stmt.setBoolean(i + 1, bool);
 				else stmt.setNull(i + 1, Types.BLOB);
 			return stmt.executeUpdate() != 0;
-		} catch (SQLException e) {
+		} catch (SQLException | FileNotFoundException e) {
 			System.err.println("Main.SQL Exception : " + e.getMessage() + "\n" + query + "\n" + Arrays.toString(attr));
-		} catch (FileNotFoundException e) {
-			throw new RuntimeException(e);
 		}
 		return false;
 	}
@@ -113,7 +111,8 @@ public class SQL {
 					default -> {
 					}
 				}
-			return stmt.executeUpdate() == 0;
+			int executeUpdate = stmt.executeUpdate();
+			return executeUpdate != 0;
 		} catch (SQLException e) {
 			System.err.println("Main.SQL Exception : " + e.getMessage() + "\n" + query + "\n" + Arrays.toString(attr));
 		} catch (FileNotFoundException e) {
@@ -144,11 +143,12 @@ public class SQL {
 		StringBuilder query = buildPartialQuery(table, whereCond, "DELETE FROM ", " WHERE ", " AND ", ";");
 		try {
 			PreparedStatement stmt = con.prepareStatement(query.toString());
-			return stmt.executeUpdate() == 0;
+			int r = stmt.executeUpdate();
+			return r != 0;
 		} catch (SQLException e) {
 			System.err.println("Main.SQL Exception : " + e.getMessage() + "\n" + query);
 		}
-		return true;
+		return false;
 	}
 
 	/**
@@ -201,5 +201,15 @@ public class SQL {
 		} catch (SQLException e) {
 			System.err.println("Main.SQL Exception : " + e.getMessage());
 		}
+	}
+
+	public int getNextId(String tableName) {
+		try {
+			ResultSet res = selectRaw("SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'SAE' AND TABLE_NAME = '" + tableName + "';");
+			if (res.next()) return res.getInt("AUTO_INCREMENT");
+		} catch (SQLException e) {
+			System.err.println("Main.SQL Exception : " + e.getMessage());
+		}
+		return 0;
 	}
 }

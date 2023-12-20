@@ -42,7 +42,7 @@ public class Adresse extends Base {
   * The address object is then added to the static list of addresses.
   */
  public Adresse(String rue, String ville, String codePostal) {
-  this.id = adresses.size();
+  this.id = Main.sql.getNextId(TABLE_NAME);
   this.rue = rue;
   this.ville = ville;
   this.codePostal = codePostal;

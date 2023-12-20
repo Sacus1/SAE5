@@ -28,7 +28,7 @@ public class Produit extends Base {
 		produits.add(this);
 	}
 	public Produit(String nom, String description, double prix, int idUnite,File image) {
-		this.id = produits.size();
+		this.id =Main.sql.getNextId(TABLE_NAME);
 		this.nom = nom;
 		this.description = description;
 		this.prix = prix;
