@@ -27,12 +27,16 @@ public class SQL {
 		} catch (ClassNotFoundException e) {
 			// levée d’exception si le driver n’est pas trouvé
 			System.err.println("Class not found : " + e.getMessage());
+			// close the application
+			System.exit(1);
 		}
 		try {
 			// on se connecte à la base de données
 			con = DriverManager.getConnection(url, user, password);
 		} catch (SQLException e) {
 			System.err.println("Main.SQL Exception : " + e.getMessage());
+			// close the application
+			System.exit(1);
 		}
 	}
 
@@ -108,7 +112,10 @@ public class SQL {
 						} else stmt.setNull(i + 1, Types.BLOB);
 					}
 					case null -> stmt.setNull(i + 1, Types.BLOB);
+					case Float aFloat -> stmt.setFloat(i + 1, aFloat);
 					default -> {
+						System.err.println("Main.SQL Exception : " + attr[i].getClass() + " is not supported");
+						stmt.setNull(i + 1, Types.BLOB);
 					}
 				}
 			int executeUpdate = stmt.executeUpdate();
