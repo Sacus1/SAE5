@@ -113,6 +113,8 @@ public class SQL {
 					}
 					case null -> stmt.setNull(i + 1, Types.BLOB);
 					case Float aFloat -> stmt.setFloat(i + 1, aFloat);
+					case Date date -> stmt.setDate(i + 1, date);
+					case Boolean bool -> stmt.setBoolean(i + 1, bool);
 					default -> {
 						System.err.println("Main.SQL Exception : " + attr[i].getClass() + " is not supported");
 						stmt.setNull(i + 1, Types.BLOB);
