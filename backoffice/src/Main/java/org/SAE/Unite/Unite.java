@@ -4,6 +4,7 @@ import org.SAE.Main.Base;
 import org.SAE.Main.Logger;
 import org.SAE.Main.Main;
 import org.SAE.Main.SQL;
+import org.SAE.Produit.Produit;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -23,6 +24,11 @@ public class Unite extends Base {
 		this.nom = nom;
 		unites.add(this);
 	}
+
+	public static Unite getUniteById(int idUnite) {
+		return unites.stream().filter(u -> u.id == idUnite).findFirst().orElse(null);
+	}
+
 	public String toString() {
 		return nom;
 	}
@@ -48,13 +54,21 @@ public class Unite extends Base {
 		getFromDatabase();
 	}
 	public static void create(Unite unite) {
-		if (Main.sql.createPrepareStatement(TABLE_NAME, new String[]{"idUnite", "nom"},
+		if (!Main.sql.createPrepareStatement(TABLE_NAME, new String[]{"idUnite", "nom"},
 						new Object[]{unite.id, unite.nom}))
 			Logger.error("Failed to insert Unite");
 		getFromDatabase();
 	}
 	protected void delete() {
-		if (Main.sql.deletePrepareStatement(TABLE_NAME, new String[]{"idUnite = " + id}))
+		Produit.getFromDatabase();
+		List<Produit> produits = Produit.produits;
+		for (int i = 0; i < produits.size(); i++) {
+			Produit p = produits.get(i);
+			if (p.idUnite == this.id) {
+				p.delete();
+			}
+		}
+		if (!Main.sql.deletePrepareStatement(TABLE_NAME, new String[]{"idUnite = " + id}))
 			Logger.error("Failed to delete Unite");
 		unites.remove(this);
 	}

@@ -24,7 +24,7 @@ public class Main {
 		JPanel leftPanel = new JPanel();
 		// add buttons
 		UButton[] UButtons = {new UButton("Depot"), new UButton("Referent"), new UButton("Adresse"),new UButton("Unité"),
-						new UButton("Produit"),new UButton("Panier"),new UButton("Abonnement"),new UButton("Jardin"),new UButton("Client")};
+						new UButton("Abonnement"),new UButton("Jardin"),new UButton("Client"),new UButton("Produit")};
 		Arrays.sort(UButtons, Comparator.comparing(UButton::getText));
 		leftPanel.setLayout(new GridLayout(UButtons.length, 1));
 		for (UButton UButton : UButtons) {
@@ -58,21 +58,16 @@ public class Main {
 						resetSelectedButton(UButtons);
 						UButton.setBackground(Color.LIGHT_GRAY);
 						break;
-					case "Panier":
-						mainPanel.add(new org.SAE.Panier.PanierView());
-						resetSelectedButton(UButtons);
-						UButton.setBackground(Color.LIGHT_GRAY);
-						break;
 					case "Abonnement":
 						mainPanel.add(new org.SAE.Abonnement.AbonnementView());
 						resetSelectedButton(UButtons);
 						UButton.setBackground(Color.LIGHT_GRAY);
 						break;
-					/*case "Jardin":
+					case "Jardin":
 						mainPanel.add(new org.SAE.Jardin.JardinView());
-						resetSelectedButton(buttons);
-						button.setBackground(Color.LIGHT_GRAY);
-						break;*/
+						resetSelectedButton(UButtons);
+						UButton.setBackground(Color.LIGHT_GRAY);
+						break;
 					case "Client":
 						mainPanel.add(new org.SAE.Client.ClientView());
 						resetSelectedButton(UButtons);
