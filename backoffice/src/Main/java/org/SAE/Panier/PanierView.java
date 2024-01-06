@@ -38,6 +38,7 @@ public class PanierView extends BaseView<Panier> {
 		JLabel label = new JLabel(panier.toString());
 		UButton editButton = new UButton("Edit");
 		editButton.addActionListener(e -> {
+			displayView(true);
 			clear();
 			mainPanel.add(createEditPanel(panier));
 			refresh();
@@ -117,7 +118,7 @@ public class PanierView extends BaseView<Panier> {
 
 	/**
 	 * This method creates a form for editing an existing Panier.
-	 * It includes text fields for the Panier details and buttons to submit the changes or cancel the operation.
+	 * It includes text fields for the Panier details and buttons to submit the changes.
 	 *
 	 * @param panier The Panier object to be edited.
 	 * @return A JPanel with the form for editing the Panier.

@@ -18,7 +18,12 @@ public class Main {
 		sql = new SQL(url,"root","");
 		frame = new JFrame("Gestion");
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		frame.setSize(800,600);
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		int windowWidth = (int) (screenSize.getWidth() * 0.8);
+		int windowHeight = (int) (screenSize.getHeight() * 0.8);
+		frame.setSize(windowWidth, windowHeight);
+		// maximize the frame
+		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		JPanel mainPanel = new JPanel();
 		// create a list of buttons on the side of the frame.
 		JPanel leftPanel = new JPanel();

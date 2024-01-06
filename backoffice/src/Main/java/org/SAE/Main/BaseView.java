@@ -94,10 +94,11 @@ public abstract class BaseView<T extends Base> extends JPanel {
 	protected JPanel createListPanel(T t){
 		t.loadFromDatabase();
 		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(1, 3));
+		panel.setLayout(new GridLayout(2, 2));
 		JLabel label = new JLabel(t.toString());
 		UButton editButton = new UButton("Edit");
 		editButton.addActionListener(e -> {
+			displayView(true);
 			clear();
 			mainPanel.add(createEditPanel(t));
 			refresh();
@@ -109,6 +110,7 @@ public abstract class BaseView<T extends Base> extends JPanel {
 			displayView(false);
 		});
 		panel.add(label);
+		panel.add(new JLabel());
 		panel.add(editButton);
 		panel.add(deleteButton);
 		return panel;

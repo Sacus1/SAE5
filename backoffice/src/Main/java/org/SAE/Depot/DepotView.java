@@ -61,6 +61,7 @@ public class DepotView extends BaseView<Depot> {
 		panel.add(new Label(t.toString()));
 		UButton editButton = new UButton("Edit");
 		editButton.addActionListener(e -> {
+			displayView(true);
 			clear();
 			mainPanel.add(createEditPanel(t));
 			refresh();
@@ -141,9 +142,6 @@ public class DepotView extends BaseView<Depot> {
 		populateFields(depotToEdit, depotFormComponents.fieldPanels, depotFormComponents.panel);
 		depotFormComponents.panel.setLayout(new GridLayout(depotFormComponents.fieldPanels.length / 2 + 1, 2));
 		UButton createButton = new UButton("Edit");
-		UButton cancelButton = new UButton("Cancel");
-		// add cancel button
-		cancelButton.addActionListener(e -> displayView(false));
 		createButton.addActionListener(e -> {
 			String[] values = getValues(depotFormComponents.fieldPanels(), depotFormComponents.addressChoice(), depotFormComponents.referentChoice());
 			if (values.length == 0) return;
@@ -166,7 +164,6 @@ public class DepotView extends BaseView<Depot> {
 			Logger.log("Depot edited");
 			displayView(false);
 		});
-		depotFormComponents.panel().add(cancelButton);
 		depotFormComponents.panel().add(createButton);
 		return depotFormComponents.panel();
 	}
