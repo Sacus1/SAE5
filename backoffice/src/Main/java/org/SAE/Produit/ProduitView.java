@@ -12,7 +12,6 @@ import java.util.concurrent.atomic.AtomicReference;
 public class ProduitView extends BaseView<Produit>{
 	public ProduitView() {
 		super("Produit");
-		Produit.getFromDatabase();
 		setLayout(new BorderLayout());
 		// add panels to the frame
 		add(topPanel, "North");
@@ -37,7 +36,6 @@ public class ProduitView extends BaseView<Produit>{
 		JTextField descriptionField = new JTextField();
 		panel.add(new JLabel("Description"));
 		panel.add(descriptionField);
-		Unite.getFromDatabase();
 		Choice uniteChoice = new Choice();
 		for (int i = 0; i < Unite.unites.size(); i++) uniteChoice.add(Unite.unites.get(i).toString());
 		panel.add(new JLabel("Unite"));
@@ -66,7 +64,6 @@ public class ProduitView extends BaseView<Produit>{
 	}
 	@Override
 	protected JPanel createEditPanel(Produit produit) {
-		Unite.getFromDatabase();
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(5, 2));
 		// nom

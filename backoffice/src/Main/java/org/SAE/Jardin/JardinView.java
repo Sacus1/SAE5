@@ -14,7 +14,6 @@ import java.util.ArrayList;
 public class JardinView extends BaseView<Jardin>{
 	public JardinView() {
 		super("Jardin");
-		Jardin.getFromDatabase();
 		setLayout(new BorderLayout());
 		// add panels to the frame
 		add(topPanel, "North");
@@ -34,12 +33,10 @@ public class JardinView extends BaseView<Jardin>{
 		panel.setLayout(new GridLayout(0, 2));
 		// create the form
 		JComboBox<Referent> referentField = new JComboBox<>();
-		Referent.getFromDatabase();
 		for (Referent referent : Referent.referents) referentField.addItem(referent);
 		panel.add(new JLabel("Referent"));
 		panel.add(referentField);
 		JComboBox<Adresse> adresseSiegeSocialField = new JComboBox<>();
-		Adresse.getFromDatabase();
 		for (Adresse adresse : Adresse.adresses) adresseSiegeSocialField.addItem(adresse);
 		panel.add(new JLabel("Adresse Siege Social"));
 		panel.add(adresseSiegeSocialField);
@@ -75,13 +72,11 @@ public class JardinView extends BaseView<Jardin>{
 		panel.setLayout(new GridLayout(0, 2));
 		// create the form
 		JComboBox<Referent> referentField = new JComboBox<>();
-		Referent.getFromDatabase();
 		for (Referent referent : Referent.referents) referentField.addItem(referent);
 		referentField.setSelectedItem(jardin.referent);
 		panel.add(new JLabel("Referent"));
 		panel.add(referentField);
 		JComboBox<Adresse> adresseSiegeSocialField = new JComboBox<>();
-		Adresse.getFromDatabase();
 		for (Adresse adresse : Adresse.adresses) adresseSiegeSocialField.addItem(adresse);
 		adresseSiegeSocialField.setSelectedItem(jardin.adresseSiegeSocial);
 		panel.add(new JLabel("Adresse Siege Social"));
@@ -101,7 +96,6 @@ public class JardinView extends BaseView<Jardin>{
 		UButton panierButton = new UButton("Panier");
 		panierButton.addActionListener(e -> {
 			clear();
-			Panier.getFromDatabase();
 			topPanel.remove(createButton);
 			topPanel.add(new JLabel("Panier de " + jardin.nomCommercial), "West");
 			mainPanel.add(new PanierView(jardin));

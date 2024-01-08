@@ -26,7 +26,7 @@ public class Produit extends Base {
 		produits.add(this);
 	}
 	public Produit(String nom, String description, int idUnite,File image) {
-		this.id =Main.sql.getNextId(TABLE_NAME);
+		this.id =-1;
 		this.nom = nom;
 		this.description = description;
 		this.idUnite = idUnite;
@@ -59,7 +59,6 @@ public class Produit extends Base {
 						new Object[]{produit.nom, produit.image, produit.description, produit.idUnite},
 						new String[]{"idProduit = "+produit.id}))
 			Logger.error("Update failed");
-		getFromDatabase();
 	}
 	public static void create(Produit produit) {
 		if (!Main.sql.createPrepareStatement("Produit", new String[]{"nom", "image", "description", "Unite_idUnite"},
@@ -68,8 +67,6 @@ public class Produit extends Base {
 		getFromDatabase();
 	}
 	public void delete() {
-		// remove linked produit
-
 		if (!Main.sql.deletePrepareStatement("Produit", new String[]{"idProduit = " + id}))
 			Logger.error("Delete failed");
 		produits.remove(this);

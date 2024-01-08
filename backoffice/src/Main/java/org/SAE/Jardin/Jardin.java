@@ -32,7 +32,7 @@ public class Jardin extends Base {
 	public static final List<Jardin> jardins = new ArrayList<>();
 
 	public Jardin(Referent referent, Adresse adresseSiegeSocial, Adresse adresseGestion, String nomCommercial, String raisonSociale) {
-		this.id = Main.sql.getNextId(TABLE_NAME);
+		this.id = -1;
 		this.referent = referent;
 		this.adresseSiegeSocial = adresseSiegeSocial;
 		this.adresseGestion = adresseGestion;
@@ -52,8 +52,6 @@ public class Jardin extends Base {
 	}
 
 	public static void getFromDatabase() {
-		Referent.getFromDatabase();
-		Adresse.getFromDatabase();
 		jardins.clear();
 		SQL sql = Main.sql;
 		try {
@@ -66,8 +64,6 @@ public class Jardin extends Base {
 				int adresseGestionIdAdresse = res.getInt("Adresse_idAdresseGestion");
 				String nomCommercial = res.getString("nomCommercial");
 				String raisonSociale = res.getString("raison");
-				Referent.getFromDatabase();
-				Adresse.getFromDatabase();
 				Referent referent = Referent.referents.stream().filter(r -> r.id == referentIdReferent).findFirst().orElse(null);
 				Adresse adresseSiegeSocial = Adresse.adresses.stream().filter(a -> a.id == adresseSiegeSocialIdAdresse).findFirst().orElse(null);
 				Adresse adresseGestion = Adresse.adresses.stream().filter(a -> a.id == adresseGestionIdAdresse).findFirst().orElse(null);
@@ -85,6 +81,7 @@ public class Jardin extends Base {
 		} catch (Exception e) {
 			Logger.error("Error while creating Jardin: " + e.getMessage());
 		}
+		getFromDatabase();
 	}
 
 	public static void update(Jardin jardin) {

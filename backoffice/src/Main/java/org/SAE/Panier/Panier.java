@@ -42,7 +42,7 @@ public class Panier extends Base {
 	ArrayList<ProduitE> produits = new ArrayList<>();
 
 	public Panier(String nom, float prix, File image, Jardin jardin) {
-		this.id = Main.sql.getNextId(TABLE_NAME);
+		this.id = -1;
 		this.nom = nom;
 		this.prix = prix;
 		this.image = image;
@@ -70,7 +70,6 @@ public class Panier extends Base {
 				float prix = res.getFloat("prix");
 				File image = Main.convertInputStreamToImage(res.getBinaryStream("image"));
 				int jardinIdJardin = res.getInt("Jardin_idJardin");
-				Jardin.getFromDatabase();
 				Panier p = new Panier(id, nom, prix, image,
 								Jardin.jardins.stream().filter(j -> j.id == jardinIdJardin).findFirst().orElse(null));
 				res = sql.select("Produit_has_Panier", new String[]{"Panier_idPanier = " + id});
@@ -79,7 +78,6 @@ public class Panier extends Base {
 					if (panierIdPanier != id) continue;
 					int produitIdProduit = res.getInt("Produit_idProduit");
 					int quantite = res.getInt("quantite");
-					Produit.getFromDatabase();
 					p.produits.add(new ProduitE(Produit.produits.stream().filter(pr -> pr.id == produitIdProduit).findFirst().orElse(null), quantite));
 				}
 			}
@@ -96,6 +94,7 @@ public class Panier extends Base {
 		} catch (Exception e) {
 			Logger.error("Error while creating Panier: " + e.getMessage());
 		}
+		getFromDatabase();
 	}
 
 	public static void update(Panier panier) {
@@ -111,11 +110,8 @@ public class Panier extends Base {
 
 	protected void delete() {
 		SQL sql = Main.sql;
-		try {
-			sql.deletePrepareStatement(TABLE_NAME, new String[]{"idPanier = " + id});
-		} catch (Exception e) {
-			Logger.error("Error while deleting Panier: " + e.getMessage());
-		}
+		sql.deletePrepareStatement(TABLE_NAME, new String[]{"idPanier = " + id});
+		paniers.remove(this);
 	}
 	@Override
 	public void loadFromDatabase(){

@@ -63,19 +63,22 @@ public class SQL {
 		query.append(";");
 		try {
 			PreparedStatement stmt = con.prepareStatement(query.toString());
-			for (int i = 0; i < attr.length; i++)
-				if (attr[i] instanceof String) stmt.setString(i + 1, (String) attr[i]);
-				else if (attr[i] instanceof Integer) stmt.setInt(i + 1, (Integer) attr[i]);
-				else if (attr[i] instanceof Double) stmt.setDouble(i + 1, (Double) attr[i]);
-				else if (attr[i] instanceof File file) {
-					InputStream inputStream = new FileInputStream(file);
-					stmt.setBinaryStream(i + 1, inputStream, (int) file.length());
-					if (file.delete()) System.out.println("File deleted successfully");
-					else System.out.println("Failed to delete the file");
+			for (int i = 0; i < attr.length; i++) {
+				switch (attr[i]) {
+					case String s -> stmt.setString(i + 1, s);
+					case Integer integer -> stmt.setInt(i + 1, integer);
+					case Double v -> stmt.setDouble(i + 1, v);
+					case File file -> {
+						InputStream inputStream = new FileInputStream(file);
+						stmt.setBinaryStream(i + 1, inputStream, (int) file.length());
+						if (file.delete()) System.out.println("File deleted successfully");
+						else System.out.println("Failed to delete the file");
+					}
+					case Date date -> stmt.setDate(i + 1, date);
+					case Boolean bool -> stmt.setBoolean(i + 1, bool);
+					case null, default -> stmt.setNull(i + 1, Types.BLOB);
 				}
-				else if (attr[i] instanceof Date date) stmt.setDate(i + 1, date);
-				else if (attr[i] instanceof Boolean bool) stmt.setBoolean(i + 1, bool);
-				else stmt.setNull(i + 1, Types.BLOB);
+			}
 			return stmt.executeUpdate() != 0;
 		} catch (SQLException | FileNotFoundException e) {
 			System.err.println("Main.SQL Exception : " + e.getMessage() + "\n" + query + "\n" + Arrays.toString(attr));
@@ -100,7 +103,8 @@ public class SQL {
 		query.append(");");
 		try {
 			PreparedStatement stmt = con.prepareStatement(query.toString());
-			for (int i = 0; i < attr.length; i++)
+			for (int i = 0; i < attr.length; i++) {
+				System.out.println(attr[i] + " " + attr[i].getClass());
 				switch (attr[i]) {
 					case String s -> stmt.setString(i + 1, s);
 					case Integer integer -> stmt.setInt(i + 1, integer);
@@ -120,6 +124,7 @@ public class SQL {
 						stmt.setNull(i + 1, Types.BLOB);
 					}
 				}
+			}
 			int executeUpdate = stmt.executeUpdate();
 			return executeUpdate != 0;
 		} catch (SQLException e) {
@@ -212,7 +217,7 @@ public class SQL {
 		}
 	}
 
-	public int getNextId(String tableName) {
+	/*public int getNextId(String tableName) {
 		try {
 			ResultSet res = selectRaw("SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'SAE' AND TABLE_NAME = '" + tableName + "';");
 			if (res.next()) return res.getInt("AUTO_INCREMENT");
@@ -220,5 +225,5 @@ public class SQL {
 			System.err.println("Main.SQL Exception : " + e.getMessage());
 		}
 		return 0;
-	}
+	}*/
 }

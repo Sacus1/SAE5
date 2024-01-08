@@ -18,7 +18,6 @@ public class AdresseView extends BaseView<Adresse> {
 	 */
 	public AdresseView() {
 		super("Adresse");
-		Adresse.getFromDatabase();
 		add(topPanel, "North");
 		add(mainPanel, "Center");
 		add(bottomPanel, "South");

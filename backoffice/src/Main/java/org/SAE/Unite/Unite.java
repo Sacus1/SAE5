@@ -20,7 +20,7 @@ public class Unite extends Base {
 		unites.add(this);
 	}
 	public Unite(String nom) {
-		this.id = Main.sql.getNextId(TABLE_NAME);;
+		this.id = -1;
 		this.nom = nom;
 		unites.add(this);
 	}
@@ -51,7 +51,6 @@ public class Unite extends Base {
 		if (!Main.sql.updatePreparedStatement(TABLE_NAME, new String[]{"idUnite", "nom"},
 						new Object[]{unite.id, unite.nom},
 						new String[]{"idUnite = " +unite.id})) Logger.error("Failed to update Unite");
-		getFromDatabase();
 	}
 	public static void create(Unite unite) {
 		if (!Main.sql.createPrepareStatement(TABLE_NAME, new String[]{"idUnite", "nom"},
@@ -60,7 +59,6 @@ public class Unite extends Base {
 		getFromDatabase();
 	}
 	protected void delete() {
-		Produit.getFromDatabase();
 		List<Produit> produits = Produit.produits;
 		for (int i = 0; i < produits.size(); i++) {
 			Produit p = produits.get(i);

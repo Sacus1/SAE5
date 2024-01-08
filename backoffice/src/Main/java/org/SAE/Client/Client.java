@@ -22,7 +22,7 @@ public class Client extends Base {
 	static final ArrayList<String> requiredFieldsList = new ArrayList<>(Arrays.asList("civilite", "nom", "prenom",
 					"adresseIdAdresse", "telephone", "mail"));
 	public final int id;
-	int adresseIdAdresse;
+	public Adresse adresse;
 	String raisonSociale;
 	String civilite;
 	String nom;
@@ -36,11 +36,11 @@ public class Client extends Base {
 	boolean estDispense;
 	public static final List<Client> clients = new ArrayList<>();
 
-	public Client(int id, int adresseIdAdresse, String raisonSociale, String civilite, String nom, String prenom,
+	public Client(int id, Adresse adresse, String raisonSociale, String civilite, String nom, String prenom,
 	              String[] telephone, String mail, String profession,
 	              Date dateNaissance, boolean estDispense) {
 		this.id = id;
-		this.adresseIdAdresse = adresseIdAdresse;
+		this.adresse = adresse;
 		this.raisonSociale = raisonSociale;
 		this.civilite = civilite;
 		this.nom = nom;
@@ -77,7 +77,7 @@ public class Client extends Base {
 				String profession = res.getString("profession");
 				Date dateNaissance = res.getDate("dateNaissance");
 				boolean estDispense = res.getBoolean("estDispense");
-				new Client(id, adresseIdAdresse, raisonSociale, civilite, nom, prenom, new String[]{telephone,
+				new Client(id, Adresse.getAdresseById(adresseIdAdresse), raisonSociale, civilite, nom, prenom, new String[]{telephone,
 								telephone2, telephone3}, mail, profession, dateNaissance, estDispense);
 			}
 		} catch (Exception e) {
@@ -87,7 +87,7 @@ public class Client extends Base {
 
 	public static void update(Client client) {
 		if (!Main.sql.updatePreparedStatement(TABLE_NAME, dbFields,
-						new Object[]{client.adresseIdAdresse, client.raisonSociale, client.civilite, client.nom,
+						new Object[]{client.adresse.id, client.raisonSociale, client.civilite, client.nom,
 										client.prenom, client.telephone, client.telephone2, client.telephone3, client.mail,
 										client.profession, client.dateNaissance, client.estDispense},
 						new String[]{"idClient = " + client.id}))
@@ -95,7 +95,7 @@ public class Client extends Base {
 	}
 
 
-	protected void delete() {
+	public void delete() {
 		if (!Main.sql.deletePrepareStatement(TABLE_NAME, new String[]{"idClient = " + id}))
 			Logger.error("Can't delete client");
 		clients.remove(this);

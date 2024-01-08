@@ -18,7 +18,6 @@ public class ClientView extends BaseView<Client> {
 
 	public ClientView() {
 		super("Client");
-		Client.getFromDatabase();
 		topPanel.remove(createButton);
 		add(topPanel, "North");
 		add(mainPanel, "Center");
@@ -41,7 +40,6 @@ public class ClientView extends BaseView<Client> {
 	protected JPanel createEditPanel(Client client) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(0, 2));
-		Adresse.getFromDatabase();
 		JComboBox<Adresse> adresseComboBox = new JComboBox<>();
 		for (Adresse adresse : Adresse.adresses) adresseComboBox.addItem(adresse);
 		JTextField raisonSocialeField = new JTextField();
@@ -85,7 +83,7 @@ public class ClientView extends BaseView<Client> {
 		panel.add(datePicker);
 		panel.add(new JLabel("Est dispensé"));
 		panel.add(estDispenseCheckBox);
-		adresseComboBox.setSelectedItem(Adresse.adresses.get(client.adresseIdAdresse - 1));
+		adresseComboBox.setSelectedItem(client.adresse);
 		raisonSocialeField.setText(client.raisonSociale);
 		civiliteField.setText(client.civilite);
 		nomField.setText(client.nom);
@@ -103,7 +101,7 @@ public class ClientView extends BaseView<Client> {
 		UButton createUButton = new UButton("Update");
 		panel.add(createUButton);
 		createUButton.addActionListener(e -> {
-			client.adresseIdAdresse = ((Adresse) Objects.requireNonNull(adresseComboBox.getSelectedItem())).id;
+			client.adresse = (Adresse) Objects.requireNonNull(adresseComboBox.getSelectedItem());
 			client.raisonSociale = raisonSocialeField.getText();
 			client.civilite = civiliteField.getText();
 			client.nom = nomField.getText();

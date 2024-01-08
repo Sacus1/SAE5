@@ -26,7 +26,7 @@ public class Referent extends Base {
 	}
 
 	public Referent(String nom, String telephone, String mail) {
-		this.id = Main.sql.getNextId(TABLE_NAME);
+		this.id = -1;
 		this.nom = nom;
 		this.telephone = telephone;
 		this.mail = mail;
@@ -66,7 +66,6 @@ public class Referent extends Base {
 						new Object[]{referent.nom, referent.telephone, referent.mail},
 						new String[]{"idReferent = "+referent.id}))
 			Logger.error("Failed to update Referent");
-		getFromDatabase();
 	}
 
 	protected void delete() {

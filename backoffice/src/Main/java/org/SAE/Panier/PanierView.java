@@ -23,7 +23,6 @@ public class PanierView extends BaseView<Panier> {
 	public PanierView(Jardin jardin) {
 		super("Panier");
 		this.jardin = jardin;
-		Panier.getFromDatabase();
 		add(topPanel, "North");
 		add(mainPanel, "Center");
 		add(bottomPanel, "South");
@@ -89,7 +88,6 @@ public class PanierView extends BaseView<Panier> {
 	 */
 	@Override
 	public JPanel createFormPanel() {
-		Jardin.getFromDatabase();
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(0, 2));
 		JTextField nomField = new JTextField();
@@ -124,7 +122,6 @@ public class PanierView extends BaseView<Panier> {
 	 * @return A JPanel with the form for editing the Panier.
 	 */
 	public JPanel createEditPanel(Panier panier) {
-		Jardin.getFromDatabase();
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(0, 2));
 		JTextField nomField = new JTextField();
@@ -144,6 +141,7 @@ public class PanierView extends BaseView<Panier> {
 		JPanel listPanel = new JPanel();
 		listPanel.setLayout(new GridLayout(0, 1));
 		JScrollPane scrollPane = new JScrollPane(listPanel);
+		scrollPane.setPreferredSize(new Dimension(300, 50));
 		panel.add(scrollPane);
 		listPanel.add(addProduitButton);
 		addProduitButton.addActionListener(e -> {
@@ -151,7 +149,6 @@ public class PanierView extends BaseView<Panier> {
 			JPanel formPanel = new JPanel();
 			formPanel.setLayout(new GridLayout(0, 2));
 			JComboBox<Produit> produitField = new JComboBox<>();
-			Produit.getFromDatabase();
 			for (Produit produit : Produit.produits) produitField.addItem(produit);
 			formPanel.add(new JLabel("Produit"));
 			formPanel.add(produitField);

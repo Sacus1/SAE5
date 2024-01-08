@@ -39,7 +39,7 @@ public class Depot extends Base {
 	String website;
 	File image;
 	JourSemaine[] jourLivraison;
-	static final ArrayList<Depot> depots = new ArrayList<>();
+	public static final ArrayList<Depot> depots = new ArrayList<>();
 
   /**
   * Constructor for the Depot class.
@@ -66,7 +66,7 @@ public class Depot extends Base {
   */
 	public Depot(int adresseIdAdresse, int referentIdReferent, String nom, String telephone, String presentation,
 	             String commentaire, String mail, String website, File image) {
-		this.id = Main.sql.getNextId(TABLE_NAME);
+		this.id = -1;
 		this.adresseIdAdresse = adresseIdAdresse;
 		this.referentIdReferent = referentIdReferent;
 		this.nom = nom;
@@ -157,10 +157,17 @@ public class Depot extends Base {
 			return;
 		}
 		insertDeliveryDays(depot);
-
+		getFromDatabase();
 	}
 
- /**
+	public static Depot getDepotById(int depotId) {
+		for (Depot depot : depots) {
+			if (depot.id == depotId) return depot;
+		}
+		return null;
+	}
+
+	/**
   * This method deletes a Depot from the database.
   */
 	protected void delete() {

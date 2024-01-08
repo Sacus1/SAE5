@@ -10,7 +10,6 @@ import java.util.ArrayList;
 public class UniteView extends BaseView<Unite> {
 	public UniteView() {
 		super("Unite");
-		Unite.getFromDatabase();
 		setLayout(new BorderLayout());
 		// add panels to the frame
 		add(topPanel, "North");

@@ -21,7 +21,6 @@ public class AbonnementView extends BaseView<Abonnement> {
 
 	public AbonnementView() {
 		super("Abonnement");
-		Abonnement.getFromDatabase();
 		add(topPanel, "North");
 		add(mainPanel, "Center");
 		add(bottomPanel, "South");
@@ -35,8 +34,6 @@ public class AbonnementView extends BaseView<Abonnement> {
 
 	@Override
 	protected JPanel createFormPanel() {
-		Client.getFromDatabase();
-		Panier.getFromDatabase();
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(0, 2));
 		JComboBox<Client> clientComboBox = new JComboBox<>();

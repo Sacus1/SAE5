@@ -1,17 +1,23 @@
 package org.SAE.Depot;
 
 import org.SAE.Adresse.Adresse;
+import org.SAE.Client.DateLabelFormatter;
 import org.SAE.Error.CannotAccessFieldException;
 import org.SAE.Main.BaseView;
 import org.SAE.Main.Logger;
 import org.SAE.Main.UButton;
 import org.SAE.Referent.Referent;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.lang.reflect.Field;
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Properties;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -28,7 +34,6 @@ public class DepotView extends BaseView<Depot> {
 	 */
 	public DepotView() {
 		super("Depot");
-		Depot.getFromDatabase();
 		setLayout(new BorderLayout());
 		archivedCheckBox = new JCheckBox("Show archived");
 		archivedCheckBox.addActionListener(e -> {
@@ -55,7 +60,6 @@ public class DepotView extends BaseView<Depot> {
 
 	@Override
 	protected JPanel createListPanel(Depot t) {
-		Depot.getFromDatabase();
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(1, 3));
 		panel.add(new Label(t.toString()));
@@ -107,6 +111,7 @@ public class DepotView extends BaseView<Depot> {
 	}
 
 
+
 	/**
 	 * Creates a new depot based on the data entered in the form.
 	 *
@@ -141,6 +146,39 @@ public class DepotView extends BaseView<Depot> {
 		// add fields to the panel
 		populateFields(depotToEdit, depotFormComponents.fieldPanels, depotFormComponents.panel);
 		depotFormComponents.panel.setLayout(new GridLayout(depotFormComponents.fieldPanels.length / 2 + 1, 2));
+		// Periode non disponible
+		depotFormComponents.panel.add(new Label("Periode non disponible"));
+		// liste des periodes non livrables
+		JPanel periodesNonLivrables = new JPanel();
+		periodesNonLivrables.setLayout(new BoxLayout(periodesNonLivrables, BoxLayout.Y_AXIS));
+		JScrollPane scrollPane = new JScrollPane(periodesNonLivrables);
+		depotFormComponents.panel.add(scrollPane);
+		scrollPane.setPreferredSize(new Dimension(300, 50));
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		// add button
+		UButton addProduitButton = new UButton("Add");
+		addProduitButton.addActionListener(e -> {
+			displayView(true);
+			clear();
+			mainPanel.add(createPeriodeNonLivrablePanel(depotToEdit));
+			refresh();
+		});
+		for (PeriodeNonLivrable periodeNonLivrable : PeriodeNonLivrable.periodesNonLivrables) {
+			if (periodeNonLivrable.depot.id == depotToEdit.id) {
+				JPanel periodePanel = new JPanel();
+				periodePanel.setLayout(new GridLayout(1, 2));
+				periodePanel.add(new Label(periodeNonLivrable.toString()));
+				UButton deleteButton = new UButton("Delete");
+				deleteButton.addActionListener(e -> {
+					periodesNonLivrables.remove(periodePanel);
+					periodeNonLivrable.delete();
+					refresh();
+				});
+				periodePanel.add(deleteButton);
+				periodesNonLivrables.add(periodePanel);
+			}
+		}
+		periodesNonLivrables.add(addProduitButton);
 		UButton createButton = new UButton("Edit");
 		createButton.addActionListener(e -> {
 			String[] values = getValues(depotFormComponents.fieldPanels(), depotFormComponents.addressChoice(), depotFormComponents.referentChoice());
@@ -168,9 +206,47 @@ public class DepotView extends BaseView<Depot> {
 		return depotFormComponents.panel();
 	}
 
+	private JPanel createPeriodeNonLivrablePanel(Depot depotToEdit) {
+		JPanel periodeNonLivrablePanel = new JPanel();
+		JLabel label = new JLabel("Nouvelle periode non livrable de " + depotToEdit.toString());
+		periodeNonLivrablePanel.add(label);
+		periodeNonLivrablePanel.setLayout(new GridLayout(1, 3));
+		Properties p = new Properties();
+		p.put("text.today", "Today");
+		p.put("text.month", "Month");
+		p.put("text.year", "Year");
+		// date debut
+		JDatePanelImpl datePaneld = new JDatePanelImpl(new UtilDateModel(), p);
+		JDatePickerImpl dateDebutField = new JDatePickerImpl(datePaneld, new DateLabelFormatter());
+		periodeNonLivrablePanel.add(new Label("Date debut *"));
+		periodeNonLivrablePanel.add(dateDebutField);
+		// date fin
+		JDatePanelImpl datePanelf = new JDatePanelImpl(new UtilDateModel(), p);
+		JDatePickerImpl dateFinField = new JDatePickerImpl(datePanelf, new DateLabelFormatter());
+		periodeNonLivrablePanel.add(new Label("Date fin *"));
+		periodeNonLivrablePanel.add(dateFinField);
+		// add button
+		UButton addButton = new UButton("Add");
+		addButton.addActionListener(e -> {
+			Date dateDebut = Date.valueOf(dateDebutField.getJFormattedTextField().getText());
+			Date dateFin = Date.valueOf(dateFinField.getJFormattedTextField().getText());
+			if (dateDebut == null || dateFin == null) {
+				Logger.error("Please fill all required fields");
+				return;
+			}
+			if (dateDebut.after(dateFin)) {
+				Logger.error("Date debut must be before date fin");
+				return;
+			}
+			PeriodeNonLivrable periodeNonLivrable = new PeriodeNonLivrable(dateDebut, dateFin, depotToEdit);
+			PeriodeNonLivrable.create(periodeNonLivrable);
+			displayView(false);
+		});
+		periodeNonLivrablePanel.add(addButton);
+		return periodeNonLivrablePanel;
+	}
+
 	private DepotFormComponents prepareDepotPanelData(Depot depotToEdit) {
-		Adresse.getFromDatabase();
-		Referent.getFromDatabase();
 		JPanel panel = new JPanel();
 		// adresse choice
 		JPanel addressChoice = new JPanel();

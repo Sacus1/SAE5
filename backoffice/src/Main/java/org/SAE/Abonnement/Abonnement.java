@@ -32,7 +32,7 @@ public class Abonnement extends Base {
 	Abonnement(Client client, Panier panier, Date debut, Date fin,
 	           int frequenceLivraison,
 	           boolean estActif) {
-		this.id = Main.sql.getNextId(TABLE_NAME);
+		this.id = -1;
 		this.client = client;
 		this.panier = panier;
 		this.debut = debut;
@@ -78,8 +78,6 @@ public class Abonnement extends Base {
 								new Object[]{estActif},
 								new String[]{"idAbonnement = " + id}))
 					Logger.error("Can't update abonnement");
-				Client.getFromDatabase();
-				Panier.getFromDatabase();
 				Client client = Client.clients.stream().filter(c -> c.id == clientIdClient).findFirst().orElse(null);
 				Panier panier = Panier.paniers.stream().filter(p -> p.id == panierIdPanier).findFirst().orElse(null);
 				if (client == null || panier == null) {
@@ -110,7 +108,6 @@ public class Abonnement extends Base {
 										abonnement.frequenceLivraison},
 						new String[]{"idAbonnement = " + abonnement.id}))
 			Logger.error("Can't update abonnement");
-		getFromDatabase();
 	}
 
 	/**
