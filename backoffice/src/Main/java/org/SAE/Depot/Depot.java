@@ -27,7 +27,7 @@ public class Depot extends Base {
 					"commentaire", "mail", "website"};
 	static final ArrayList<String> requiredFieldsList = new ArrayList<>(Arrays.asList("Adresse id", "Referent.Referent id",
 					"Nom", "Telephone"));
-	final int id;
+	public int id;
 	int adresseIdAdresse;
 	int referentIdReferent;
 	boolean isArchived;
@@ -38,7 +38,7 @@ public class Depot extends Base {
 	String mail;
 	String website;
 	File image;
-	JourSemaine[] jourLivraison;
+	public JourSemaine[] jourLivraison;
 	public static final ArrayList<Depot> depots = new ArrayList<>();
 
   /**
@@ -66,7 +66,7 @@ public class Depot extends Base {
   */
 	public Depot(int adresseIdAdresse, int referentIdReferent, String nom, String telephone, String presentation,
 	             String commentaire, String mail, String website, File image) {
-		this.id = -1;
+		this.id = Main.sql.getNextId(TABLE_NAME);
 		this.adresseIdAdresse = adresseIdAdresse;
 		this.referentIdReferent = referentIdReferent;
 		this.nom = nom;

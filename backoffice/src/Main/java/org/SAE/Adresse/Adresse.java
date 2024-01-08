@@ -18,7 +18,7 @@ import java.util.List;
 public class Adresse extends Base {
 	public static final String TABLE_NAME = "Adresse";
 	protected static final String[] TABLE_COLUMNS = {"adresse", "ville", "codePostal"};
-	public final int id;
+	public int id;
 	String rue;
 	String ville;
 	String codePostal;
@@ -44,7 +44,6 @@ public class Adresse extends Base {
 	 * The address object is then added to the static list of addresses.
 	 */
 	public Adresse(String rue, String ville, String codePostal) {
-		this.id = -1;
 		this.rue = rue;
 		this.ville = ville;
 		this.codePostal = codePostal;

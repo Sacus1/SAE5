@@ -18,7 +18,7 @@ public class Panier extends Base {
 	static final String[] fields = {"Nom", "Prix", "Image", "Jardin"};
 	static final String[] dbFields = {"nom", "prix", "image", "Jardin_idJardin"};
 	static final ArrayList<String> requiredFieldsList = new ArrayList<>(Arrays.asList("Nom", "Prix", "Jardin"));
-	public final int id;
+	public int id;
 	String nom;
 	float prix;
 	File image;
@@ -42,7 +42,6 @@ public class Panier extends Base {
 	ArrayList<ProduitE> produits = new ArrayList<>();
 
 	public Panier(String nom, float prix, File image, Jardin jardin) {
-		this.id = -1;
 		this.nom = nom;
 		this.prix = prix;
 		this.image = image;

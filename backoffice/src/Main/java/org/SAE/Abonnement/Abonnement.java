@@ -20,7 +20,7 @@ public class Abonnement extends Base {
 	static final String TABLE_NAME = "Abonnement";
 	static final String[] dbFields = {"Client_idClient","Panier_idPanier","debut","fin","estActif","frequenceLivraison"};
 
-	final int id;
+	int id;
 	Client client;
 	Panier panier;
 	boolean estActif;
@@ -32,7 +32,6 @@ public class Abonnement extends Base {
 	Abonnement(Client client, Panier panier, Date debut, Date fin,
 	           int frequenceLivraison,
 	           boolean estActif) {
-		this.id = -1;
 		this.client = client;
 		this.panier = panier;
 		this.debut = debut;

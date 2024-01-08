@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Referent extends Base {
 	private static final String TABLE_NAME = "Referent" ;
-	public final int id;
+	public int id;
 	String nom;
 	String telephone;
 	String mail;
@@ -26,7 +26,6 @@ public class Referent extends Base {
 	}
 
 	public Referent(String nom, String telephone, String mail) {
-		this.id = -1;
 		this.nom = nom;
 		this.telephone = telephone;
 		this.mail = mail;

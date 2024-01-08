@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 public class Unite extends Base {
 	private static final String TABLE_NAME = "Unite" ;
-	public final int id;
+	public int id;
 	String nom;
 	public static final List<Unite> unites = new ArrayList<>();
 	public Unite(int id, String nom) {
@@ -20,7 +20,6 @@ public class Unite extends Base {
 		unites.add(this);
 	}
 	public Unite(String nom) {
-		this.id = -1;
 		this.nom = nom;
 		unites.add(this);
 	}

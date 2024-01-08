@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Produit extends Base {
 	static final String TABLE_NAME = "Produit";
-	public final int id;
+	public int id;
 	public int idUnite;
 	public String nom;
 	String description;
@@ -26,7 +26,6 @@ public class Produit extends Base {
 		produits.add(this);
 	}
 	public Produit(String nom, String description, int idUnite,File image) {
-		this.id =-1;
 		this.nom = nom;
 		this.description = description;
 		this.idUnite = idUnite;

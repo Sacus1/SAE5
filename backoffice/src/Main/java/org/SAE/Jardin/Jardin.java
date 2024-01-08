@@ -22,7 +22,7 @@ public class Jardin extends Base {
 	private static final String[] dbFields = {"Referent_idReferent","Adresse_idAdresseSiegeSocial","Adresse_idAdresseGestion",
 					"nomCommercial","raison"};
 
-	public final int id;
+	public int id;
 	public Referent referent;
 	public Adresse adresseSiegeSocial;
 	public Adresse adresseGestion;
@@ -32,7 +32,6 @@ public class Jardin extends Base {
 	public static final List<Jardin> jardins = new ArrayList<>();
 
 	public Jardin(Referent referent, Adresse adresseSiegeSocial, Adresse adresseGestion, String nomCommercial, String raisonSociale) {
-		this.id = -1;
 		this.referent = referent;
 		this.adresseSiegeSocial = adresseSiegeSocial;
 		this.adresseGestion = adresseGestion;

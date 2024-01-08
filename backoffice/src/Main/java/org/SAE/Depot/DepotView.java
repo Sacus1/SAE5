@@ -156,8 +156,8 @@ public class DepotView extends BaseView<Depot> {
 		scrollPane.setPreferredSize(new Dimension(300, 50));
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		// add button
-		UButton addProduitButton = new UButton("Add");
-		addProduitButton.addActionListener(e -> {
+		UButton addPeriode = new UButton("Add");
+		addPeriode.addActionListener(e -> {
 			displayView(true);
 			clear();
 			mainPanel.add(createPeriodeNonLivrablePanel(depotToEdit));
@@ -178,7 +178,7 @@ public class DepotView extends BaseView<Depot> {
 				periodesNonLivrables.add(periodePanel);
 			}
 		}
-		periodesNonLivrables.add(addProduitButton);
+		periodesNonLivrables.add(addPeriode);
 		UButton createButton = new UButton("Modifier");
 		createButton.addActionListener(e -> {
 			String[] values = getValues(depotFormComponents.fieldPanels(), depotFormComponents.addressChoice(), depotFormComponents.referentChoice());

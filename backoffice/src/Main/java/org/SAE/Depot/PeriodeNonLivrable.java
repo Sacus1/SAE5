@@ -27,7 +27,6 @@ public class PeriodeNonLivrable extends Base {
 	}
 
 	public PeriodeNonLivrable(Date dateDebut, Date dateFin, Depot depot) {
-		id = -1;
 		this.dateDebut = dateDebut;
 		this.dateFin = dateFin;
 		this.depot = depot;
