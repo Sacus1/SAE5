@@ -63,7 +63,7 @@ public abstract class BaseView<T extends Base> extends JPanel {
 				mainPanel.add(formPanel);
 			}
 			refresh();
-			createButton.setText("Cancel");
+			createButton.setText("Annuler");
 			inCreation = true;
 			return;
 		}
@@ -76,7 +76,7 @@ public abstract class BaseView<T extends Base> extends JPanel {
 			}
 		}
 		refresh();
-		createButton.setText("Create " + name);
+		createButton.setText("Créer " + name);
 		inCreation = false;
 	}
 
@@ -96,14 +96,14 @@ public abstract class BaseView<T extends Base> extends JPanel {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(2, 2));
 		JLabel label = new JLabel(t.toString());
-		UButton editButton = new UButton("Edit");
+		UButton editButton = new UButton("Modifier");
 		editButton.addActionListener(e -> {
 			displayView(true);
 			clear();
 			mainPanel.add(createEditPanel(t));
 			refresh();
 		});
-		UButton deleteButton = new UButton("Delete");
+		UButton deleteButton = new UButton("Supprimer");
 		deleteButton.addActionListener(e -> {
 			t.delete();
 			t.loadFromDatabase();

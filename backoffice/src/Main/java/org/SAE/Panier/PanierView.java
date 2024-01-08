@@ -35,14 +35,14 @@ public class PanierView extends BaseView<Panier> {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(1, 3));
 		JLabel label = new JLabel(panier.toString());
-		UButton editButton = new UButton("Edit");
+		UButton editButton = new UButton("Modifier");
 		editButton.addActionListener(e -> {
 			displayView(true);
 			clear();
 			mainPanel.add(createEditPanel(panier));
 			refresh();
 		});
-		UButton deleteButton = new UButton("Delete");
+		UButton deleteButton = new UButton("Supprimer");
 		deleteButton.addActionListener(e -> {
 			panier.delete();
 			panier.loadFromDatabase();
@@ -175,7 +175,7 @@ public class PanierView extends BaseView<Panier> {
 			JPanel produitPanel = new JPanel();
 			produitPanel.setLayout(new GridLayout(1, 3));
 			JLabel produitLabel = new JLabel(produitPanier.toString());
-			UButton deleteButton = new UButton("Delete");
+			UButton deleteButton = new UButton("Supprimer");
 			deleteButton.addActionListener(e -> {
 				panier.deleteProduit(produitPanier.produit);
 				panier.loadFromDatabase();

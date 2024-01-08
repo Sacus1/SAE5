@@ -92,6 +92,8 @@ public class Client extends Base {
 										client.profession, client.dateNaissance, client.estDispense},
 						new String[]{"idClient = " + client.id}))
 			Logger.error("Can't update client");
+		getFromDatabase();
+
 	}
 
 

@@ -66,6 +66,8 @@ public class Referent extends Base {
 						new Object[]{referent.nom, referent.telephone, referent.mail},
 						new String[]{"idReferent = "+referent.id}))
 			Logger.error("Failed to update Referent");
+		getFromDatabase();
+
 	}
 
 	protected void delete() {
@@ -75,7 +77,7 @@ public class Referent extends Base {
 	}
 
 	public static void create(Referent referent) {
-		if (Main.sql.createPrepareStatement("Referent", new String[]{"nom", "telephone", "mail"},
+		if (!Main.sql.createPrepareStatement("Referent", new String[]{"nom", "telephone", "mail"},
 						new Object[]{referent.nom, referent.telephone, referent.mail}))
 			Logger.error("Failed to create Referent");
 		getFromDatabase();

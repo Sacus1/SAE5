@@ -59,6 +59,7 @@ public class Produit extends Base {
 						new Object[]{produit.nom, produit.image, produit.description, produit.idUnite},
 						new String[]{"idProduit = "+produit.id}))
 			Logger.error("Update failed");
+		getFromDatabase();
 	}
 	public static void create(Produit produit) {
 		if (!Main.sql.createPrepareStatement("Produit", new String[]{"nom", "image", "description", "Unite_idUnite"},
@@ -68,7 +69,7 @@ public class Produit extends Base {
 	}
 	public void delete() {
 		if (!Main.sql.deletePrepareStatement("Produit", new String[]{"idProduit = " + id}))
-			Logger.error("Delete failed");
+			Logger.error("Echec de la suppression");
 		produits.remove(this);
 	}
 	@Override

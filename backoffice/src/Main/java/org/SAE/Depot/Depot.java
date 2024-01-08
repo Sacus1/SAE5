@@ -134,6 +134,8 @@ public class Depot extends Base {
 			Logger.error("Failed to update depot");
 		}
 		insertDeliveryDays(depot);
+		getFromDatabase();
+
 	}
 
 	private static void insertDeliveryDays(Depot depot) {

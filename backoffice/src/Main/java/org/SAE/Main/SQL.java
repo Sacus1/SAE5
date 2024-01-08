@@ -104,7 +104,6 @@ public class SQL {
 		try {
 			PreparedStatement stmt = con.prepareStatement(query.toString());
 			for (int i = 0; i < attr.length; i++) {
-				System.out.println(attr[i] + " " + attr[i].getClass());
 				switch (attr[i]) {
 					case String s -> stmt.setString(i + 1, s);
 					case Integer integer -> stmt.setInt(i + 1, integer);

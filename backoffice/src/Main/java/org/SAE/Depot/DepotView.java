@@ -35,7 +35,7 @@ public class DepotView extends BaseView<Depot> {
 	public DepotView() {
 		super("Depot");
 		setLayout(new BorderLayout());
-		archivedCheckBox = new JCheckBox("Show archived");
+		archivedCheckBox = new JCheckBox("Montrer les depots archivés");
 		archivedCheckBox.addActionListener(e -> {
 			showArchived = !showArchived;
 			displayView(false);
@@ -63,15 +63,15 @@ public class DepotView extends BaseView<Depot> {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(1, 3));
 		panel.add(new Label(t.toString()));
-		UButton editButton = new UButton("Edit");
+		UButton editButton = new UButton("Modifier");
 		editButton.addActionListener(e -> {
 			displayView(true);
 			clear();
 			mainPanel.add(createEditPanel(t));
 			refresh();
 		});
-		UButton deleteButton = new UButton("Delete");
-		UButton archiveButton = new UButton(t.isArchived ? "Unarchive" : "Archive");
+		UButton deleteButton = new UButton("Supprimer");
+		UButton archiveButton = new UButton(t.isArchived ? "Désarchiver" : "Archiver");
 		deleteButton.addActionListener(e -> {
 			t.delete();
 			Depot.getFromDatabase();
@@ -168,7 +168,7 @@ public class DepotView extends BaseView<Depot> {
 				JPanel periodePanel = new JPanel();
 				periodePanel.setLayout(new GridLayout(1, 2));
 				periodePanel.add(new Label(periodeNonLivrable.toString()));
-				UButton deleteButton = new UButton("Delete");
+				UButton deleteButton = new UButton("Supprimer");
 				deleteButton.addActionListener(e -> {
 					periodesNonLivrables.remove(periodePanel);
 					periodeNonLivrable.delete();
@@ -179,7 +179,7 @@ public class DepotView extends BaseView<Depot> {
 			}
 		}
 		periodesNonLivrables.add(addProduitButton);
-		UButton createButton = new UButton("Edit");
+		UButton createButton = new UButton("Modifier");
 		createButton.addActionListener(e -> {
 			String[] values = getValues(depotFormComponents.fieldPanels(), depotFormComponents.addressChoice(), depotFormComponents.referentChoice());
 			if (values.length == 0) return;

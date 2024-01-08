@@ -108,6 +108,8 @@ public class Abonnement extends Base {
 										abonnement.frequenceLivraison},
 						new String[]{"idAbonnement = " + abonnement.id}))
 			Logger.error("Can't update abonnement");
+		getFromDatabase();
+
 	}
 
 	/**

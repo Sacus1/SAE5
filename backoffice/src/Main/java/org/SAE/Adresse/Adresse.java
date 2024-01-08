@@ -59,6 +59,8 @@ public class Adresse extends Base {
 		if (!(Main.sql.updatePreparedStatement(TABLE_NAME, TABLE_COLUMNS,
 						new Object[]{adresse.rue, adresse.ville, adresse.codePostal},
 						new String[]{"idAdresse = " + adresse.id}))) org.SAE.Main.Logger.log("Update failed");
+		getFromDatabase();
+
 	}
 
 	public static Adresse getAdresseById(int adresseIdAdresse) {

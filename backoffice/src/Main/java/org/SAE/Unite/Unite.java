@@ -51,10 +51,11 @@ public class Unite extends Base {
 		if (!Main.sql.updatePreparedStatement(TABLE_NAME, new String[]{"idUnite", "nom"},
 						new Object[]{unite.id, unite.nom},
 						new String[]{"idUnite = " +unite.id})) Logger.error("Failed to update Unite");
+		getFromDatabase();
 	}
 	public static void create(Unite unite) {
-		if (!Main.sql.createPrepareStatement(TABLE_NAME, new String[]{"idUnite", "nom"},
-						new Object[]{unite.id, unite.nom}))
+		if (!Main.sql.createPrepareStatement(TABLE_NAME, new String[]{"nom"},
+						new Object[]{unite.nom}))
 			Logger.error("Failed to insert Unite");
 		getFromDatabase();
 	}

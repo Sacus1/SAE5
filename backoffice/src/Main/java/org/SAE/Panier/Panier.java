@@ -106,6 +106,8 @@ public class Panier extends Base {
 		} catch (Exception e) {
 			Logger.error("Error while updating Panier: " + e.getMessage());
 		}
+		getFromDatabase();
+
 	}
 
 	protected void delete() {

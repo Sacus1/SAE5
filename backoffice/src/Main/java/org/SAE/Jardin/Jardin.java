@@ -92,6 +92,8 @@ public class Jardin extends Base {
 		} catch (Exception e) {
 			Logger.error("Error while updating Jardin: " + e.getMessage());
 		}
+		getFromDatabase();
+
 	}
 
 	@Override
