@@ -104,6 +104,10 @@ public class PanierView extends BaseView<Panier> {
 				Logger.error("Please fill all the required fields");
 				return;
 			}
+			if (!prixField.getText().matches("[0-9]+.[0-9][0-9]")) {
+				Logger.error("Prix must be a number : 0.00");
+				return;
+			}
 			String nom = nomField.getText();
 			float prix = Float.parseFloat(prixField.getText());
 			Panier panier = new Panier(nom, prix, image.get(), jardin);

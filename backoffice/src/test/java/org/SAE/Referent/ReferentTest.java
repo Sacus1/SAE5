@@ -46,7 +46,7 @@ class ReferentTest {
     @Test
     void shouldDeleteReferent() {
         try (MockedStatic<Logger> mockLogger = Mockito.mockStatic(Logger.class)) {
-            Referent.delete(referent);
+            referent.delete();
             mockLogger.verify(() -> Logger.error(Mockito.anyString()), Mockito.times(0));
         }
         Mockito.verify(sqlMock).deletePrepareStatement(Mockito.anyString(), Mockito.any());

@@ -26,7 +26,7 @@ class ProduitTest {
   Mockito.when(sqlMock.createPrepareStatement(Mockito.anyString(), Mockito.any(), Mockito.any())).thenReturn(true);
   Mockito.when(sqlMock.updatePreparedStatement(Mockito.anyString(), Mockito.any(), Mockito.any(),
           Mockito.any())).thenReturn(true);
-  produit = new Produit("Product1", "Description1", 100.0, 1, new File("path/to/image"));
+  produit = new Produit("product","desc",1,new File("path/to/image"));
  }
 
  @Test
@@ -59,7 +59,7 @@ class ProduitTest {
       .thenReturn(false);
 
   try (MockedStatic<Logger> mockLogger = Mockito.mockStatic(Logger.class)) {
-    Produit.delete(produit);
+    produit.delete();
       mockLogger.verify(() -> Logger.error(Mockito.anyString()), Mockito.times(0));
       }
 

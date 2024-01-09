@@ -11,7 +11,7 @@ import static org.SAE.Main.Main.sql;
 
 public class Tournee extends Base {
 	static final String TABLE_NAME = "Tournee";
-	int id;
+	public int id;
 	JourSemaine jourPreparation;
 	JourSemaine jourLivraison;
 	String nom;
@@ -61,6 +61,16 @@ public class Tournee extends Base {
 			e.printStackTrace();
 		}
 	}
+
+	public static Tournee getTourneeById(int tourneeId) {
+		for (Tournee tournee : tournees) {
+			if (tournee.id == tourneeId) {
+				return tournee;
+			}
+		}
+		return null;
+	}
+
 	@Override
 	public void loadFromDatabase() {
 		getFromDatabase();
