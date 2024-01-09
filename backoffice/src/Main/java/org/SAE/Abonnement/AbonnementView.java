@@ -66,6 +66,18 @@ public class AbonnementView extends BaseView<Abonnement> {
 		createButton.addActionListener(e -> {
 			Client client = (Client) clientComboBox.getSelectedItem();
 			Panier panier = (Panier) panierComboBox.getSelectedItem();
+			// check for value
+			if (client == null || panier == null || debutField.getJFormattedTextField().getText().isEmpty() || finField.getJFormattedTextField().getText().isEmpty() || frequenceLivraisonField.getText().isEmpty()) {
+				org.SAE.Main.Logger.error("All fields must be filled");
+				return;
+			}
+			// check if date interval is greater than frequenceLivraison
+			if (Date.valueOf(debutField.getJFormattedTextField().getText())
+							.toLocalDate().plusDays(Integer.parseInt(frequenceLivraisonField.getText()))
+							.isAfter(Date.valueOf(finField.getJFormattedTextField().getText()).toLocalDate())) {
+				org.SAE.Main.Logger.error("Date interval must be greater than frequenceLivraison");
+				return;
+			}
 			Date debut = Date.valueOf(debutField.getJFormattedTextField().getText());
 			Date fin = Date.valueOf(finField.getJFormattedTextField().getText());
 			int frequenceLivraison = Integer.parseInt(frequenceLivraisonField.getText());
@@ -115,6 +127,18 @@ public class AbonnementView extends BaseView<Abonnement> {
 		createButton.addActionListener(e -> {
 			abonnement.client = (Client) clientComboBox.getSelectedItem();
 			abonnement.panier = (Panier) panierComboBox.getSelectedItem();
+			// check for value
+			if (abonnement.client == null || abonnement.panier == null || debutField.getJFormattedTextField().getText().isEmpty() || finField.getJFormattedTextField().getText().isEmpty() || frequenceLivraisonField.getText().isEmpty()) {
+				org.SAE.Main.Logger.error("All fields must be filled");
+				return;
+			}
+			// check if date interval is greater than frequenceLivraison
+			if (Date.valueOf(debutField.getJFormattedTextField().getText())
+							.toLocalDate().plusDays(Integer.parseInt(frequenceLivraisonField.getText()))
+							.isAfter(Date.valueOf(finField.getJFormattedTextField().getText()).toLocalDate())) {
+				org.SAE.Main.Logger.error("Date interval must be greater than frequenceLivraison");
+				return;
+			}
 			abonnement.debut = Date.valueOf(debutField.getJFormattedTextField().getText());
 			abonnement.fin = Date.valueOf(finField.getJFormattedTextField().getText());
 			abonnement.frequenceLivraison = Integer.parseInt(frequenceLivraisonField.getText());
