@@ -1,7 +1,5 @@
 package org.SAE.Main;
 
-import org.SAE.Depot.Depot;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -68,11 +66,47 @@ public abstract class BaseView<T extends Base> extends JPanel {
 			return;
 		}
 		clear();
+		// search bar
+		JTextField searchBar = new JTextField();
+		searchBar.setMaximumSize(new Dimension(1000, 30));
+		searchBar.setPreferredSize(new Dimension(1000, 30));
+		searchBar.addActionListener(e -> {
+			ArrayList<T> list = new ArrayList<>(GetList());
+			ArrayList<T> filteredList = new ArrayList<>();
+			for (T t : list) {
+				if (t.toString().toLowerCase().contains(searchBar.getText().toLowerCase())) {
+					filteredList.add(t);
+				}
+			}
+			clear();
+			JPanel listPanel = new JPanel();
+			listPanel.setLayout(new GridLayout(0, 1));
+			JScrollPane scrollPane = new JScrollPane(listPanel);
+			int width = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.8);
+			int height = (int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.8);
+			scrollPane.setPreferredSize(new Dimension(width, height));
+			mainPanel.add(scrollPane);
+			for (T t : filteredList) {
+				JPanel p = createListPanel(t);
+				if (p != null) {
+					listPanel.add(p);
+				}
+			}
+			refresh();
+		});
+		topPanel.add(searchBar);
+		JPanel listPanel = new JPanel();
+		listPanel.setLayout(new GridLayout(0, 1));
+		JScrollPane scrollPane = new JScrollPane(listPanel);
+		int width = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.8);
+		int height = (int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.8);
+		scrollPane.setPreferredSize(new Dimension(width, height));
+		mainPanel.add(scrollPane);
 		ArrayList<T> list = new ArrayList<>(GetList());
 		for (T t : list) {
-			JPanel listPanel = createListPanel(t);
-			if (listPanel != null) {
-				mainPanel.add(listPanel);
+			JPanel p = createListPanel(t);
+			if (p != null) {
+				listPanel.add(p);
 			}
 		}
 		refresh();
@@ -92,9 +126,8 @@ public abstract class BaseView<T extends Base> extends JPanel {
 	 * @return the created list panel.
 	 */
 	protected JPanel createListPanel(T t){
-		t.loadFromDatabase();
 		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(2, 2));
+		panel.setLayout(new GridLayout(1, 2));
 		JLabel label = new JLabel(t.toString());
 		UButton editButton = new UButton("Modifier");
 		editButton.addActionListener(e -> {
@@ -110,7 +143,6 @@ public abstract class BaseView<T extends Base> extends JPanel {
 			displayView(false);
 		});
 		panel.add(label);
-		panel.add(new JLabel());
 		panel.add(editButton);
 		panel.add(deleteButton);
 		return panel;
