@@ -6,6 +6,7 @@ import org.SAE.Depot.Depot;
 import org.SAE.Depot.DepotView;
 import org.SAE.Depot.PeriodeNonLivrable;
 import org.SAE.Jardin.Jardin;
+import org.SAE.Livraison.Livraison;
 import org.SAE.Panier.Panier;
 import org.SAE.Produit.Produit;
 import org.SAE.Referent.Referent;
@@ -47,7 +48,7 @@ public class Main {
 		// add buttons
 		UButton[] UButtons = {new UButton("Depot"), new UButton("Referent"), new UButton("Adresse"),new UButton("Unité"),
 						new UButton("Abonnement"),new UButton("Jardin"),new UButton("Client"),new UButton("Produit"),new UButton(
-										"Tournée")};
+										"Tournée"),new UButton("Livraison")};
 		Arrays.sort(UButtons, Comparator.comparing(UButton::getText));
 		leftPanel.setLayout(new GridLayout(UButtons.length, 1));
 		for (UButton UButton : UButtons) {
@@ -101,6 +102,11 @@ public class Main {
 						resetSelectedButton(UButtons);
 						UButton.setBackground(Color.LIGHT_GRAY);
 						break;
+					case "Livraison":
+						mainPanel.add(new org.SAE.Livraison.LivraisonView());
+						resetSelectedButton(UButtons);
+						UButton.setBackground(Color.LIGHT_GRAY);
+						break;
 					default:
 						break;
 				}
@@ -140,6 +146,7 @@ public class Main {
 		PeriodeNonLivrable.getFromDatabase();
 		Abonnement.getFromDatabase();
 		Tournee.getFromDatabase();
+		Livraison.getFromDatabase();
 		mainPanel.remove(loadingLabel);
 	}
 
