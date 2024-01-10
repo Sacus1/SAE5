@@ -28,7 +28,7 @@ public class AbonnementView extends BaseView<Abonnement> {
 	}
 
 	@Override
-	protected ArrayList<Abonnement> GetList() {
+	protected ArrayList<Abonnement> getList() {
 		return (ArrayList<Abonnement>) Abonnement.abonnements;
 	}
 

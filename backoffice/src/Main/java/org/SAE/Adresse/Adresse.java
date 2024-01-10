@@ -88,7 +88,7 @@ public class Adresse extends Base {
 	 * Method to return a string representation of the address object.
 	 */
 	public String toString() {
-		return rue + ", " + ville;
+		return rue + ", " + ville + ", " + codePostal;
 	}
 
 	/**
@@ -130,4 +130,5 @@ public class Adresse extends Base {
 	public void loadFromDatabase() {
 		getFromDatabase();
 	}
+
 }

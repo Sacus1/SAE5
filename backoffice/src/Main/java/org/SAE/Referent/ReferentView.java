@@ -18,7 +18,7 @@ public class ReferentView extends BaseView<Referent> {
 	}
 
 	@Override
-	protected ArrayList<Referent> GetList() {
+	protected ArrayList<Referent> getList() {
 		return (ArrayList<Referent>) Referent.referents;
 	}
 

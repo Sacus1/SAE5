@@ -25,7 +25,7 @@ public class AdresseView extends BaseView<Adresse> {
 	}
 
 	@Override
-	protected ArrayList<Adresse> GetList() {
+	protected ArrayList<Adresse> getList() {
 		return (ArrayList<Adresse>) Adresse.adresses;
 	}
 

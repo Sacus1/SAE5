@@ -21,7 +21,7 @@ public class ProduitView extends BaseView<Produit>{
 	}
 
 	@Override
-	protected ArrayList<Produit> GetList() {
+	protected ArrayList<Produit> getList() {
 		return (ArrayList<Produit>) Produit.produits;
 	}
 

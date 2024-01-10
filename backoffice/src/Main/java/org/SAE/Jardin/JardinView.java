@@ -23,7 +23,7 @@ public class JardinView extends BaseView<Jardin>{
 	}
 
 	@Override
-	protected ArrayList<Jardin> GetList() {
+	protected ArrayList<Jardin> getList() {
 		return (ArrayList<Jardin>) Jardin.jardins;
 	}
 

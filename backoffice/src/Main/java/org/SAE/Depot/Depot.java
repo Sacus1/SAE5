@@ -1,5 +1,6 @@
 package org.SAE.Depot;
 
+import org.SAE.Adresse.Adresse;
 import org.SAE.Main.Base;
 import org.SAE.Main.Logger;
 import org.SAE.Main.Main;
@@ -28,7 +29,7 @@ public class Depot extends Base {
 	static final ArrayList<String> requiredFieldsList = new ArrayList<>(Arrays.asList("Adresse id", "Referent.Referent id",
 					"Nom", "Telephone"));
 	public int id;
-	int adresseIdAdresse;
+	public Adresse adresse;
 	int referentIdReferent;
 	boolean isArchived;
 	String nom;
@@ -45,10 +46,10 @@ public class Depot extends Base {
   * Constructor for the Depot class.
   * It initializes the Depot object and adds it to the depots list.
   */
-	public Depot(int id, int adresseIdAdresse, int referentIdReferent, String nom, String telephone, String presentation,
+	public Depot(int id, Adresse adress, int referentIdReferent, String nom, String telephone, String presentation,
 	             String commentaire, String mail, String website, File image) {
 		this.id = id;
-		this.adresseIdAdresse = adresseIdAdresse;
+		this.adresse = adress;
 		this.referentIdReferent = referentIdReferent;
 		this.nom = nom;
 		this.telephone = telephone;
@@ -64,10 +65,10 @@ public class Depot extends Base {
  /**
   * This method fetches the Depot data from the database and creates Depot objects.
   */
-	public Depot(int adresseIdAdresse, int referentIdReferent, String nom, String telephone, String presentation,
+	public Depot(Adresse adresse, int referentIdReferent, String nom, String telephone, String presentation,
 	             String commentaire, String mail, String website, File image) {
 		this.id = Main.sql.getNextId(TABLE_NAME);
-		this.adresseIdAdresse = adresseIdAdresse;
+		this.adresse = adresse;
 		this.referentIdReferent = referentIdReferent;
 		this.nom = nom;
 		this.telephone = telephone;
@@ -101,7 +102,8 @@ public class Depot extends Base {
 				InputStream imageStream = res.getBinaryStream("image");
 				boolean isArchived = res.getBoolean("estArchive");
 				File image = Main.convertInputStreamToImage(imageStream);
-				Depot d = new Depot(id, addressId, referentId, name, telephone, presentation, comment, mail, website, image);
+				Depot d = new Depot(id, Adresse.getAdresseById(addressId), referentId, name, telephone, presentation, comment, mail,
+								website, image);
 				d.isArchived = isArchived;
 				String query = "SELECT * FROM JourSemaine JOIN JourOuvrable ON JourSemaine.idJourSemaine = JourOuvrable.JourSemaine_idJourSemaine JOIN Depot ON Depot.idDepot = JourOuvrable.Depot_idDepot WHERE Depot.idDepot = " + d.id + ";";
 				ResultSet res2 = sql.selectRaw(query);
@@ -128,7 +130,7 @@ public class Depot extends Base {
 		if(!Main.sql.updatePreparedStatement(TABLE_NAME, new String[]{
 										"Adresse_idAdresse", "Referent_idReferent", "nom", "telephone", "presentation",
 										"commentaire", "mail", "website","image", "estArchive"},
-						new Object[]{depot.adresseIdAdresse, depot.referentIdReferent, depot.nom, depot.telephone,
+						new Object[]{depot.adresse.id, depot.referentIdReferent, depot.nom, depot.telephone,
 										depot.presentation, depot.commentaire, depot.mail, depot.website,depot.image, depot.isArchived ? 1 : 0},
 						new String[]{"idDepot = " + depot.id})) {
 			Logger.error("Failed to update depot");
@@ -153,7 +155,7 @@ public class Depot extends Base {
 	if (!Main.sql.createPrepareStatement(TABLE_NAME, new String[]{"idDepot",
 									"Adresse_idAdresse", "Referent_idReferent", "nom", "telephone", "presentation",
 									"commentaire", "mail", "website", "image"},
-					new Object[]{depot.id, depot.adresseIdAdresse, depot.referentIdReferent, depot.nom, depot.telephone,
+					new Object[]{depot.id, depot.adresse.id, depot.referentIdReferent, depot.nom, depot.telephone,
 									depot.presentation, depot.commentaire, depot.mail, depot.website, depot.image})) {
 			Logger.error("Can't create depot");
 			return;

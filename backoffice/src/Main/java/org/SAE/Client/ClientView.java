@@ -26,7 +26,7 @@ public class ClientView extends BaseView<Client> {
 	}
 
 	@Override
-	protected ArrayList<Client> GetList() {
+	protected ArrayList<Client> getList() {
 		return (ArrayList<Client>) Client.clients;
 	}
 

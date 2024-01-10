@@ -19,7 +19,7 @@ public class UniteView extends BaseView<Unite> {
 	}
 
 	@Override
-	protected ArrayList<Unite> GetList() {
+	protected ArrayList<Unite> getList() {
 		return (ArrayList<Unite>) Unite.unites;
 	}
 

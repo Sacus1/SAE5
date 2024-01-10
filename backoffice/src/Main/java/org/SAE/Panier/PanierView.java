@@ -54,7 +54,7 @@ public class PanierView extends BaseView<Panier> {
 		return panel;
 	}
 	@Override
-	protected ArrayList<Panier> GetList() {
+	protected ArrayList<Panier> getList() {
 		return (ArrayList<Panier>) Panier.paniers;
 	}
 	/**

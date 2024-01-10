@@ -51,9 +51,10 @@ public abstract class BaseView<T extends Base> extends JPanel {
 	 * This method is used to display the view based on the mode.
 	 * If the mode is not create mode, it will display a list of Base objects.
 	 * If the mode is create mode, it will display a form for creating a new Base object.
+	 *
 	 * @param isCreateMode a boolean indicating whether the view is in create mode or not.
 	 */
-	public void displayView(boolean isCreateMode){
+	public void displayView(boolean isCreateMode) {
 		if (isCreateMode) {
 			clear();
 			JPanel formPanel = createFormPanel();
@@ -70,31 +71,24 @@ public abstract class BaseView<T extends Base> extends JPanel {
 		JTextField searchBar = new JTextField();
 		searchBar.setMaximumSize(new Dimension(1000, 30));
 		searchBar.setPreferredSize(new Dimension(1000, 30));
-		searchBar.addActionListener(e -> {
-			ArrayList<T> list = new ArrayList<>(GetList());
-			ArrayList<T> filteredList = new ArrayList<>();
-			for (T t : list) {
-				if (t.toString().toLowerCase().contains(searchBar.getText().toLowerCase())) {
-					filteredList.add(t);
-				}
-			}
-			clear();
-			JPanel listPanel = new JPanel();
-			listPanel.setLayout(new GridLayout(0, 1));
-			JScrollPane scrollPane = new JScrollPane(listPanel);
-			int width = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.8);
-			int height = (int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.8);
-			scrollPane.setPreferredSize(new Dimension(width, height));
-			mainPanel.add(scrollPane);
-			for (T t : filteredList) {
-				JPanel p = createListPanel(t);
-				if (p != null) {
-					listPanel.add(p);
-				}
-			}
-			refresh();
-		});
+		searchBar.addActionListener(e -> search(searchBar));
 		topPanel.add(searchBar);
+		searchBar.setText("");
+		search(searchBar);
+		refresh();
+		createButton.setText("Créer " + name);
+		inCreation = false;
+	}
+
+	private void search(JTextField searchBar) {
+		ArrayList<T> list = new ArrayList<>(getList());
+		ArrayList<T> filteredList = new ArrayList<>();
+		for (T t : list) {
+			if (t.toString().toLowerCase().contains(searchBar.getText().toLowerCase())) {
+				filteredList.add(t);
+			}
+		}
+		clear();
 		JPanel listPanel = new JPanel();
 		listPanel.setLayout(new GridLayout(0, 1));
 		JScrollPane scrollPane = new JScrollPane(listPanel);
@@ -102,19 +96,16 @@ public abstract class BaseView<T extends Base> extends JPanel {
 		int height = (int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.8);
 		scrollPane.setPreferredSize(new Dimension(width, height));
 		mainPanel.add(scrollPane);
-		ArrayList<T> list = new ArrayList<>(GetList());
-		for (T t : list) {
+		for (T t : filteredList) {
 			JPanel p = createListPanel(t);
 			if (p != null) {
 				listPanel.add(p);
 			}
 		}
 		refresh();
-		createButton.setText("Créer " + name);
-		inCreation = false;
 	}
 
-	protected abstract ArrayList<T> GetList();
+	protected abstract ArrayList<T> getList();
 
 
 	/**
@@ -122,10 +113,11 @@ public abstract class BaseView<T extends Base> extends JPanel {
 	 * The list panel contains a label displaying the Base object, an edit button, and a delete button.
 	 * The edit button, when clicked, will display an edit panel for the Base object.
 	 * The delete button, when clicked, will delete the Base object and refresh the view.
+	 *
 	 * @param t the Base object for which the list panel is created.
 	 * @return the created list panel.
 	 */
-	protected JPanel createListPanel(T t){
+	protected JPanel createListPanel(T t) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(1, 2));
 		JLabel label = new JLabel(t.toString());
@@ -162,11 +154,15 @@ public abstract class BaseView<T extends Base> extends JPanel {
 		mainPanel.revalidate();
 		mainPanel.repaint();
 	}
+
 	protected abstract JPanel createFormPanel();
+
 	protected abstract JPanel createEditPanel(T object);
+
 	/**
 	 * Creates and returns a panel for a field.
-	 * @param fieldName The name of the field.
+	 *
+	 * @param fieldName  The name of the field.
 	 * @param isRequired Whether the field is required or not.
 	 * @return JPanel for a field.
 	 */

@@ -49,7 +49,7 @@ public class DepotView extends BaseView<Depot> {
 	}
 
 	@Override
-	protected ArrayList<Depot> GetList() {
+	protected ArrayList<Depot> getList() {
 		ArrayList<Depot> list = new ArrayList<>();
 		for (Depot depot : Depot.depots) {
 			if (showArchived || !depot.isArchived) list.add(depot);
@@ -61,7 +61,7 @@ public class DepotView extends BaseView<Depot> {
 	@Override
 	protected JPanel createListPanel(Depot t) {
 		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(1, 3));
+		panel.setLayout(new GridLayout(1, 4));
 		panel.add(new Label(t.toString()));
 		UButton editButton = new UButton("Modifier");
 		editButton.addActionListener(e -> {
@@ -126,7 +126,9 @@ public class DepotView extends BaseView<Depot> {
 			Logger.error("No delivery day selected");
 			return;
 		}
-		Depot depot = new Depot(Integer.parseInt(values[0]), Integer.parseInt(values[1]), values[2], values[3], values[4],
+		Depot depot = new Depot(Adresse.getAdresseById(Integer.parseInt(values[0])), Integer.parseInt(values[1]),
+						values[2], values[3],
+						values[4],
 						values[5], values[6], values[7], depotImage);
 		depot.jourLivraison = deliveryDays.toArray(new JourSemaine[0]);
 		Depot.create(depot);
@@ -188,7 +190,7 @@ public class DepotView extends BaseView<Depot> {
 				Logger.error("No delivery day selected");
 				return;
 			}
-			depotToEdit.adresseIdAdresse = Integer.parseInt(values[0]);
+			depotToEdit.adresse = Adresse.getAdresseById(Integer.parseInt(values[0]));
 			depotToEdit.referentIdReferent = Integer.parseInt(values[1]);
 			depotToEdit.nom = values[2];
 			depotToEdit.telephone = values[3];
@@ -411,7 +413,7 @@ public class DepotView extends BaseView<Depot> {
 		// select adresse
 		if (depot == null) return adresseChoice;
 		for (int i = 0; i < Adresse.adresses.size(); i++)
-			if (Adresse.adresses.get(i).id == depot.adresseIdAdresse) {
+			if (Adresse.adresses.get(i).id == depot.adresse.id) {
 				adresseChoice.select(i);
 				break;
 			}
