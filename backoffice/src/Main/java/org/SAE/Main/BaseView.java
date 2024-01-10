@@ -159,18 +159,5 @@ public abstract class BaseView<T extends Base> extends JPanel {
 
 	protected abstract JPanel createEditPanel(T object);
 
-	/**
-	 * Creates and returns a panel for a field.
-	 *
-	 * @param fieldName  The name of the field.
-	 * @param isRequired Whether the field is required or not.
-	 * @return JPanel for a field.
-	 */
-	protected JPanel createFieldPanel(String fieldName, boolean isRequired) {
-		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(1, 2));
-		panel.add(new Label(fieldName + (isRequired ? " *" : "")));
-		panel.add(new TextField());
-		return panel;
-	}
+
 }
