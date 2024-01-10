@@ -3,6 +3,7 @@ package org.SAE.Tournee;
 import org.SAE.Depot.Depot;
 import org.SAE.Depot.JourSemaine;
 import org.SAE.Main.Base;
+import org.SAE.Main.Logger;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -90,14 +91,11 @@ public class Tournee extends Base {
 	public static void create(Tournee tournee) {
 		int jourPreparation = tournee.jourPreparation.ordinal()+1;
 		int jourLivraison = tournee.jourLivraison.ordinal()+1;
-		sql.createPrepareStatement(TABLE_NAME, new String[]{"jourPreparation", "jourLivraison", "nom", "couleur",
+		if (!sql.createPrepareStatement(TABLE_NAME, new String[]{"jourPreparation", "jourLivraison", "nom", "couleur",
 										"estMatin"},
 						new Object[]{jourPreparation,jourLivraison, tournee.nom, tournee.color,
-										tournee.estLivreMatin});
-		for (Depot depot : tournee.depots) {
-			sql.createPrepareStatement("Tournee_has_Depot", new String[]{"Tournee_idTournee", "Depot_idDepot"},
-							new Object[]{tournee.id, depot.id});
-		}
+										tournee.estLivreMatin}))
+			Logger.error("Can't create tournee");
 		getFromDatabase();
 	}
 
