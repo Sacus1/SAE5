@@ -11,27 +11,23 @@ import java.util.List;
 
 public class Produit extends Base {
 	static final String TABLE_NAME = "Produit";
-	final int id;
-	int idUnite;
-	String nom;
+	public int id;
+	public int idUnite;
+	public String nom;
 	String description;
 	File image;
-	double prix;
-	static final List<Produit> produits = new ArrayList<>();
-	public Produit(int id, String nom, String description, double prix, int idUnite,File image) {
+	public static final List<Produit> produits = new ArrayList<>();
+	public Produit(int id, String nom, String description, int idUnite,File image) {
 		this.id = id;
 		this.nom = nom;
 		this.description = description;
-		this.prix = prix;
 		this.idUnite = idUnite;
 		this.image = image;
 		produits.add(this);
 	}
-	public Produit(String nom, String description, double prix, int idUnite,File image) {
-		this.id = produits.size();
+	public Produit(String nom, String description, int idUnite,File image) {
 		this.nom = nom;
 		this.description = description;
-		this.prix = prix;
 		this.idUnite = idUnite;
 		this.image = image;
 		produits.add(this);
@@ -48,32 +44,31 @@ public class Produit extends Base {
 			while (res.next()) {
 				int id = res.getInt("idProduit");
 				String nom = res.getString("nom");
-				String imagePath = res.getString("imagePath");
 				String description = res.getString("description");
-				double prix = res.getDouble("prix");
+				File image = Main.convertInputStreamToImage(res.getBinaryStream("image"));
 				int idUnite = res.getInt("Unite_idUnite");
-				new Produit(id, nom, description, prix, idUnite, new File(imagePath));
+				new Produit(id, nom, description, idUnite, image);
 			}
 		} catch (Exception e) {
 			Logger.error(String.valueOf(e));
 		}
 	}
 	public static void update(Produit produit) {
-		if (!Main.sql.updatePreparedStatement("Produit", new String[]{"nom", "image", "description", "prix", "Unite_idUnite"},
-						new Object[]{produit.nom, produit.image, produit.description, produit.prix, produit.idUnite},
+		if (!Main.sql.updatePreparedStatement("Produit", new String[]{"nom", "image", "description", "Unite_idUnite"},
+						new Object[]{produit.nom, produit.image, produit.description, produit.idUnite},
 						new String[]{"idProduit = "+produit.id}))
 			Logger.error("Update failed");
 		getFromDatabase();
 	}
 	public static void create(Produit produit) {
-		if (Main.sql.createPrepareStatement("Produit", new String[]{"nom", "image", "description", "prix", "Unite_idUnite"},
-						new Object[]{produit.nom, produit.image, produit.description, produit.prix, produit.idUnite}))
+		if (!Main.sql.createPrepareStatement("Produit", new String[]{"nom", "image", "description", "Unite_idUnite"},
+						new Object[]{produit.nom, produit.image, produit.description,  produit.idUnite}))
 			Logger.error("Create failed");
 		getFromDatabase();
 	}
-	protected void delete() {
-		if (Main.sql.deletePrepareStatement("Produit", new String[]{"idProduit = " + id}))
-			Logger.error("Delete failed");
+	public void delete() {
+		if (!Main.sql.deletePrepareStatement("Produit", new String[]{"idProduit = " + id}))
+			Logger.error("Echec de la suppression");
 		produits.remove(this);
 	}
 	@Override

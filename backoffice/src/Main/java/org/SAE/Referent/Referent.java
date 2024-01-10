@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Referent extends Base {
-	public final int id;
+	private static final String TABLE_NAME = "Referent" ;
+	public int id;
 	String nom;
 	String telephone;
 	String mail;
@@ -25,7 +26,6 @@ public class Referent extends Base {
 	}
 
 	public Referent(String nom, String telephone, String mail) {
-		this.id = referents.size();
 		this.nom = nom;
 		this.telephone = telephone;
 		this.mail = mail;
@@ -66,6 +66,7 @@ public class Referent extends Base {
 						new String[]{"idReferent = "+referent.id}))
 			Logger.error("Failed to update Referent");
 		getFromDatabase();
+
 	}
 
 	protected void delete() {
@@ -75,7 +76,7 @@ public class Referent extends Base {
 	}
 
 	public static void create(Referent referent) {
-		if (Main.sql.createPrepareStatement("Referent", new String[]{"nom", "telephone", "mail"},
+		if (!Main.sql.createPrepareStatement("Referent", new String[]{"nom", "telephone", "mail"},
 						new Object[]{referent.nom, referent.telephone, referent.mail}))
 			Logger.error("Failed to create Referent");
 		getFromDatabase();

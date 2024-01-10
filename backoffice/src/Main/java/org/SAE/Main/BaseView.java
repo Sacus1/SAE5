@@ -1,5 +1,7 @@
 package org.SAE.Main;
 
+import org.SAE.Depot.Depot;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -9,17 +11,20 @@ import java.util.ArrayList;
  * It extends JPanel, a generic lightweight container.
  */
 public abstract class BaseView<T extends Base> extends JPanel {
-	public final UButton createButton = new UButton("Create");
+	public final UButton createButton;
 	public static boolean inCreation = false;
 	protected static JPanel mainPanel;
 	protected static JPanel topPanel;
 	protected static JPanel bottomPanel;
+	private String name;
 
 	/**
 	 * Constructor for BaseView.
 	 * Sets up the layout and initializes the panels, and the create button.
 	 */
-	protected BaseView() {
+	protected BaseView(String name) {
+		this.name = name;
+		createButton = new UButton("Create " + name);
 		setLayout(new BorderLayout());
 		initializePanels();
 		setupCreateButton();
@@ -51,25 +56,28 @@ public abstract class BaseView<T extends Base> extends JPanel {
 	 * @param isCreateMode a boolean indicating whether the view is in create mode or not.
 	 */
 	public void displayView(boolean isCreateMode){
-		if (!isCreateMode) {
+		if (isCreateMode) {
 			clear();
-			ArrayList<T> list = GetList();
-			for (T t : list) {
-				mainPanel.add(createListPanel(t));
+			JPanel formPanel = createFormPanel();
+			if (formPanel != null) {
+				mainPanel.add(formPanel);
 			}
 			refresh();
-			// rename cancel button to create
-			createButton.setText("Create");
-			inCreation = false;
-		}
-		else {
-			clear();
-			mainPanel.add(createFormPanel());
-			refresh();
-			// rename create button to cancel
-			createButton.setText("Cancel");
+			createButton.setText("Annuler");
 			inCreation = true;
+			return;
 		}
+		clear();
+		ArrayList<T> list = new ArrayList<>(GetList());
+		for (T t : list) {
+			JPanel listPanel = createListPanel(t);
+			if (listPanel != null) {
+				mainPanel.add(listPanel);
+			}
+		}
+		refresh();
+		createButton.setText("Créer " + name);
+		inCreation = false;
 	}
 
 	protected abstract ArrayList<T> GetList();
@@ -86,20 +94,23 @@ public abstract class BaseView<T extends Base> extends JPanel {
 	protected JPanel createListPanel(T t){
 		t.loadFromDatabase();
 		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(1, 3));
+		panel.setLayout(new GridLayout(2, 2));
 		JLabel label = new JLabel(t.toString());
-		UButton editButton = new UButton("Edit");
+		UButton editButton = new UButton("Modifier");
 		editButton.addActionListener(e -> {
+			displayView(true);
 			clear();
 			mainPanel.add(createEditPanel(t));
 			refresh();
 		});
-		UButton deleteButton = new UButton("Delete");
+		UButton deleteButton = new UButton("Supprimer");
 		deleteButton.addActionListener(e -> {
 			t.delete();
+			t.loadFromDatabase();
 			displayView(false);
 		});
 		panel.add(label);
+		panel.add(new JLabel());
 		panel.add(editButton);
 		panel.add(deleteButton);
 		return panel;
@@ -108,7 +119,7 @@ public abstract class BaseView<T extends Base> extends JPanel {
 	/**
 	 * This method clears all components from the main panel.
 	 */
-	public static void clear() {
+	public void clear() {
 		mainPanel.removeAll();
 	}
 
@@ -121,4 +132,17 @@ public abstract class BaseView<T extends Base> extends JPanel {
 	}
 	protected abstract JPanel createFormPanel();
 	protected abstract JPanel createEditPanel(T object);
+	/**
+	 * Creates and returns a panel for a field.
+	 * @param fieldName The name of the field.
+	 * @param isRequired Whether the field is required or not.
+	 * @return JPanel for a field.
+	 */
+	protected JPanel createFieldPanel(String fieldName, boolean isRequired) {
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(1, 2));
+		panel.add(new Label(fieldName + (isRequired ? " *" : "")));
+		panel.add(new TextField());
+		return panel;
+	}
 }

@@ -7,8 +7,11 @@ import org.SAE.Main.SQL;
 
 import javax.swing.*;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -18,13 +21,13 @@ import java.util.Arrays;
  */
 public class Depot extends Base {
 	static final String TABLE_NAME = "Depot";
-	static final String[] fields = {"Adresse id", "Referent.Referent id", "Nom", "Telephone", "Presentation",
+	static final String[] fields = {"Nom", "Telephone", "Presentation",
 					"Commentaire", "Mail", "Website"};
-	static final String[] dbFields = {"Adresse_idAdresse", "Referent_idReferent", "nom", "telephone", "presentation",
+	static final String[] dbFields = {"nom", "telephone", "presentation",
 					"commentaire", "mail", "website"};
 	static final ArrayList<String> requiredFieldsList = new ArrayList<>(Arrays.asList("Adresse id", "Referent.Referent id",
 					"Nom", "Telephone"));
-	final int id;
+	public int id;
 	int adresseIdAdresse;
 	int referentIdReferent;
 	boolean isArchived;
@@ -35,8 +38,8 @@ public class Depot extends Base {
 	String mail;
 	String website;
 	File image;
-	JourSemaine[] jourLivraison;
-	static final ArrayList<Depot> depots = new ArrayList<>();
+	public JourSemaine[] jourLivraison;
+	public static final ArrayList<Depot> depots = new ArrayList<>();
 
   /**
   * Constructor for the Depot class.
@@ -63,7 +66,7 @@ public class Depot extends Base {
   */
 	public Depot(int adresseIdAdresse, int referentIdReferent, String nom, String telephone, String presentation,
 	             String commentaire, String mail, String website, File image) {
-		this.id = depots.size();
+		this.id = Main.sql.getNextId(TABLE_NAME);
 		this.adresseIdAdresse = adresseIdAdresse;
 		this.referentIdReferent = referentIdReferent;
 		this.nom = nom;
@@ -96,9 +99,11 @@ public class Depot extends Base {
 				String mail = res.getString("mail");
 				String website = res.getString("website");
 				InputStream imageStream = res.getBinaryStream("image");
+				boolean isArchived = res.getBoolean("estArchive");
 				File image = Main.convertInputStreamToImage(imageStream);
 				Depot d = new Depot(id, addressId, referentId, name, telephone, presentation, comment, mail, website, image);
-				String query = "SELECT * FROM JourSemaine JOIN Depot_has_JourSemaine ON JourSemaine.idJourSemaine = Depot_has_JourSemaine.JourSemaine_idJourSemaine JOIN Depot ON Depot.idDepot = Depot_has_JourSemaine.Depot_idDepot WHERE Depot.idDepot = " + d.id + ";";
+				d.isArchived = isArchived;
+				String query = "SELECT * FROM JourSemaine JOIN JourOuvrable ON JourSemaine.idJourSemaine = JourOuvrable.JourSemaine_idJourSemaine JOIN Depot ON Depot.idDepot = JourOuvrable.Depot_idDepot WHERE Depot.idDepot = " + d.id + ";";
 				ResultSet res2 = sql.selectRaw(query);
 				ArrayList<JourSemaine> joursLivraisons = new ArrayList<>();
 				while (res2.next()) joursLivraisons.add(JourSemaine.valueOf(res2.getString("nom")));
@@ -111,39 +116,41 @@ public class Depot extends Base {
 
 	}
 
-	private static void insertDeliveryDays(Depot depot) {
-		if (depot.jourLivraison == null) return;
-		for (JourSemaine jourSemaine : depot.jourLivraison)
-			if (Main.sql.createPrepareStatement("JourSemaine_idJourSemaine", new String[]{"Depot_idDepot"},
-							new Object[]{jourSemaine.ordinal(), depot.id}))
-				Logger.error("Can't create depot because of delivery days");
-		getFromDatabase();
-	}
 
   /**
   * This method updates the Depot data in the database.
   * @param depot The Depot object to be updated.
   */
 	static void update(Depot depot) {
+		// update jourLivraison
+		if (!Main.sql.deletePrepareStatement("JourOuvrable", new String[]{"Depot_idDepot = " + depot.id}))
+			Logger.error("Failed to update depot : deletion delivery days error");
 		if(!Main.sql.updatePreparedStatement(TABLE_NAME, new String[]{
 										"Adresse_idAdresse", "Referent_idReferent", "nom", "telephone", "presentation",
-										"commentaire", "mail", "website","image"},
+										"commentaire", "mail", "website","image", "estArchive"},
 						new Object[]{depot.adresseIdAdresse, depot.referentIdReferent, depot.nom, depot.telephone,
-										depot.presentation, depot.commentaire, depot.mail, depot.website,depot.image},
-						new String[]{"idDepot = " + depot.id}))
+										depot.presentation, depot.commentaire, depot.mail, depot.website,depot.image, depot.isArchived ? 1 : 0},
+						new String[]{"idDepot = " + depot.id})) {
 			Logger.error("Failed to update depot");
-		// update jourLivraison
-		if (Main.sql.deletePrepareStatement("Depot_has_JourSemaine", new String[]{"Depot_idDepot = " + depot.id}))
-			Logger.error("Failed to update depot");
+		}
 		insertDeliveryDays(depot);
+		getFromDatabase();
+
 	}
 
+	private static void insertDeliveryDays(Depot depot) {
+		for (JourSemaine jour : depot.jourLivraison) {
+			if (!Main.sql.createPrepareStatement("JourOuvrable", new String[]{"Depot_idDepot", "JourSemaine_idJourSemaine"},
+							new Object[]{depot.id, jour.ordinal()+1}))
+				Logger.error("Failed to update depot : creation delivery days error");
+		}
+	}
   /**
    * This method creates a new Depot in the database.
    * @param depot The Depot object to be created.
    */
 	static void create(Depot depot) {
-	if (Main.sql.createPrepareStatement(TABLE_NAME, new String[]{"idDepot",
+	if (!Main.sql.createPrepareStatement(TABLE_NAME, new String[]{"idDepot",
 									"Adresse_idAdresse", "Referent_idReferent", "nom", "telephone", "presentation",
 									"commentaire", "mail", "website", "image"},
 					new Object[]{depot.id, depot.adresseIdAdresse, depot.referentIdReferent, depot.nom, depot.telephone,
@@ -152,19 +159,23 @@ public class Depot extends Base {
 			return;
 		}
 		insertDeliveryDays(depot);
-
+		getFromDatabase();
 	}
 
- /**
+	public static Depot getDepotById(int depotId) {
+		for (Depot depot : depots) {
+			if (depot.id == depotId) return depot;
+		}
+		return null;
+	}
+
+	/**
   * This method deletes a Depot from the database.
   */
 	protected void delete() {
-		if (Main.sql.deletePrepareStatement(TABLE_NAME, new String[]{"idDepot = " + this.id})) {
+		Main.sql.deletePrepareStatement("JourOuvrable", new String[]{"Depot_idDepot = " + this.id});
+		if (!Main.sql.deletePrepareStatement(TABLE_NAME, new String[]{"idDepot = " + this.id})) {
 			Logger.error("Can't delete depot");
-			return;
-		}
-		if (Main.sql.deletePrepareStatement("Depot_has_JourSemaine", new String[]{"Depot_idDepot = " + this.id})) {
-			Logger.error("Can't delete depot because of delivery days");
 			return;
 		}
 		depots.remove(this);
@@ -182,5 +193,10 @@ public class Depot extends Base {
 	@Override
 	public void loadFromDatabase(){
 		getFromDatabase();
+	}
+
+	@Override
+	public String toString() {
+		return nom;
 	}
 }

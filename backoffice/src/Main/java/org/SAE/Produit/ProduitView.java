@@ -11,8 +11,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class ProduitView extends BaseView<Produit>{
 	public ProduitView() {
-		super();
-		Produit.getFromDatabase();
+		super("Produit");
 		setLayout(new BorderLayout());
 		// add panels to the frame
 		add(topPanel, "North");
@@ -37,10 +36,6 @@ public class ProduitView extends BaseView<Produit>{
 		JTextField descriptionField = new JTextField();
 		panel.add(new JLabel("Description"));
 		panel.add(descriptionField);
-		JTextField prixField = new JTextField();
-		panel.add(new JLabel("Prix"));
-		panel.add(prixField);
-		Unite.getFromDatabase();
 		Choice uniteChoice = new Choice();
 		for (int i = 0; i < Unite.unites.size(); i++) uniteChoice.add(Unite.unites.get(i).toString());
 		panel.add(new JLabel("Unite"));
@@ -56,10 +51,11 @@ public class ProduitView extends BaseView<Produit>{
 				image.set(fileChooser.getSelectedFile());
 			}
 		});
+		panel.add(imageButton);
 		// create a button to create the produit
 		UButton createButton = new UButton("Create");
 		createButton.addActionListener(e -> {
-			Produit produit = new Produit(nomField.getText(), descriptionField.getText(), Double.parseDouble(prixField.getText()), Unite.unites.get(uniteChoice.getSelectedIndex()).id, image.get());
+			Produit produit = new Produit(nomField.getText(), descriptionField.getText(), Unite.unites.get(uniteChoice.getSelectedIndex()).id, image.get());
 			Produit.create(produit);
 			displayView(false);
 		});
@@ -80,17 +76,13 @@ public class ProduitView extends BaseView<Produit>{
 		panel.add(descriptionLabel);
 		TextField descriptionField = new TextField(produit.description);
 		panel.add(descriptionField);
-		// prix
-		Label prixLabel = new Label("prix");
-		panel.add(prixLabel);
-		TextField prixField = new TextField(Double.toString(produit.prix));
-		panel.add(prixField);
 		// unite
 		Label uniteLabel = new Label("unite");
 		panel.add(uniteLabel);
 		Choice uniteChoice = new Choice();
 		for (int i = 0; i < Unite.unites.size(); i++) uniteChoice.add(Unite.unites.get(i).toString());
-		uniteChoice.select(produit.idUnite);
+		Unite unite = Unite.getUniteById(produit.idUnite);
+		uniteChoice.select(unite.toString());
 		panel.add(uniteChoice);
 		// image choice
 		UButton imageButton = new UButton("Choose image");
@@ -108,7 +100,6 @@ public class ProduitView extends BaseView<Produit>{
 		updateButton.addActionListener(e -> {
 			produit.nom = nomField.getText();
 			produit.description = descriptionField.getText();
-			produit.prix = Double.parseDouble(prixField.getText());
 			produit.idUnite = Unite.unites.get(uniteChoice.getSelectedIndex()).id;
 			produit.image = image.get();
 			Produit.update(produit);

@@ -9,8 +9,7 @@ import java.util.ArrayList;
 
 public class ReferentView extends BaseView<Referent> {
 	public ReferentView() {
-		super();
-		Referent.getFromDatabase();
+		super("Referent");
 		setLayout(new BorderLayout());
 		add(topPanel, "North");
 		add(mainPanel, "Center");
@@ -51,21 +50,6 @@ public class ReferentView extends BaseView<Referent> {
 	private UButton getCreateButton(JTextField nomField, JTextField telephoneField, JTextField emailField) {
 		UButton createButton = new UButton("Create");
 		createButton.addActionListener(e -> {
-			// check if all required fields are filled
-			if (nomField.getText().isEmpty() || telephoneField.getText().isEmpty() || emailField.getText().isEmpty()) {
-				org.SAE.Main.Logger.error("All fields must be filled");
-				return;
-			}
-			// check if the email is valid
-			if (!emailField.getText().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
-				org.SAE.Main.Logger.error("Invalid email");
-				return;
-			}
-			// check if the telephone is valid
-			if (!telephoneField.getText().matches("^(?:(?:\\+|00)33|0)[1-9](?:\\s?\\d{2}){4}$")) {
-				org.SAE.Main.Logger.error("Invalid telephone");
-				return;
-			}
 			Referent r = new Referent(nomField.getText(), telephoneField.getText(), emailField.getText());
 			Referent.create(r);
 			displayView(false);
@@ -93,23 +77,9 @@ public class ReferentView extends BaseView<Referent> {
 		panel.add(emailLabel);
 		panel.add(emailField);
 		// add a button to create the referent
-		UButton createButton = new UButton("Edit");
+		UButton createButton = new UButton("Modifier");
 		createButton.addActionListener(e -> {
-			// check if all required fields are filled
-			if (nomField.getText().isEmpty() || telephoneField.getText().isEmpty() || emailField.getText().isEmpty()) {
-				org.SAE.Main.Logger.error("All fields must be filled");
-				return;
-			}
-			// check if the email is valid
-			if (!emailField.getText().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$\n")) {
-				org.SAE.Main.Logger.error("Invalid email");
-				return;
-			}
-			// check if the telephone is valid
-			if (!telephoneField.getText().matches("^(?:(?:\\+|00)33|0)[1-9](?:\\s?\\d{2}){4}$\n")) {
-				org.SAE.Main.Logger.error("Invalid telephone");
-				return;
-			}
+
 			referent.nom = nomField.getText();
 			referent.telephone = telephoneField.getText();
 			referent.mail = emailField.getText();

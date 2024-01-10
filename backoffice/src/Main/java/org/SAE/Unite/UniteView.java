@@ -9,8 +9,7 @@ import java.util.ArrayList;
 
 public class UniteView extends BaseView<Unite> {
 	public UniteView() {
-		super();
-		Unite.getFromDatabase();
+		super("Unite");
 		setLayout(new BorderLayout());
 		// add panels to the frame
 		add(topPanel, "North");

@@ -17,8 +17,7 @@ public class AdresseView extends BaseView<Adresse> {
 	 * It initializes the UI components and fetches the Adresse data from the database.
 	 */
 	public AdresseView() {
-		super();
-		Adresse.getFromDatabase();
+		super("Adresse");
 		add(topPanel, "North");
 		add(mainPanel, "Center");
 		add(bottomPanel, "South");
@@ -71,7 +70,7 @@ public class AdresseView extends BaseView<Adresse> {
 
 	/**
 	 * This method creates a form for editing an existing Adresse.
-	 * It includes text fields for the Adresse details and buttons to submit the changes or cancel the operation.
+	 * It includes text fields for the Adresse details and buttons to submit the changes.
 	 * @param adresse The Adresse object to be edited.
 	 * @return A JPanel with the form for editing the Adresse.
 	 */
@@ -83,7 +82,6 @@ public class AdresseView extends BaseView<Adresse> {
 		JTextField villeField = new JTextField(adresse.ville);
 		JTextField codePostalField = new JTextField(adresse.codePostal);
 		UButton submitButton = new UButton("Submit");
-		UButton cancelButton = new UButton("Cancel");
 		panel.add(new Label("Adresse *"));
 		panel.add(adresseField);
 		panel.add(new Label("Ville *"));
@@ -91,7 +89,6 @@ public class AdresseView extends BaseView<Adresse> {
 		panel.add(new Label("Code Postal *"));
 		panel.add(codePostalField);
 		panel.add(submitButton);
-		panel.add(cancelButton);
 		submitButton.addActionListener(e -> {
 			// check all field are filled
 			if (adresseField.getText().isEmpty() || villeField.getText().isEmpty() || codePostalField.getText().isEmpty()) {
