@@ -16,6 +16,7 @@ router
       if (err) res.status(500).send(err);
       else {
         res.status(200).send(rows);
+        //TODO: Create a token and store it in the database
       }
     });
 
