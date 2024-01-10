@@ -18,7 +18,6 @@ public class ClientView extends BaseView<Client> {
 
 	public ClientView() {
 		super("Client");
-		topPanel.remove(createButton);
 		add(topPanel, "North");
 		add(mainPanel, "Center");
 		add(bottomPanel, "South");
@@ -32,7 +31,71 @@ public class ClientView extends BaseView<Client> {
 
 	@Override
 	protected JPanel createFormPanel() {
-		return null;
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(0, 2));
+		JComboBox<Adresse> adresseComboBox = new JComboBox<>();
+		for (Adresse adresse : Adresse.adresses) adresseComboBox.addItem(adresse);
+		JTextField raisonSocialeField = new JTextField();
+		JTextField civiliteField = new JTextField();
+		JTextField nomField = new JTextField();
+		JTextField prenomField = new JTextField();
+		JTextField telephoneField = new JTextField();
+		JTextField telephone2Field = new JTextField();
+		JTextField telephone3Field = new JTextField();
+		JTextField mailField = new JTextField();
+		JTextField professionField = new JTextField();
+		UtilDateModel model = new UtilDateModel();
+		Properties p = new Properties();
+		p.put("text.today", "Today");
+		p.put("text.month", "Month");
+		p.put("text.year", "Year");
+		JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
+		JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+		JCheckBox estDispenseCheckBox = new JCheckBox();
+		panel.add(new JLabel("Adresse"));
+		panel.add(adresseComboBox);
+		panel.add(new JLabel("Raison sociale"));
+		panel.add(raisonSocialeField);
+		panel.add(new JLabel("Civilité"));
+		panel.add(civiliteField);
+		panel.add(new JLabel("Nom"));
+		panel.add(nomField);
+		panel.add(new JLabel("Prénom"));
+		panel.add(prenomField);
+		panel.add(new JLabel("Téléphone"));
+		panel.add(telephoneField);
+		panel.add(new JLabel("Téléphone 2"));
+		panel.add(telephone2Field);
+		panel.add(new JLabel("Téléphone 3"));
+		panel.add(telephone3Field);
+		panel.add(new JLabel("Mail"));
+		panel.add(mailField);
+		panel.add(new JLabel("Profession"));
+		panel.add(professionField);
+		panel.add(new JLabel("Date de naissance"));
+		panel.add(datePicker);
+		panel.add(new JLabel("Est dispensé"));
+		panel.add(estDispenseCheckBox);
+		UButton cancelUButton = new UButton("Cancel");
+		panel.add(cancelUButton);
+		cancelUButton.addActionListener(e -> displayView(false));
+		UButton createUButton = new UButton("Créer");
+		panel.add(createUButton);
+		createUButton.addActionListener(e -> {
+			Client client = new Client((Adresse) Objects.requireNonNull(adresseComboBox.getSelectedItem()),
+							raisonSocialeField.getText(),
+							civiliteField.getText(),
+							nomField.getText(),
+							prenomField.getText(),
+							new String[]{telephoneField.getText(), telephone2Field.getText(), telephone3Field.getText()},
+							mailField.getText(),
+							professionField.getText(),
+							Date.valueOf(datePicker.getJFormattedTextField().getText()),
+							estDispenseCheckBox.isSelected());
+			Client.create(client);
+			displayView(false);
+		});
+		return panel;
 	}
 
 
