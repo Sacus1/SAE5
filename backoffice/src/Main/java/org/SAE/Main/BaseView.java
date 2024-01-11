@@ -31,7 +31,7 @@ public abstract class BaseView<T extends Base> extends JPanel {
 		setupCreateButton();
 		searchBar = new JTextField();
 		searchBar.setMaximumSize(new Dimension(1000, 30));
-		searchBar.setPreferredSize(new Dimension(1000, 30));
+		searchBar.setPreferredSize(new Dimension(800, 30));
 		searchBar.addActionListener(e -> search());
 	}
 
@@ -40,6 +40,7 @@ public abstract class BaseView<T extends Base> extends JPanel {
 	 */
 	private static void initializePanels() {
 		topPanel = new JPanel();
+		topPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		bottomPanel = new JPanel();
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
