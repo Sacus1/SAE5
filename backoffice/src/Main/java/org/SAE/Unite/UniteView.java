@@ -53,7 +53,7 @@ public class UniteView extends BaseView<Unite> {
 		TextField nomField = new TextField();
 		panel.add(nomField);
 		// create button
-		UButton createButton = new UButton("Create");
+		UButton createButton = new UButton("Créer");
 		createButton.addActionListener(e -> {
 			Unite unite = new Unite(nomField.getText());
 			Unite.create(unite);

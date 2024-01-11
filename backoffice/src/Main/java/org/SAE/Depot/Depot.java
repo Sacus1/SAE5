@@ -141,6 +141,7 @@ public class Depot extends Base {
 	}
 
 	private static void insertDeliveryDays(Depot depot) {
+		if (depot.jourLivraison == null) return;
 		for (JourSemaine jour : depot.jourLivraison) {
 			if (!Main.sql.createPrepareStatement("JourOuvrable", new String[]{"Depot_idDepot", "JourSemaine_idJourSemaine"},
 							new Object[]{depot.id, jour.ordinal()+1}))

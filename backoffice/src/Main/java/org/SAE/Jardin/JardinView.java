@@ -50,7 +50,7 @@ public class JardinView extends BaseView<Jardin>{
 		JTextField raisonSocialeField = new JTextField();
 		panel.add(new JLabel("Raison Sociale"));
 		panel.add(raisonSocialeField);
-		UButton createButton = new UButton("Create");
+		UButton createButton = new UButton("Créer");
 		createButton.addActionListener(e -> {
 			Jardin jardin = new Jardin(
 				(Referent) referentField.getSelectedItem(),
