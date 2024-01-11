@@ -51,27 +51,27 @@ public class ClientView extends BaseView<Client> {
 		JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
 		JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
 		JCheckBox estDispenseCheckBox = new JCheckBox();
-		panel.add(new JLabel("Adresse"));
+		panel.add(new JLabel("Adresse*"));
 		panel.add(adresseComboBox);
-		panel.add(new JLabel("Raison sociale"));
+		panel.add(new JLabel("Raison sociale*"));
 		panel.add(raisonSocialeField);
-		panel.add(new JLabel("Civilité"));
+		panel.add(new JLabel("Civilité*"));
 		panel.add(civiliteField);
-		panel.add(new JLabel("Nom"));
+		panel.add(new JLabel("Nom*"));
 		panel.add(nomField);
-		panel.add(new JLabel("Prénom"));
+		panel.add(new JLabel("Prénom*"));
 		panel.add(prenomField);
-		panel.add(new JLabel("Téléphone"));
+		panel.add(new JLabel("Téléphone*"));
 		panel.add(telephoneField);
 		panel.add(new JLabel("Téléphone 2"));
 		panel.add(telephone2Field);
 		panel.add(new JLabel("Téléphone 3"));
 		panel.add(telephone3Field);
-		panel.add(new JLabel("Mail"));
+		panel.add(new JLabel("Mail*"));
 		panel.add(mailField);
 		panel.add(new JLabel("Profession"));
 		panel.add(professionField);
-		panel.add(new JLabel("Date de naissance"));
+		panel.add(new JLabel("Date de naissance*"));
 		panel.add(datePicker);
 		panel.add(new JLabel("Est dispensé"));
 		panel.add(estDispenseCheckBox);
@@ -81,6 +81,35 @@ public class ClientView extends BaseView<Client> {
 		JButton createJButton = new JButton("Créer");
 		panel.add(createJButton);
 		createJButton.addActionListener(e -> {
+			// check for field
+			if (raisonSocialeField.getText().isEmpty()) {
+				JOptionPane.showMessageDialog(null, "Veuillez renseigner la raison sociale");
+				return;
+			}
+			if (civiliteField.getText().isEmpty()) {
+				JOptionPane.showMessageDialog(null, "Veuillez renseigner la civilité");
+				return;
+			}
+			if (nomField.getText().isEmpty()) {
+				JOptionPane.showMessageDialog(null, "Veuillez renseigner le nom");
+				return;
+			}
+			if (prenomField.getText().isEmpty()) {
+				JOptionPane.showMessageDialog(null, "Veuillez renseigner le prénom");
+				return;
+			}
+			if (telephoneField.getText().isEmpty()) {
+				JOptionPane.showMessageDialog(null, "Veuillez renseigner le téléphone");
+				return;
+			}
+			if (mailField.getText().isEmpty()) {
+				JOptionPane.showMessageDialog(null, "Veuillez renseigner le mail");
+				return;
+			}
+			if (datePicker.getJFormattedTextField().getText().isEmpty()) {
+				JOptionPane.showMessageDialog(null, "Veuillez renseigner la date de naissance");
+				return;
+			}
 			Client client = new Client((Adresse) Objects.requireNonNull(adresseComboBox.getSelectedItem()),
 							raisonSocialeField.getText(),
 							civiliteField.getText(),
