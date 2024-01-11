@@ -181,7 +181,13 @@ public class DepotView extends BaseView<Depot> {
 			}
 		}
 		periodesNonLivrables.add(addPeriode);
-		UButton createButton = new UButton("Détailler");
+		UButton createButton = getEditButton(depotToEdit, depotFormComponents);
+		depotFormComponents.panel().add(createButton);
+		return depotFormComponents.panel();
+	}
+
+	private UButton getEditButton(Depot depotToEdit, DepotFormComponents depotFormComponents) {
+		UButton createButton = new UButton("Modifier");
 		createButton.addActionListener(e -> {
 			String[] values = getValues(depotFormComponents.fieldPanels(), depotFormComponents.addressChoice(), depotFormComponents.referentChoice());
 			if (values.length == 0) return;
@@ -204,8 +210,7 @@ public class DepotView extends BaseView<Depot> {
 			Logger.log("Depot edited");
 			displayView(false);
 		});
-		depotFormComponents.panel().add(createButton);
-		return depotFormComponents.panel();
+		return createButton;
 	}
 
 	private JPanel createPeriodeNonLivrablePanel(Depot depotToEdit) {

@@ -102,7 +102,7 @@ public class JardinView extends BaseView<Jardin>{
 			refresh();
 		});
 		panel.add(panierButton);
-		UButton updateButton = new UButton("Update");
+		UButton updateButton = new UButton("Modifier");
 		updateButton.addActionListener(e -> {
 			jardin.referent = (Referent) referentField.getSelectedItem();
 			jardin.adresseSiegeSocial = (Adresse) adresseSiegeSocialField.getSelectedItem();

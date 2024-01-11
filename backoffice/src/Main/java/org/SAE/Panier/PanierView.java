@@ -97,7 +97,7 @@ public class PanierView extends BaseView<Panier> {
 		panel.add(new JLabel("Prix *"));
 		panel.add(prixField);
 		AtomicReference<File> image = createImageChooserPanel( panel);
-		UButton submitButton = new UButton("Submit");
+		UButton submitButton = new UButton("Modifier");
 		panel.add(submitButton);
 		submitButton.addActionListener(e -> {
 			if (nomField.getText().isEmpty() || prixField.getText().isEmpty()) {
@@ -159,7 +159,7 @@ public class PanierView extends BaseView<Panier> {
 			JTextField quantiteField = new JTextField();
 			formPanel.add(new JLabel("Quantite"));
 			formPanel.add(quantiteField);
-			UButton submitButton = new UButton("Submit");
+			UButton submitButton = new UButton("Modifier");
 			formPanel.add(submitButton);
 			submitButton.addActionListener(e1 -> {
 				if (quantiteField.getText().isEmpty()) {
@@ -189,7 +189,7 @@ public class PanierView extends BaseView<Panier> {
 			produitPanel.add(deleteButton);
 			listPanel.add(produitPanel);
 		}
-		UButton submitButton = new UButton("Submit");
+		UButton submitButton = new UButton("Modifier");
 		panel.add(submitButton);
 		submitButton.addActionListener(e -> {
 			if (nomField.getText().isEmpty() || prixField.getText().isEmpty()) {

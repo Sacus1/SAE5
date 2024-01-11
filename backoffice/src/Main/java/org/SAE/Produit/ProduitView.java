@@ -108,7 +108,7 @@ public class ProduitView extends BaseView<Produit>{
 			}
 		});
 		// create button
-		UButton updateButton = new UButton("Update");
+		UButton updateButton = new UButton("Modifier");
 		updateButton.addActionListener(e -> {
 			produit.nom = nomField.getText();
 			produit.description = descriptionField.getText();

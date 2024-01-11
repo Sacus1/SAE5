@@ -33,7 +33,7 @@ public class UniteView extends BaseView<Unite> {
 		TextField nomField = new TextField(unite.nom);
 		panel.add(nomField);
 		// create button
-		UButton updateButton = new UButton("Update");
+		UButton updateButton = new UButton("Modifier");
 		updateButton.addActionListener(e -> {
 			unite.nom = nomField.getText();
 			Unite.update(unite);

@@ -77,7 +77,7 @@ public class ReferentView extends BaseView<Referent> {
 		panel.add(emailLabel);
 		panel.add(emailField);
 		// add a button to create the referent
-		UButton createButton = new UButton("Détailler");
+		UButton createButton = new UButton("Modifier");
 		createButton.addActionListener(e -> {
 
 			referent.nom = nomField.getText();

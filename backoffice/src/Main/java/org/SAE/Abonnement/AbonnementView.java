@@ -123,7 +123,7 @@ public class AbonnementView extends BaseView<Abonnement> {
 		panel.add(frequenceLivraisonField);
 		panel.add(new JLabel("Est actif"));
 		panel.add(estActifCheckBox);
-		UButton createButton = new UButton("Update");
+		UButton createButton = new UButton("Modifier");
 		createButton.addActionListener(e -> {
 			abonnement.client = (Client) clientComboBox.getSelectedItem();
 			abonnement.panier = (Panier) panierComboBox.getSelectedItem();

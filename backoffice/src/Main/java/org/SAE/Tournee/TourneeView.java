@@ -90,16 +90,19 @@ public class TourneeView extends BaseView<Tournee> {
 		panel.add(colorComboBox);
 		panel.add(new JLabel("Est livré le matin"));
 		panel.add(estLivreMatinCheckBox);
+		UButton submitButton;
 		if (tournee != null){
-		 jourLivraisonComboBox.setSelectedItem(tournee.jourLivraison);
-		 jourPreparationComboBox.setSelectedItem(tournee.jourPreparation);
-		 estLivreMatinCheckBox.setSelected(tournee.estLivreMatin);
-		 colorComboBox.setSelectedItem(Color.valueOf(tournee.color));
-		 nomField.setText(tournee.nom);
+			jourLivraisonComboBox.setSelectedItem(tournee.jourLivraison);
+			jourPreparationComboBox.setSelectedItem(tournee.jourPreparation);
+			estLivreMatinCheckBox.setSelected(tournee.estLivreMatin);
+			colorComboBox.setSelectedItem(Color.valueOf(tournee.color));
+			nomField.setText(tournee.nom);
+			submitButton = new UButton("Modifier");
 		}
 		else {
 			tournee = new Tournee(JourSemaine.Lundi, JourSemaine.Lundi, "", "Rouge", false);
 			Tournee.create(tournee);
+			submitButton = new UButton("Créer");
 		}
 		JLabel depotsLabel = new JLabel("Depots");
 		panel.add(depotsLabel);
@@ -119,7 +122,6 @@ public class TourneeView extends BaseView<Tournee> {
 			listPanel.revalidate();
 			listPanel.repaint();
 		});
-		UButton submitButton = new UButton("Valider");
 		submitButton.addActionListener(e -> {
 			finalTournee.nom = nomField.getText();
 			finalTournee.jourLivraison = (JourSemaine) jourLivraisonComboBox.getSelectedItem();

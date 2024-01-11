@@ -161,7 +161,7 @@ public class ClientView extends BaseView<Client> {
 		UButton cancelUButton = new UButton("Cancel");
 		panel.add(cancelUButton);
 		cancelUButton.addActionListener(e -> displayView(false));
-		UButton createUButton = new UButton("Update");
+		UButton createUButton = new UButton("Modifier");
 		panel.add(createUButton);
 		createUButton.addActionListener(e -> {
 			client.adresse = (Adresse) Objects.requireNonNull(adresseComboBox.getSelectedItem());

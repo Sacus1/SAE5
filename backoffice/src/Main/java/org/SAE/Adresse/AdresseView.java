@@ -42,7 +42,7 @@ public class AdresseView extends BaseView<Adresse> {
 		JTextField adresseField = new JTextField();
 		JTextField villeField = new JTextField();
 		JTextField codePostalField = new JTextField();
-		UButton submitButton = new UButton("Submit");
+		UButton submitButton = new UButton("Créer");
 		panel.add(new JLabel("Adresse *"));
 		panel.add(adresseField);
 		panel.add(new JLabel("Ville *"));
@@ -81,7 +81,7 @@ public class AdresseView extends BaseView<Adresse> {
 		JTextField adresseField = new JTextField(adresse.rue);
 		JTextField villeField = new JTextField(adresse.ville);
 		JTextField codePostalField = new JTextField(adresse.codePostal);
-		UButton submitButton = new UButton("Submit");
+		UButton submitButton = new UButton("Modifier");
 		panel.add(new Label("Adresse *"));
 		panel.add(adresseField);
 		panel.add(new Label("Ville *"));
