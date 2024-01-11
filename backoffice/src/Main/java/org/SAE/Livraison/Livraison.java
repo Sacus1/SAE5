@@ -8,6 +8,7 @@ import org.SAE.Tournee.Tournee;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.SAE.Main.Main.sql;
 
@@ -27,7 +28,7 @@ public class Livraison extends Base {
 	public String etat;
 
 	public static final String TABLE_NAME = "Livraison";
-	public static ArrayList<Livraison> livraisons = new ArrayList<>();
+	public static List<Livraison> livraisons = new ArrayList<>();
 
 	public Livraison(int id, Depot depot, Tournee tournee, Abonnement abonnement, Date date, String etat) {
 		this.id = id;

@@ -1,14 +1,11 @@
 package org.SAE.Client;
 
 import org.SAE.Adresse.Adresse;
-import org.SAE.Client.Client;
-import org.SAE.Depot.JourSemaine;
 import org.SAE.Main.Base;
 import org.SAE.Main.Logger;
 import org.SAE.Main.Main;
 import org.SAE.Main.SQL;
 
-import javax.swing.*;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.util.ArrayList;

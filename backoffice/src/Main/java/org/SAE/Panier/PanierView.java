@@ -4,13 +4,11 @@ import org.SAE.Jardin.Jardin;
 import org.SAE.Main.BaseView;
 import org.SAE.Main.Logger;
 import org.SAE.Produit.Produit;
-import org.SAE.Produit.ProduitView;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PanierView extends BaseView<Panier> {
@@ -103,7 +101,7 @@ public class PanierView extends BaseView<Panier> {
 				Logger.error("Please fill all the required fields");
 				return;
 			}
-			if (!prixField.getText().matches("[0-9]+.[0-9][0-9]")) {
+			if (!prixField.getText().matches("\\d+.\\d\\d")) {
 				Logger.error("Prix must be a number : 0.00");
 				return;
 			}

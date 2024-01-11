@@ -1,4 +1,5 @@
 package org.SAE.Panier;
+
 import org.SAE.Jardin.Jardin;
 import org.SAE.Main.Base;
 import org.SAE.Main.Logger;
@@ -6,9 +7,7 @@ import org.SAE.Main.Main;
 import org.SAE.Main.SQL;
 import org.SAE.Produit.Produit;
 
-import javax.swing.*;
 import java.io.File;
-import java.io.InputStream;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Arrays;

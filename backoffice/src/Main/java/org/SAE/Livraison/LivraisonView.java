@@ -61,7 +61,7 @@ public class LivraisonView extends BaseView<Livraison> {
 	}
 	@Override
 	protected ArrayList getList() {
-		return Livraison.livraisons;
+		return (ArrayList) Livraison.livraisons;
 	}
 
 	@Override

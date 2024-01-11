@@ -16,7 +16,7 @@ public abstract class BaseView<T extends Base> extends JPanel {
 	protected static JPanel mainPanel;
 	protected static JPanel topPanel;
 	protected static JPanel bottomPanel;
-	private String name;
+	private final String name;
 	private JTextField searchBar;
 
 	/**

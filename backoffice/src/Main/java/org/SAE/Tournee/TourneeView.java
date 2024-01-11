@@ -52,7 +52,7 @@ public class TourneeView extends BaseView<Tournee> {
 	}
 	@Override
 	protected ArrayList<Tournee> getList() {
-		return Tournee.tournees;
+		return (ArrayList<Tournee>) Tournee.tournees;
 	}
 
 	@Override

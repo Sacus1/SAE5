@@ -39,7 +39,7 @@ public class Referent extends Base {
 	public static void getFromDatabase() {
 		SQL sql = Main.sql;
 		referents.clear();
-		ResultSet res = sql.select("Referent");
+		ResultSet res = sql.select(TABLE_NAME);
 		try {
 			if (res == null) return;
 			while (res.next())
@@ -61,7 +61,7 @@ public class Referent extends Base {
 	}
 
 	public static void update(Referent referent) {
-		if (!Main.sql.updatePreparedStatement("Referent", new String[]{"nom", "telephone", "mail"},
+		if (!Main.sql.updatePreparedStatement(TABLE_NAME, new String[]{"nom", "telephone", "mail"},
 						new Object[]{referent.nom, referent.telephone, referent.mail},
 						new String[]{"idReferent = "+referent.id}))
 			Logger.error("Failed to update Referent");
@@ -70,13 +70,13 @@ public class Referent extends Base {
 	}
 
 	protected void delete() {
-		if (Main.sql.deletePrepareStatement("Referent", new String[]{"idReferent = " + id}))
+		if (Main.sql.deletePrepareStatement(TABLE_NAME, new String[]{"idReferent = " + id}))
 			Logger.error("Failed to delete Referent");
 		referents.remove(this);
 	}
 
 	public static void create(Referent referent) {
-		if (!Main.sql.createPrepareStatement("Referent", new String[]{"nom", "telephone", "mail"},
+		if (!Main.sql.createPrepareStatement(TABLE_NAME, new String[]{"nom", "telephone", "mail"},
 						new Object[]{referent.nom, referent.telephone, referent.mail}))
 			Logger.error("Failed to create Referent");
 		getFromDatabase();

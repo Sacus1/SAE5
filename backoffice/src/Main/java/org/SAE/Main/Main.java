@@ -1,4 +1,5 @@
 package org.SAE.Main;
+
 import org.SAE.Abonnement.Abonnement;
 import org.SAE.Adresse.Adresse;
 import org.SAE.Client.Client;
@@ -13,28 +14,25 @@ import org.SAE.Referent.Referent;
 import org.SAE.Tournee.Tournee;
 import org.SAE.Unite.Unite;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Properties;
 
 public class Main {
 	public static SQL sql ;
 	public static JFrame frame;
-	static final String url = "jdbc:mysql://localhost:3306/SAE";
-	static private JPanel mainPanel;
-	private static void resetSelectedButton(JButton[] JButtons) {
-		for (JButton JButton : JButtons) JButton.setBackground(null);
+	static final String URL = "jdbc:mysql://localhost:3306/SAE";
+	private static JPanel mainPanel;
+	private static void resetSelectedButton(JButton[] buttons) {
+		for (JButton JButton : buttons) JButton.setBackground(null);
 	}
 	public static void main(String[] args) {
 		// get environment variables DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD
 		// if they are not set, use default values
 		String url = System.getenv("DATABASE_URL");
-		if (url == null) url = Main.url;
+		if (url == null) url = Main.URL;
 		String username = System.getenv("DATABASE_USERNAME");
 		if (username == null) username = "root";
 		String password = System.getenv("DATABASE_PASSWORD");
@@ -48,18 +46,6 @@ public class Main {
 		frame.setSize(windowWidth, windowHeight);
 		// maximize the frame
 		frame.setExtendedState(Frame.MAXIMIZED_BOTH);
-		// set ressource jardin.ico as the icon for the frame
-		try {
-			URL url2 = Main.class.getResource("/jardin.ico");
-			if (url2 != null) {
-				Image icon = ImageIO.read(url2);
-				frame.setIconImage(icon);
-			} else {
-				System.out.println("Resource not found");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		mainPanel = new JPanel();
 		// show loading screen
 		frame.add(mainPanel, "Center");
@@ -68,12 +54,12 @@ public class Main {
 		// create a list of buttons on the side of the frame.
 		JPanel leftPanel = new JPanel();
 		// add buttons
-		JButton[] JButtons = {new JButton("Depot"), new JButton("Referent"), new JButton("Adresse"),new JButton("Unité"),
+		JButton[] buttons = {new JButton("Depot"), new JButton("Referent"), new JButton("Adresse"),new JButton("Unité"),
 						new JButton("Abonnement"),new JButton("Jardin"),new JButton("Client"),new JButton("Produit"),new JButton(
 										"Tournée"),new JButton("Livraison")};
-		Arrays.sort(JButtons, Comparator.comparing(JButton::getText));
-		leftPanel.setLayout(new GridLayout(JButtons.length, 1));
-		for (JButton JButton : JButtons) {
+		Arrays.sort(buttons, Comparator.comparing(JButton::getText));
+		leftPanel.setLayout(new GridLayout(buttons.length, 1));
+		for (JButton JButton : buttons) {
 			JButton.addActionListener(e -> {
 				// clear the frame
 				mainPanel.removeAll();
@@ -81,52 +67,52 @@ public class Main {
 				switch (JButton.getText()) {
 					case "Depot":
 						mainPanel.add(new DepotView());
-						resetSelectedButton(JButtons);
+						resetSelectedButton(buttons);
 						JButton.setBackground(Color.LIGHT_GRAY);
 						break;
 					case "Referent":
 						mainPanel.add(new org.SAE.Referent.ReferentView());
-						resetSelectedButton(JButtons);
+						resetSelectedButton(buttons);
 						JButton.setBackground(Color.LIGHT_GRAY);
 						break;
 					case "Adresse":
 						mainPanel.add(new org.SAE.Adresse.AdresseView());
-						resetSelectedButton(JButtons);
+						resetSelectedButton(buttons);
 						JButton.setBackground(Color.LIGHT_GRAY);
 						break;
 					case "Unité":
 						mainPanel.add(new org.SAE.Unite.UniteView());
-						resetSelectedButton(JButtons);
+						resetSelectedButton(buttons);
 						JButton.setBackground(Color.LIGHT_GRAY);
 						break;
 					case "Produit":
 						mainPanel.add(new org.SAE.Produit.ProduitView());
-						resetSelectedButton(JButtons);
+						resetSelectedButton(buttons);
 						JButton.setBackground(Color.LIGHT_GRAY);
 						break;
 					case "Abonnement":
 						mainPanel.add(new org.SAE.Abonnement.AbonnementView());
-						resetSelectedButton(JButtons);
+						resetSelectedButton(buttons);
 						JButton.setBackground(Color.LIGHT_GRAY);
 						break;
 					case "Jardin":
 						mainPanel.add(new org.SAE.Jardin.JardinView());
-						resetSelectedButton(JButtons);
+						resetSelectedButton(buttons);
 						JButton.setBackground(Color.LIGHT_GRAY);
 						break;
 					case "Client":
 						mainPanel.add(new org.SAE.Client.ClientView());
-						resetSelectedButton(JButtons);
+						resetSelectedButton(buttons);
 						JButton.setBackground(Color.LIGHT_GRAY);
 						break;
 					case "Tournée":
 						mainPanel.add(new org.SAE.Tournee.TourneeView());
-						resetSelectedButton(JButtons);
+						resetSelectedButton(buttons);
 						JButton.setBackground(Color.LIGHT_GRAY);
 						break;
 					case "Livraison":
 						mainPanel.add(new org.SAE.Livraison.LivraisonView());
-						resetSelectedButton(JButtons);
+						resetSelectedButton(buttons);
 						JButton.setBackground(Color.LIGHT_GRAY);
 						break;
 					default:
