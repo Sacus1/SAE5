@@ -13,11 +13,14 @@ import org.SAE.Referent.Referent;
 import org.SAE.Tournee.Tournee;
 import org.SAE.Unite.Unite;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Properties;
 
 public class Main {
 	public static SQL sql ;
@@ -28,7 +31,14 @@ public class Main {
 		for (JButton JButton : JButtons) JButton.setBackground(null);
 	}
 	public static void main(String[] args) {
-		sql = new SQL(url,"root","");
+		// get environment variables DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD
+		// if they are not set, use default values
+		String url = System.getenv("DATABASE_URL");
+		if (url == null) url = Main.url;
+		String username = System.getenv("DATABASE_USERNAME");
+		if (username == null) username = "root";
+		String password = System.getenv("DATABASE_PASSWORD");
+		sql = new SQL(url, username, password);
 		// load all data from the database
 		frame = new JFrame("Gestion");
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -38,6 +48,18 @@ public class Main {
 		frame.setSize(windowWidth, windowHeight);
 		// maximize the frame
 		frame.setExtendedState(Frame.MAXIMIZED_BOTH);
+		// set ressource jardin.ico as the icon for the frame
+		try {
+			URL url2 = Main.class.getResource("/jardin.ico");
+			if (url2 != null) {
+				Image icon = ImageIO.read(url2);
+				frame.setIconImage(icon);
+			} else {
+				System.out.println("Resource not found");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		mainPanel = new JPanel();
 		// show loading screen
 		frame.add(mainPanel, "Center");
@@ -131,7 +153,6 @@ public class Main {
 			}
 		});
 	}
-
 	private static void loadAllData() {
 		JLabel loadingLabel = new JLabel("Loading...");
 		mainPanel.add(loadingLabel);
