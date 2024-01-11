@@ -25,6 +25,7 @@ public class Main {
 	public static JFrame frame;
 	static final String URL = "jdbc:mysql://localhost:3306/SAE";
 	private static JPanel mainPanel;
+	private static JButton selectedButton;
 	private static void resetSelectedButton(JButton[] buttons) {
 		for (JButton JButton : buttons) JButton.setBackground(null);
 	}
@@ -61,66 +62,8 @@ public class Main {
 		leftPanel.setLayout(new GridLayout(buttons.length, 1));
 		for (JButton JButton : buttons) {
 			JButton.addActionListener(e -> {
-				// clear the frame
-				mainPanel.removeAll();
-				// add the view to the frame
-				switch (JButton.getText()) {
-					case "Depot":
-						mainPanel.add(new DepotView());
-						resetSelectedButton(buttons);
-						JButton.setBackground(Color.LIGHT_GRAY);
-						break;
-					case "Referent":
-						mainPanel.add(new org.SAE.Referent.ReferentView());
-						resetSelectedButton(buttons);
-						JButton.setBackground(Color.LIGHT_GRAY);
-						break;
-					case "Adresse":
-						mainPanel.add(new org.SAE.Adresse.AdresseView());
-						resetSelectedButton(buttons);
-						JButton.setBackground(Color.LIGHT_GRAY);
-						break;
-					case "Unité":
-						mainPanel.add(new org.SAE.Unite.UniteView());
-						resetSelectedButton(buttons);
-						JButton.setBackground(Color.LIGHT_GRAY);
-						break;
-					case "Produit":
-						mainPanel.add(new org.SAE.Produit.ProduitView());
-						resetSelectedButton(buttons);
-						JButton.setBackground(Color.LIGHT_GRAY);
-						break;
-					case "Abonnement":
-						mainPanel.add(new org.SAE.Abonnement.AbonnementView());
-						resetSelectedButton(buttons);
-						JButton.setBackground(Color.LIGHT_GRAY);
-						break;
-					case "Jardin":
-						mainPanel.add(new org.SAE.Jardin.JardinView());
-						resetSelectedButton(buttons);
-						JButton.setBackground(Color.LIGHT_GRAY);
-						break;
-					case "Client":
-						mainPanel.add(new org.SAE.Client.ClientView());
-						resetSelectedButton(buttons);
-						JButton.setBackground(Color.LIGHT_GRAY);
-						break;
-					case "Tournée":
-						mainPanel.add(new org.SAE.Tournee.TourneeView());
-						resetSelectedButton(buttons);
-						JButton.setBackground(Color.LIGHT_GRAY);
-						break;
-					case "Livraison":
-						mainPanel.add(new org.SAE.Livraison.LivraisonView());
-						resetSelectedButton(buttons);
-						JButton.setBackground(Color.LIGHT_GRAY);
-						break;
-					default:
-						break;
-				}
-				// refresh the frame
-				frame.revalidate();
-				frame.repaint();
+				resetSelectedButton(buttons);
+				activateButton(JButton);
 			});
 			// change the size of the button to fit the frame
 			leftPanel.add(JButton);
@@ -139,9 +82,58 @@ public class Main {
 			}
 		});
 	}
+
+	private static void activateButton(JButton JButton) {
+		selectedButton = JButton;
+		JButton.setBackground(Color.LIGHT_GRAY);
+		// clear the frame
+		mainPanel.removeAll();
+		// add the view to the frame
+		switch (JButton.getText()) {
+			case "Depot":
+				mainPanel.add(new DepotView());
+				break;
+			case "Referent":
+				mainPanel.add(new org.SAE.Referent.ReferentView());
+				break;
+			case "Adresse":
+				mainPanel.add(new org.SAE.Adresse.AdresseView());
+				break;
+			case "Unité":
+				mainPanel.add(new org.SAE.Unite.UniteView());
+				break;
+			case "Produit":
+				mainPanel.add(new org.SAE.Produit.ProduitView());
+				break;
+			case "Abonnement":
+				mainPanel.add(new org.SAE.Abonnement.AbonnementView());
+				break;
+			case "Jardin":
+				mainPanel.add(new org.SAE.Jardin.JardinView());
+				break;
+			case "Client":
+				mainPanel.add(new org.SAE.Client.ClientView());
+				break;
+			case "Tournée":
+				mainPanel.add(new org.SAE.Tournee.TourneeView());
+				break;
+			case "Livraison":
+				mainPanel.add(new org.SAE.Livraison.LivraisonView());
+				break;
+			default:
+				break;
+		}
+		// refresh the frame
+		frame.revalidate();
+		frame.repaint();
+	}
+
 	private static void loadAllData() {
+		mainPanel.removeAll();
 		JLabel loadingLabel = new JLabel("Loading...");
 		mainPanel.add(loadingLabel);
+		frame.revalidate();
+		frame.repaint();
 		Unite.getFromDatabase();
 		Produit.getFromDatabase();
 		Adresse.getFromDatabase();
@@ -154,7 +146,12 @@ public class Main {
 		Abonnement.getFromDatabase();
 		Tournee.getFromDatabase();
 		Livraison.getFromDatabase();
-		mainPanel.remove(loadingLabel);
+		if (selectedButton != null)
+			activateButton(selectedButton);
+		else
+			mainPanel.removeAll();
+		frame.revalidate();
+		frame.repaint();
 	}
 
 	/**
