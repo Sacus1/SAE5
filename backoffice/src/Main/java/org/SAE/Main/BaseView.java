@@ -10,6 +10,8 @@ import java.util.ArrayList;
  */
 public abstract class BaseView<T extends Base> extends JPanel {
 	public final JButton createButton;
+	static final int SCREEN_WIDTH = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.8);
+	static final int SCREEN_HEIGHT = (int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.8);
 	public static boolean inCreation = false;
 	protected static JPanel mainPanel;
 	protected static JPanel topPanel;
@@ -76,16 +78,16 @@ public abstract class BaseView<T extends Base> extends JPanel {
 		searchBar = new JTextField();
 		searchBar.setMaximumSize(new Dimension(1000, 30));
 		searchBar.setPreferredSize(new Dimension(1000, 30));
-		searchBar.addActionListener(e -> search(searchBar));
+		searchBar.addActionListener(e -> search());
 		topPanel.add(searchBar);
 		searchBar.setText("");
-		search(searchBar);
+		search();
 		refresh();
 		createButton.setText("Créer " + name);
 		inCreation = false;
 	}
 
-	private void search(JTextField searchBar) {
+	private void search() {
 		ArrayList<T> list = new ArrayList<>(getList());
 		ArrayList<T> filteredList = new ArrayList<>();
 		for (T t : list) {
@@ -97,9 +99,7 @@ public abstract class BaseView<T extends Base> extends JPanel {
 		JPanel listPanel = new JPanel();
 		listPanel.setLayout(new GridLayout(0, 1));
 		JScrollPane scrollPane = new JScrollPane(listPanel);
-		int width = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.8);
-		int height = (int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.8);
-		scrollPane.setPreferredSize(new Dimension(width, height));
+		scrollPane.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
 		mainPanel.add(scrollPane);
 		for (T t : filteredList) {
 			JPanel p = createListPanel(t);
@@ -124,8 +124,11 @@ public abstract class BaseView<T extends Base> extends JPanel {
 	 */
 	protected JPanel createListPanel(T t) {
 		JPanel panel = new JPanel();
+		panel.setMaximumSize(new Dimension(SCREEN_WIDTH-10, 30));
+		panel.setPreferredSize(new Dimension(SCREEN_WIDTH-10, 30));
 		panel.setLayout(new GridLayout(1, 2));
-		JLabel label = new JLabel(t.toString());
+		JLabel label = new JLabel("<html>" + t.toString().replace("<", "&lt;").replace(">", "&gt;").replace("\n"
+						, "<br/>") + "</html>");
 		JButton editButton = new JButton("Détailler");
 		editButton.addActionListener(e -> {
 			displayView(true);
