@@ -25,12 +25,12 @@ public class Livraison extends Base {
 	 * "en cours" : la livraison est en cours <br>
 	 * "en attente" : la livraison est en attente
 	 */
-	public String etat;
+	public Etat etat;
 
 	public static final String TABLE_NAME = "Livraison";
 	public static List<Livraison> livraisons = new ArrayList<>();
 
-	public Livraison(int id, Depot depot, Tournee tournee, Abonnement abonnement, Date date, String etat) {
+	public Livraison(int id, Depot depot, Tournee tournee, Abonnement abonnement, Date date, Etat etat) {
 		this.id = id;
 		this.depot = depot;
 		this.tournee = tournee;
@@ -39,7 +39,7 @@ public class Livraison extends Base {
 		this.etat = etat;
 	}
 
-	public Livraison(Depot depot, Tournee tournee, Abonnement abonnement, Date date, String etat) {
+	public Livraison(Depot depot, Tournee tournee, Abonnement abonnement, Date date, Etat etat) {
 		this.depot = depot;
 		this.tournee = tournee;
 		this.abonnement = abonnement;
@@ -60,8 +60,8 @@ public class Livraison extends Base {
 				int abonnementId = res.getInt("Abonnement_idAbonnement");
 				Abonnement abonnement = Abonnement.getAbonnementById(abonnementId);
 				Date date = res.getDate("semaine");
-				String etat = res.getString("etat");
-				livraisons.add(new Livraison(id, depot, tournee, abonnement, date, etat));
+				int etat = res.getInt("etat");
+				livraisons.add(new Livraison(id, depot, tournee, abonnement, date, Etat.values()[etat]));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -83,7 +83,7 @@ public class Livraison extends Base {
 										"Abonnement_idAbonnement", "semaine",
 										"etat"},
 						new Object[]{livraison.depot == null ? null : livraison.depot.id, livraison.tournee == null ? null : livraison.tournee.id,
-										livraison.abonnement.id, livraison.date, livraison.etat});
+										livraison.abonnement.id, livraison.date, livraison.etat.ordinal()+1});
 		getFromDatabase();
 	}
 
@@ -92,7 +92,7 @@ public class Livraison extends Base {
 										"Abonnement_idAbonnement", "semaine",
 										"etat"},
 						new Object[]{livraison.depot == null ? null : livraison.depot.id, livraison.tournee == null ? null : livraison.tournee.id,
-										livraison.abonnement.id, livraison.date, livraison.etat},
+										livraison.abonnement.id, livraison.date, livraison.etat.ordinal()+1},
 						new String[]{"idLivraison = " + livraison.id});
 		getFromDatabase();
 	}
@@ -104,7 +104,7 @@ public class Livraison extends Base {
 		sb.append("\nAbonnement : ").append(abonnement.id);
 		if (depot != null) sb.append("\nDepot : ").append(depot.id);
 		sb.append("\nDate : ").append(date);
-		sb.append("\nEtat : ").append(etat);
+		sb.append("\nEtat : ").append(etat.getEtat());
 		return sb.toString();
 	}
 }

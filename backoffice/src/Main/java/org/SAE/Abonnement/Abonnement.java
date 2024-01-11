@@ -1,6 +1,7 @@
 package org.SAE.Abonnement;
 
 import org.SAE.Client.Client;
+import org.SAE.Livraison.Etat;
 import org.SAE.Livraison.Livraison;
 import org.SAE.Main.Base;
 import org.SAE.Main.Logger;
@@ -134,6 +135,14 @@ public class Abonnement extends Base {
 	}
 
 	void updateLivraison() {
+		// delete old livraisons
+		List<Livraison> livraisons = new ArrayList<>(Livraison.livraisons);
+		for (Livraison livraison : livraisons) {
+			if (livraison.abonnement == this && livraison.etat == Etat.EN_ATTENTE) {
+				livraison.delete();
+			}
+		}
+		if (!estActif) return;
 		long frequence = (long) frequenceLivraison * 24 * 60 * 60 * 1000;
 		Date[] datesLivraison = new Date[(int) ((fin.getTime()-debut.getTime()) / frequence + 1)];
 		Date date = debut;
@@ -141,16 +150,9 @@ public class Abonnement extends Base {
 			datesLivraison[i] = date;
 			date = new Date(date.getTime() + (long) frequenceLivraison * 24 * 60 * 60 * 1000);
 		}
-		// delete old livraisons
-		for (Livraison livraison : Livraison.livraisons) {
-			if (livraison.abonnement == this &&
-							(livraison.date.before(new Date(System.currentTimeMillis())) &&
-											(!livraison.etat.equals("livre") && (!livraison.etat.equals("en cours")))))
-				livraison.delete();
-		}
 		for (Date dateLivraison : datesLivraison) {
 			if (dateLivraison.before(new Date(System.currentTimeMillis()))) continue;
-			Livraison livraison = new Livraison(null, null, this, dateLivraison, "En attente");
+			Livraison livraison = new Livraison(null, null, this, dateLivraison, Etat.EN_ATTENTE);
 			Livraison.create(livraison);
 		}
 	}
