@@ -167,7 +167,7 @@ public class Abonnement extends Base {
 
 	@Override
 	public String toString() {
-		return "Pour " + client + " : \n" + panier + " du " + debut + " au " + fin + " tous les " + frequenceLivraison +
-						" jours";
+		return "Pour " + client + " : \nLivraison de " + panier + " du " + debut + " au " + fin + " tous les " + frequenceLivraison +
+						" jours" + (estActif ? "" : " (inactif)") + "\n" + "Identifiant : " + id + "\n";
 	}
 }

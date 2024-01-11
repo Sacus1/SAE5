@@ -18,12 +18,12 @@ public class Livraison extends Base {
 	public Abonnement abonnement;
 	public Date date;
 	/**
-	*  etat peut prendre les valeurs suivantes : <br>
-	* "livre" : la livraison a été effectuée <br>
-	* "annule" : la livraison a été annulée <br>
-	* "en cours" : la livraison est en cours <br>
-	* "en attente" : la livraison est en attente
-	* */
+	 * etat peut prendre les valeurs suivantes : <br>
+	 * "livre" : la livraison a été effectuée <br>
+	 * "annule" : la livraison a été annulée <br>
+	 * "en cours" : la livraison est en cours <br>
+	 * "en attente" : la livraison est en attente
+	 */
 	public String etat;
 
 	public static final String TABLE_NAME = "Livraison";
@@ -77,29 +77,33 @@ public class Livraison extends Base {
 		livraisons.remove(this);
 	}
 
-	public static void create(Livraison livraison){
+	public static void create(Livraison livraison) {
 		sql.createPrepareStatement(TABLE_NAME, new String[]{"Depot_idDepot", "Tournee_idTournee",
-					"Abonnement_idAbonnement", "semaine",
+										"Abonnement_idAbonnement", "semaine",
 										"etat"},
-				new Object[]{livraison.depot == null ? null : livraison.depot.id, livraison.tournee == null ? null : livraison.tournee.id,
-								livraison.abonnement.id, livraison.date, livraison.etat});
+						new Object[]{livraison.depot == null ? null : livraison.depot.id, livraison.tournee == null ? null : livraison.tournee.id,
+										livraison.abonnement.id, livraison.date, livraison.etat});
 		getFromDatabase();
 	}
 
-	public static void update(Livraison livraison){
+	public static void update(Livraison livraison) {
 		sql.updatePreparedStatement(TABLE_NAME, new String[]{"Depot_idDepot", "Tournee_idTournee",
-						"Abonnement_idAbonnement", "semaine",
+										"Abonnement_idAbonnement", "semaine",
 										"etat"},
-				new Object[]{livraison.depot == null ? null : livraison.depot.id, livraison.tournee == null ? null : livraison.tournee.id,
-								livraison.abonnement.id, livraison.date, livraison.etat},
-				new String[]{"idLivraison = " + livraison.id});
+						new Object[]{livraison.depot == null ? null : livraison.depot.id, livraison.tournee == null ? null : livraison.tournee.id,
+										livraison.abonnement.id, livraison.date, livraison.etat},
+						new String[]{"idLivraison = " + livraison.id});
 		getFromDatabase();
 	}
 
 	@Override
 	public String toString() {
-		return "Identifiant : " + id +
-		"\nDate : " + date +
-		"\nEtat : " + etat;
+		StringBuilder sb = new StringBuilder();
+		sb.append("Identifiant : ").append(id);
+		sb.append("\nAbonnement : ").append(abonnement.id);
+		if (depot != null) sb.append("\nDepot : ").append(depot.id);
+		sb.append("\nDate : ").append(date);
+		sb.append("\nEtat : ").append(etat);
+		return sb.toString();
 	}
 }
