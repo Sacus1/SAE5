@@ -3,10 +3,10 @@ package org.SAE.Depot;
 import org.SAE.Main.Base;
 
 import java.sql.Date;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.SAE.Main.Main.sql;
 
@@ -16,7 +16,7 @@ public class PeriodeNonLivrable extends Base {
 	public Date dateFin;
 	public Depot depot;
 
-	public static ArrayList<PeriodeNonLivrable> periodesNonLivrables = new ArrayList<>();
+	public static List<PeriodeNonLivrable> periodesNonLivrables = new ArrayList<>();
 	private static final String TABLE_NAME = "PeriodeNonLivrable";
 
 	public PeriodeNonLivrable(int id, Date dateDebut, Date dateFin, Depot depot) {

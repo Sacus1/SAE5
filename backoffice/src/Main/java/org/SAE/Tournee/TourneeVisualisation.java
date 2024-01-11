@@ -20,7 +20,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class TourneeVisualisation extends JXMapViewer {
 	ArrayList<double[]> points = new ArrayList<>();
@@ -66,7 +65,7 @@ public class TourneeVisualisation extends JXMapViewer {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null; // Or handle error appropriately
+		return new double[0]; // Or handle error appropriately
 	}
 
 	private static JSONArray getJsonArray(String apiURL) throws IOException, JSONException {

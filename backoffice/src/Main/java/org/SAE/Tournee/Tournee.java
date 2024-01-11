@@ -7,6 +7,7 @@ import org.SAE.Main.Logger;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.SAE.Main.Main.sql;
 
@@ -18,7 +19,7 @@ public class Tournee extends Base {
 	String nom;
 	String color;
 	boolean estLivreMatin;
-	public static ArrayList<Tournee> tournees = new ArrayList<>();
+	public static List<Tournee> tournees = new ArrayList<>();
 	ArrayList<Depot> depots = new ArrayList<>();
 
 	public Tournee(int id, JourSemaine jourPreparation, JourSemaine jourLivraison, String nom, String color, boolean estLivreMatin) {

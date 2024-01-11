@@ -26,7 +26,7 @@ public class ProduitView extends BaseView<Produit>{
 
 	@Override
 	protected JPanel createFormPanel() {
-		if (Unite.unites.size() == 0) {
+		if (Unite.unites.isEmpty()) {
 			JOptionPane.showMessageDialog(this, "Veuillez créer une unité avant de créer un produit");
 			return null;
 		}

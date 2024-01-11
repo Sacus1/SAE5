@@ -6,15 +6,12 @@ import org.SAE.Main.Logger;
 import org.SAE.Main.Main;
 import org.SAE.Main.SQL;
 
-import javax.swing.*;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * This class represents a Depot, a JPanel.
@@ -40,7 +37,7 @@ public class Depot extends Base {
 	String website;
 	File image;
 	public JourSemaine[] jourLivraison;
-	public static final ArrayList<Depot> depots = new ArrayList<>();
+	public static final List<Depot> depots = new ArrayList<>();
 
   /**
   * Constructor for the Depot class.
