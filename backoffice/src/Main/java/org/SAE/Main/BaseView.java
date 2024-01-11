@@ -29,6 +29,10 @@ public abstract class BaseView<T extends Base> extends JPanel {
 		setLayout(new BorderLayout());
 		initializePanels();
 		setupCreateButton();
+		searchBar = new JTextField();
+		searchBar.setMaximumSize(new Dimension(1000, 30));
+		searchBar.setPreferredSize(new Dimension(1000, 30));
+		searchBar.addActionListener(e -> search());
 	}
 
 	/**
@@ -73,18 +77,12 @@ public abstract class BaseView<T extends Base> extends JPanel {
 			inCreation = true;
 			return;
 		}
-		clear();
-		// search bar
-		searchBar = new JTextField();
-		searchBar.setMaximumSize(new Dimension(1000, 30));
-		searchBar.setPreferredSize(new Dimension(1000, 30));
-		searchBar.addActionListener(e -> search());
 		topPanel.add(searchBar);
 		searchBar.setText("");
 		search();
-		refresh();
 		createButton.setText("Créer " + name);
 		inCreation = false;
+		refresh();
 	}
 
 	private void search() {

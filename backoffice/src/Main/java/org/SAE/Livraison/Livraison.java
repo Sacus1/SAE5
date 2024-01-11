@@ -60,7 +60,7 @@ public class Livraison extends Base {
 				int abonnementId = res.getInt("Abonnement_idAbonnement");
 				Abonnement abonnement = Abonnement.getAbonnementById(abonnementId);
 				Date date = res.getDate("semaine");
-				int etat = res.getInt("etat");
+				int etat = res.getInt("etat")-1;
 				livraisons.add(new Livraison(id, depot, tournee, abonnement, date, Etat.values()[etat]));
 			}
 		} catch (Exception e) {
