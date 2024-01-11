@@ -1,7 +1,6 @@
 package org.SAE.Unite;
 
 import org.SAE.Main.BaseView;
-import org.SAE.Main.UButton;
 
 import javax.swing.*;
 import java.awt.*;
@@ -33,7 +32,7 @@ public class UniteView extends BaseView<Unite> {
 		TextField nomField = new TextField(unite.nom);
 		panel.add(nomField);
 		// create button
-		UButton updateButton = new UButton("Modifier");
+		JButton updateButton = new JButton("Modifier");
 		updateButton.addActionListener(e -> {
 			unite.nom = nomField.getText();
 			Unite.update(unite);
@@ -53,7 +52,7 @@ public class UniteView extends BaseView<Unite> {
 		TextField nomField = new TextField();
 		panel.add(nomField);
 		// create button
-		UButton createButton = new UButton("Créer");
+		JButton createButton = new JButton("Créer");
 		createButton.addActionListener(e -> {
 			Unite unite = new Unite(nomField.getText());
 			Unite.create(unite);

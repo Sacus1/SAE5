@@ -1,7 +1,5 @@
 package org.SAE.Tournee;
 
-import org.SAE.Adresse.Adresse;
-import org.SAE.Main.UButton;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,7 +35,7 @@ public class TourneeVisualisation extends JXMapViewer {
 		frame.add(this, BorderLayout.CENTER);
 		setTileFactory(new DefaultTileFactory(new OSMTileFactoryInfo()));
 
-		UButton button = new UButton("Save as image");
+		JButton button = new JButton("Save as image");
 		button.addActionListener(e -> {
 			try {
 				Image image = createImage(getWidth(), getHeight());

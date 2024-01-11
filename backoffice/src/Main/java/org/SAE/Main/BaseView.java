@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * It extends JPanel, a generic lightweight container.
  */
 public abstract class BaseView<T extends Base> extends JPanel {
-	public final UButton createButton;
+	public final JButton createButton;
 	public static boolean inCreation = false;
 	protected static JPanel mainPanel;
 	protected static JPanel topPanel;
@@ -23,7 +23,7 @@ public abstract class BaseView<T extends Base> extends JPanel {
 	 */
 	protected BaseView(String name) {
 		this.name = name;
-		createButton = new UButton("Create " + name);
+		createButton = new JButton("Create " + name);
 		setLayout(new BorderLayout());
 		initializePanels();
 		setupCreateButton();
@@ -126,14 +126,14 @@ public abstract class BaseView<T extends Base> extends JPanel {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(1, 2));
 		JLabel label = new JLabel(t.toString());
-		UButton editButton = new UButton("Détailler");
+		JButton editButton = new JButton("Détailler");
 		editButton.addActionListener(e -> {
 			displayView(true);
 			clear();
 			mainPanel.add(createEditPanel(t));
 			refresh();
 		});
-		UButton deleteButton = new UButton("Supprimer");
+		JButton deleteButton = new JButton("Supprimer");
 		deleteButton.addActionListener(e -> {
 			t.delete();
 			t.loadFromDatabase();

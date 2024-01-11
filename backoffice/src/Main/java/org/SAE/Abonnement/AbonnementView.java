@@ -2,11 +2,8 @@ package org.SAE.Abonnement;
 
 import org.SAE.Client.Client;
 import org.SAE.Client.DateLabelFormatter;
-import org.SAE.Depot.Depot;
 import org.SAE.Main.BaseView;
-import org.SAE.Main.UButton;
 import org.SAE.Panier.Panier;
-import org.jdatepicker.JDatePanel;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -123,7 +120,7 @@ public class AbonnementView extends BaseView<Abonnement> {
 		panel.add(frequenceLivraisonField);
 		panel.add(new JLabel("Est actif"));
 		panel.add(estActifCheckBox);
-		UButton createButton = new UButton("Modifier");
+		JButton createButton = new JButton("Modifier");
 		createButton.addActionListener(e -> {
 			abonnement.client = (Client) clientComboBox.getSelectedItem();
 			abonnement.panier = (Panier) panierComboBox.getSelectedItem();

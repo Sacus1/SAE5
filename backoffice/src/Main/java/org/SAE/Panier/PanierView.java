@@ -3,7 +3,6 @@ package org.SAE.Panier;
 import org.SAE.Jardin.Jardin;
 import org.SAE.Main.BaseView;
 import org.SAE.Main.Logger;
-import org.SAE.Main.UButton;
 import org.SAE.Produit.Produit;
 import org.SAE.Produit.ProduitView;
 
@@ -35,14 +34,14 @@ public class PanierView extends BaseView<Panier> {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(1, 3));
 		JLabel label = new JLabel(panier.toString());
-		UButton editButton = new UButton("Détailler");
+		JButton editButton = new JButton("Détailler");
 		editButton.addActionListener(e -> {
 			displayView(true);
 			clear();
 			mainPanel.add(createEditPanel(panier));
 			refresh();
 		});
-		UButton deleteButton = new UButton("Supprimer");
+		JButton deleteButton = new JButton("Supprimer");
 		deleteButton.addActionListener(e -> {
 			panier.delete();
 			panier.loadFromDatabase();
@@ -67,7 +66,7 @@ public class PanierView extends BaseView<Panier> {
 	 JPanel img = new JPanel();
 	 img.setLayout(new GridLayout(1, 2));
 	 img.add(new Label("Image"));
-	 UButton imageButton = new UButton("Select");
+	 JButton imageButton = new JButton("Select");
 	 AtomicReference<File> image = new AtomicReference<>();
 	 imageButton.addActionListener(e -> {
 	  JFileChooser fileChooser = new JFileChooser();
@@ -97,7 +96,7 @@ public class PanierView extends BaseView<Panier> {
 		panel.add(new JLabel("Prix *"));
 		panel.add(prixField);
 		AtomicReference<File> image = createImageChooserPanel( panel);
-		UButton submitButton = new UButton("Modifier");
+		JButton submitButton = new JButton("Modifier");
 		panel.add(submitButton);
 		submitButton.addActionListener(e -> {
 			if (nomField.getText().isEmpty() || prixField.getText().isEmpty()) {
@@ -138,7 +137,7 @@ public class PanierView extends BaseView<Panier> {
 		panel.add(prixField);
 		AtomicReference<File> image = createImageChooserPanel( panel);
 		// produit
-		UButton addProduitButton = new UButton("Add Produit");
+		JButton addProduitButton = new JButton("Add Produit");
 		// list of produits in scrollable panel
 		JLabel produitsLabel = new JLabel("Produits");
 		panel.add(produitsLabel);
@@ -159,7 +158,7 @@ public class PanierView extends BaseView<Panier> {
 			JTextField quantiteField = new JTextField();
 			formPanel.add(new JLabel("Quantite"));
 			formPanel.add(quantiteField);
-			UButton submitButton = new UButton("Modifier");
+			JButton submitButton = new JButton("Modifier");
 			formPanel.add(submitButton);
 			submitButton.addActionListener(e1 -> {
 				if (quantiteField.getText().isEmpty()) {
@@ -179,7 +178,7 @@ public class PanierView extends BaseView<Panier> {
 			JPanel produitPanel = new JPanel();
 			produitPanel.setLayout(new GridLayout(1, 3));
 			JLabel produitLabel = new JLabel(produitPanier.toString());
-			UButton deleteButton = new UButton("Supprimer");
+			JButton deleteButton = new JButton("Supprimer");
 			deleteButton.addActionListener(e -> {
 				panier.deleteProduit(produitPanier.produit);
 				panier.loadFromDatabase();
@@ -189,7 +188,7 @@ public class PanierView extends BaseView<Panier> {
 			produitPanel.add(deleteButton);
 			listPanel.add(produitPanel);
 		}
-		UButton submitButton = new UButton("Modifier");
+		JButton submitButton = new JButton("Modifier");
 		panel.add(submitButton);
 		submitButton.addActionListener(e -> {
 			if (nomField.getText().isEmpty() || prixField.getText().isEmpty()) {

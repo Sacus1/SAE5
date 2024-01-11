@@ -6,7 +6,6 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
-import org.SAE.Main.UButton;
 import javax.swing.*;
 import java.awt.*;
 import java.sql.Date;
@@ -76,12 +75,12 @@ public class ClientView extends BaseView<Client> {
 		panel.add(datePicker);
 		panel.add(new JLabel("Est dispensé"));
 		panel.add(estDispenseCheckBox);
-		UButton cancelUButton = new UButton("Cancel");
-		panel.add(cancelUButton);
-		cancelUButton.addActionListener(e -> displayView(false));
-		UButton createUButton = new UButton("Créer");
-		panel.add(createUButton);
-		createUButton.addActionListener(e -> {
+		JButton cancelJButton = new JButton("Cancel");
+		panel.add(cancelJButton);
+		cancelJButton.addActionListener(e -> displayView(false));
+		JButton createJButton = new JButton("Créer");
+		panel.add(createJButton);
+		createJButton.addActionListener(e -> {
 			Client client = new Client((Adresse) Objects.requireNonNull(adresseComboBox.getSelectedItem()),
 							raisonSocialeField.getText(),
 							civiliteField.getText(),
@@ -158,12 +157,12 @@ public class ClientView extends BaseView<Client> {
 		professionField.setText(client.profession);
 		model.setValue(client.dateNaissance);
 		estDispenseCheckBox.setSelected(client.estDispense);
-		UButton cancelUButton = new UButton("Cancel");
-		panel.add(cancelUButton);
-		cancelUButton.addActionListener(e -> displayView(false));
-		UButton createUButton = new UButton("Modifier");
-		panel.add(createUButton);
-		createUButton.addActionListener(e -> {
+		JButton cancelJButton = new JButton("Cancel");
+		panel.add(cancelJButton);
+		cancelJButton.addActionListener(e -> displayView(false));
+		JButton createJButton = new JButton("Modifier");
+		panel.add(createJButton);
+		createJButton.addActionListener(e -> {
 			client.adresse = (Adresse) Objects.requireNonNull(adresseComboBox.getSelectedItem());
 			client.raisonSociale = raisonSocialeField.getText();
 			client.civilite = civiliteField.getText();

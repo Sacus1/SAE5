@@ -3,7 +3,6 @@ package org.SAE.Tournee;
 import org.SAE.Depot.Depot;
 import org.SAE.Depot.JourSemaine;
 import org.SAE.Main.BaseView;
-import org.SAE.Main.UButton;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,20 +23,20 @@ public class TourneeView extends BaseView<Tournee> {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(1, 2));
 		JLabel label = new JLabel(t.toString());
-		UButton editButton = new UButton("Détailler");
+		JButton editButton = new JButton("Détailler");
 		editButton.addActionListener(e -> {
 			displayView(true);
 			clear();
 			mainPanel.add(createEditPanel(t));
 			refresh();
 		});
-		UButton deleteButton = new UButton("Supprimer");
+		JButton deleteButton = new JButton("Supprimer");
 		deleteButton.addActionListener(e -> {
 			t.delete();
 			t.loadFromDatabase();
 			displayView(false);
 		});
-		UButton visualiserButton = new UButton("Visualiser");
+		JButton visualiserButton = new JButton("Visualiser");
 		visualiserButton.addActionListener(e -> {
 			TourneeVisualisation visu = new TourneeVisualisation();
 			for (Depot depot : t.depots) {
@@ -90,19 +89,19 @@ public class TourneeView extends BaseView<Tournee> {
 		panel.add(colorComboBox);
 		panel.add(new JLabel("Est livré le matin"));
 		panel.add(estLivreMatinCheckBox);
-		UButton submitButton;
+		JButton submitButton;
 		if (tournee != null){
 			jourLivraisonComboBox.setSelectedItem(tournee.jourLivraison);
 			jourPreparationComboBox.setSelectedItem(tournee.jourPreparation);
 			estLivreMatinCheckBox.setSelected(tournee.estLivreMatin);
 			colorComboBox.setSelectedItem(Color.valueOf(tournee.color));
 			nomField.setText(tournee.nom);
-			submitButton = new UButton("Modifier");
+			submitButton = new JButton("Modifier");
 		}
 		else {
 			tournee = new Tournee(JourSemaine.Lundi, JourSemaine.Lundi, "", "Rouge", false);
 			Tournee.create(tournee);
-			submitButton = new UButton("Créer");
+			submitButton = new JButton("Créer");
 		}
 		JLabel depotsLabel = new JLabel("Depots");
 		panel.add(depotsLabel);

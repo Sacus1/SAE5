@@ -1,11 +1,6 @@
 package org.SAE.Livraison;
 
-import org.SAE.Adresse.Adresse;
-import org.SAE.Depot.Depot;
-import org.SAE.Depot.PeriodeNonLivrable;
 import org.SAE.Main.BaseView;
-import org.SAE.Main.BaseView;
-import org.SAE.Main.UButton;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,28 +27,28 @@ public class LivraisonView extends BaseView<Livraison> {
 		panelButton.setBorder(BorderFactory.createLineBorder(Color.black));
 		panelLabel.add(new JLabel("<html>"+String.valueOf(l).replace("\n", "<br>")+"</html>", SwingConstants.CENTER));
 		// buttons to change etat
-		UButton button = new UButton("En cours");
+		JButton button = new JButton("En cours");
 		button.addActionListener(e -> {
 			l.etat = "En cours";
 			Livraison.update(l);
 			displayView(false);
 		});
 		panelButton.add(button);
-		button = new UButton("Livré");
+		button = new JButton("Livré");
 		button.addActionListener(e -> {
 			l.etat = "Livré";
 			Livraison.update(l);
 			displayView(false);
 		});
 		panelButton.add(button);
-		button = new UButton("Annulé");
+		button = new JButton("Annulé");
 		button.addActionListener(e -> {
 			l.etat = "Annulé";
 			Livraison.update(l);
 			displayView(false);
 		});
 		panelButton.add(button);
-		button = new UButton("En attente");
+		button = new JButton("En attente");
 		button.addActionListener(e -> {
 			l.etat = "En attente";
 			Livraison.update(l);

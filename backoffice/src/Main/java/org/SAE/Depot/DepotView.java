@@ -5,7 +5,6 @@ import org.SAE.Client.DateLabelFormatter;
 import org.SAE.Error.CannotAccessFieldException;
 import org.SAE.Main.BaseView;
 import org.SAE.Main.Logger;
-import org.SAE.Main.UButton;
 import org.SAE.Referent.Referent;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -63,15 +62,15 @@ public class DepotView extends BaseView<Depot> {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(1, 4));
 		panel.add(new Label(t.toString()));
-		UButton editButton = new UButton("Détailler");
+		JButton editButton = new JButton("Détailler");
 		editButton.addActionListener(e -> {
 			displayView(true);
 			clear();
 			mainPanel.add(createEditPanel(t));
 			refresh();
 		});
-		UButton deleteButton = new UButton("Supprimer");
-		UButton archiveButton = new UButton(t.isArchived ? "Désarchiver" : "Archiver");
+		JButton deleteButton = new JButton("Supprimer");
+		JButton archiveButton = new JButton(t.isArchived ? "Désarchiver" : "Archiver");
 		deleteButton.addActionListener(e -> {
 			t.delete();
 			Depot.getFromDatabase();
@@ -103,7 +102,7 @@ public class DepotView extends BaseView<Depot> {
 			depotFormComponents.panel.add(depotFormComponents.fieldPanels[i]);
 		}
 		depotFormComponents.panel.setLayout(new GridLayout(depotFormComponents.fieldPanels.length / 2 + 2, 2));
-		UButton createButton = new UButton("Créer");
+		JButton createButton = new JButton("Créer");
 		createButton.addActionListener(e -> createDepot(depotFormComponents.fieldPanels, depotFormComponents.joursLivraisons, depotFormComponents.image.get(),
 						depotFormComponents.addressChoice, depotFormComponents.referentChoice));
 		depotFormComponents.panel.add(createButton);
@@ -158,7 +157,7 @@ public class DepotView extends BaseView<Depot> {
 		scrollPane.setPreferredSize(new Dimension(300, 50));
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		// add button
-		UButton addPeriode = new UButton("Add");
+		JButton addPeriode = new JButton("Add");
 		addPeriode.addActionListener(e -> {
 			displayView(true);
 			clear();
@@ -170,7 +169,7 @@ public class DepotView extends BaseView<Depot> {
 				JPanel periodePanel = new JPanel();
 				periodePanel.setLayout(new GridLayout(1, 2));
 				periodePanel.add(new Label(periodeNonLivrable.toString()));
-				UButton deleteButton = new UButton("Supprimer");
+				JButton deleteButton = new JButton("Supprimer");
 				deleteButton.addActionListener(e -> {
 					periodesNonLivrables.remove(periodePanel);
 					periodeNonLivrable.delete();
@@ -181,13 +180,13 @@ public class DepotView extends BaseView<Depot> {
 			}
 		}
 		periodesNonLivrables.add(addPeriode);
-		UButton createButton = getEditButton(depotToEdit, depotFormComponents);
+		JButton createButton = getEditButton(depotToEdit, depotFormComponents);
 		depotFormComponents.panel().add(createButton);
 		return depotFormComponents.panel();
 	}
 
-	private UButton getEditButton(Depot depotToEdit, DepotFormComponents depotFormComponents) {
-		UButton createButton = new UButton("Modifier");
+	private JButton getEditButton(Depot depotToEdit, DepotFormComponents depotFormComponents) {
+		JButton createButton = new JButton("Modifier");
 		createButton.addActionListener(e -> {
 			String[] values = getValues(depotFormComponents.fieldPanels(), depotFormComponents.addressChoice(), depotFormComponents.referentChoice());
 			if (values.length == 0) return;
@@ -233,7 +232,7 @@ public class DepotView extends BaseView<Depot> {
 		periodeNonLivrablePanel.add(new Label("Date fin *"));
 		periodeNonLivrablePanel.add(dateFinField);
 		// add button
-		UButton addButton = new UButton("Add");
+		JButton addButton = new JButton("Add");
 		addButton.addActionListener(e -> {
 			Date dateDebut = Date.valueOf(dateDebutField.getJFormattedTextField().getText());
 			Date dateFin = Date.valueOf(dateFinField.getJFormattedTextField().getText());
@@ -309,7 +308,7 @@ public class DepotView extends BaseView<Depot> {
 		JPanel imagePanel = new JPanel();
 		imagePanel.setLayout(new GridLayout(1, 2));
 		imagePanel.add(new Label("Image"));
-		UButton imageButton = new UButton("Select");
+		JButton imageButton = new JButton("Select");
 		AtomicReference<File> image = new AtomicReference<>();
 		imageButton.addActionListener(e -> {
 			JFileChooser fileChooser = new JFileChooser();
@@ -336,7 +335,7 @@ public class DepotView extends BaseView<Depot> {
 		delivery.setLayout(new GridLayout(1, 2));
 		delivery.add(new Label("Jour de livraison *"));
 		// Create components
-		UButton button = new UButton("Select");
+		JButton button = new JButton("Select");
 		JPopupMenu popupMenu = new JPopupMenu();
 		ArrayList<JourSemaine> joursLivraisons = new ArrayList<>();
 		JList<String> list = new JList<>(new String[]{"Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"});

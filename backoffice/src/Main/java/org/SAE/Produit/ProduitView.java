@@ -1,6 +1,5 @@
 package org.SAE.Produit;
 import org.SAE.Main.BaseView;
-import org.SAE.Main.UButton;
 import org.SAE.Unite.Unite;
 
 import javax.swing.*;
@@ -45,7 +44,7 @@ public class ProduitView extends BaseView<Produit>{
 		panel.add(new JLabel("Unite"));
 		panel.add(uniteChoice);
 		// image choice
-		UButton imageButton = new UButton("Choose image");
+		JButton imageButton = new JButton("Choose image");
 		AtomicReference<File> image = new AtomicReference<>();
 		imageButton.addActionListener(e -> {
 			JFileChooser fileChooser = new JFileChooser();
@@ -57,7 +56,7 @@ public class ProduitView extends BaseView<Produit>{
 		});
 		panel.add(imageButton);
 		// create a button to create the produit
-		UButton createButton = new UButton("Créer");
+		JButton createButton = new JButton("Créer");
 		createButton.addActionListener(e -> {
 			if (nomField.getText().equals("")) {
 				JOptionPane.showMessageDialog(this, "Veuillez entrer un nom");
@@ -97,7 +96,7 @@ public class ProduitView extends BaseView<Produit>{
 		uniteChoice.select(unite.toString());
 		panel.add(uniteChoice);
 		// image choice
-		UButton imageButton = new UButton("Choose image");
+		JButton imageButton = new JButton("Choose image");
 		AtomicReference<File> image = new AtomicReference<>();
 		imageButton.addActionListener(e -> {
 			JFileChooser fileChooser = new JFileChooser();
@@ -108,7 +107,7 @@ public class ProduitView extends BaseView<Produit>{
 			}
 		});
 		// create button
-		UButton updateButton = new UButton("Modifier");
+		JButton updateButton = new JButton("Modifier");
 		updateButton.addActionListener(e -> {
 			produit.nom = nomField.getText();
 			produit.description = descriptionField.getText();
