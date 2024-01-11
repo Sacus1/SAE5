@@ -1,7 +1,6 @@
 package org.SAE.Main;
 
 import javax.swing.*;
-import java.awt.*;
 /**
  * Logger class for displaying messages in a JFrame.
  */

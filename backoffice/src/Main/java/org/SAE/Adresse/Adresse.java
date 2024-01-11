@@ -8,7 +8,6 @@ import org.SAE.Main.SQL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -88,7 +87,7 @@ public class Adresse extends Base {
 	 * Method to return a string representation of the address object.
 	 */
 	public String toString() {
-		return rue + ", " + ville;
+		return rue + ", " + ville + ", " + codePostal;
 	}
 
 	/**
@@ -120,7 +119,7 @@ public class Adresse extends Base {
 	static void create(Adresse adresse) {
 		String[] tableColumns = {"idAdresse"};
 		for (String column : TABLE_COLUMNS) tableColumns = Main.addStringToArray(tableColumns, column);
-		if (Main.sql.createPrepareStatement(TABLE_NAME, tableColumns,
+		if (!Main.sql.createPrepareStatement(TABLE_NAME, tableColumns,
 						new Object[]{adresse.id, adresse.rue, adresse.ville, adresse.codePostal}))
 			org.SAE.Main.Logger.log("Create failed");
 		getFromDatabase();
@@ -130,4 +129,5 @@ public class Adresse extends Base {
 	public void loadFromDatabase() {
 		getFromDatabase();
 	}
+
 }

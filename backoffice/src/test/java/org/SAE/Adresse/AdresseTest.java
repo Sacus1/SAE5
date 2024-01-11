@@ -53,7 +53,7 @@ class AdresseTest {
 						.thenReturn(false);
 
 		try (MockedStatic<Logger> mockLogger = Mockito.mockStatic(Logger.class)) {
-			Adresse.delete(adresse);
+			adresse.delete();
 			mockLogger.verify(() -> Logger.error(Mockito.anyString()), Mockito.times(0));
 		}
 		Mockito.verify(sqlMock).deletePrepareStatement(Mockito.eq(Adresse.TABLE_NAME), Mockito.any());

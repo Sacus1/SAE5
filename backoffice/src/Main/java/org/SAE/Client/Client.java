@@ -1,14 +1,11 @@
 package org.SAE.Client;
 
 import org.SAE.Adresse.Adresse;
-import org.SAE.Client.Client;
-import org.SAE.Depot.JourSemaine;
 import org.SAE.Main.Base;
 import org.SAE.Main.Logger;
 import org.SAE.Main.Main;
 import org.SAE.Main.SQL;
 
-import javax.swing.*;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -55,6 +52,23 @@ public class Client extends Base {
 		clients.add(this);
 	}
 
+	public Client(Adresse adresse, String text, String text1, String text2, String text3, String[] strings, String text4, String text5, Date date, boolean selected) {
+		this.id = Main.sql.getNextId(TABLE_NAME);
+		this.adresse = adresse;
+		this.raisonSociale = text;
+		this.civilite = text1;
+		this.nom = text2;
+		this.prenom = text3;
+		this.telephone = strings[0];
+		this.telephone2 = strings[1];
+		this.telephone3 = strings[2];
+		this.mail = text4;
+		this.profession = text5;
+		this.dateNaissance = date;
+		this.estDispense = selected;
+		clients.add(this);
+	}
+
 	public static void getFromDatabase() {
 		clients.clear();
 		SQL sql = Main.sql;
@@ -94,6 +108,15 @@ public class Client extends Base {
 			Logger.error("Can't update client");
 		getFromDatabase();
 
+	}
+
+	static void create(Client client) {
+		if (!Main.sql.createPrepareStatement(TABLE_NAME, dbFields,
+						new Object[]{client.adresse.id, client.raisonSociale, client.civilite, client.nom,
+										client.prenom, client.telephone, client.telephone2, client.telephone3, client.mail,
+										client.profession, client.dateNaissance, client.estDispense}))
+			Logger.error("Can't create client");
+		getFromDatabase();
 	}
 
 

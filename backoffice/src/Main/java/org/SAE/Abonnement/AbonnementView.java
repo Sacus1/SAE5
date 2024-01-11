@@ -2,11 +2,8 @@ package org.SAE.Abonnement;
 
 import org.SAE.Client.Client;
 import org.SAE.Client.DateLabelFormatter;
-import org.SAE.Depot.Depot;
 import org.SAE.Main.BaseView;
-import org.SAE.Main.UButton;
 import org.SAE.Panier.Panier;
-import org.jdatepicker.JDatePanel;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -28,7 +25,7 @@ public class AbonnementView extends BaseView<Abonnement> {
 	}
 
 	@Override
-	protected ArrayList<Abonnement> GetList() {
+	protected ArrayList<Abonnement> getList() {
 		return (ArrayList<Abonnement>) Abonnement.abonnements;
 	}
 
@@ -62,10 +59,22 @@ public class AbonnementView extends BaseView<Abonnement> {
 		panel.add(frequenceLivraisonField);
 		panel.add(new JLabel("Est actif"));
 		panel.add(estActifCheckBox);
-		JButton createButton = new JButton("Create");
+		JButton createButton = new JButton("Créer");
 		createButton.addActionListener(e -> {
 			Client client = (Client) clientComboBox.getSelectedItem();
 			Panier panier = (Panier) panierComboBox.getSelectedItem();
+			// check for value
+			if (client == null || panier == null || debutField.getJFormattedTextField().getText().isEmpty() || finField.getJFormattedTextField().getText().isEmpty() || frequenceLivraisonField.getText().isEmpty()) {
+				org.SAE.Main.Logger.error("All fields must be filled");
+				return;
+			}
+			// check if date interval is greater than frequenceLivraison
+			if (Date.valueOf(debutField.getJFormattedTextField().getText())
+							.toLocalDate().plusDays(Integer.parseInt(frequenceLivraisonField.getText()))
+							.isAfter(Date.valueOf(finField.getJFormattedTextField().getText()).toLocalDate())) {
+				org.SAE.Main.Logger.error("Date interval must be greater than frequenceLivraison");
+				return;
+			}
 			Date debut = Date.valueOf(debutField.getJFormattedTextField().getText());
 			Date fin = Date.valueOf(finField.getJFormattedTextField().getText());
 			int frequenceLivraison = Integer.parseInt(frequenceLivraisonField.getText());
@@ -111,10 +120,22 @@ public class AbonnementView extends BaseView<Abonnement> {
 		panel.add(frequenceLivraisonField);
 		panel.add(new JLabel("Est actif"));
 		panel.add(estActifCheckBox);
-		UButton createButton = new UButton("Update");
+		JButton createButton = new JButton("Modifier");
 		createButton.addActionListener(e -> {
 			abonnement.client = (Client) clientComboBox.getSelectedItem();
 			abonnement.panier = (Panier) panierComboBox.getSelectedItem();
+			// check for value
+			if (abonnement.client == null || abonnement.panier == null || debutField.getJFormattedTextField().getText().isEmpty() || finField.getJFormattedTextField().getText().isEmpty() || frequenceLivraisonField.getText().isEmpty()) {
+				org.SAE.Main.Logger.error("All fields must be filled");
+				return;
+			}
+			// check if date interval is greater than frequenceLivraison
+			if (Date.valueOf(debutField.getJFormattedTextField().getText())
+							.toLocalDate().plusDays(Integer.parseInt(frequenceLivraisonField.getText()))
+							.isAfter(Date.valueOf(finField.getJFormattedTextField().getText()).toLocalDate())) {
+				org.SAE.Main.Logger.error("Date interval must be greater than frequenceLivraison");
+				return;
+			}
 			abonnement.debut = Date.valueOf(debutField.getJFormattedTextField().getText());
 			abonnement.fin = Date.valueOf(finField.getJFormattedTextField().getText());
 			abonnement.frequenceLivraison = Integer.parseInt(frequenceLivraisonField.getText());

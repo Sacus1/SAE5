@@ -3,7 +3,6 @@ package org.SAE.Tournee;
 import org.SAE.Depot.Depot;
 import org.SAE.Depot.JourSemaine;
 import org.SAE.Main.BaseView;
-import org.SAE.Main.UButton;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,8 +19,40 @@ public class TourneeView extends BaseView<Tournee> {
 	}
 
 	@Override
-	protected ArrayList<Tournee> GetList() {
-		return Tournee.tournees;
+	protected JPanel createListPanel(Tournee t) {
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(1, 2));
+		JLabel label = new JLabel(t.toString());
+		JButton editButton = new JButton("Détailler");
+		editButton.addActionListener(e -> {
+			displayView(true);
+			clear();
+			mainPanel.add(createEditPanel(t));
+			refresh();
+		});
+		JButton deleteButton = new JButton("Supprimer");
+		deleteButton.addActionListener(e -> {
+			t.delete();
+			t.loadFromDatabase();
+			displayView(false);
+		});
+		JButton visualiserButton = new JButton("Visualiser");
+		visualiserButton.addActionListener(e -> {
+			TourneeVisualisation visu = new TourneeVisualisation();
+			for (Depot depot : t.depots) {
+				double[] geo = TourneeVisualisation.getGeo(depot.adresse.toString());
+				visu.addMarker(geo[0], geo[1]);
+			}
+		});
+		panel.add(label);
+		panel.add(editButton);
+		panel.add(deleteButton);
+		panel.add(visualiserButton);
+		return panel;
+	}
+	@Override
+	protected ArrayList<Tournee> getList() {
+		return (ArrayList<Tournee>) Tournee.tournees;
 	}
 
 	@Override
@@ -58,20 +89,20 @@ public class TourneeView extends BaseView<Tournee> {
 		panel.add(colorComboBox);
 		panel.add(new JLabel("Est livré le matin"));
 		panel.add(estLivreMatinCheckBox);
+		JButton submitButton;
 		if (tournee != null){
-		 jourLivraisonComboBox.setSelectedItem(tournee.jourLivraison);
-		 jourPreparationComboBox.setSelectedItem(tournee.jourPreparation);
-		 estLivreMatinCheckBox.setSelected(tournee.estLivreMatin);
-		 colorComboBox.setSelectedItem(Color.valueOf(tournee.color));
-		 nomField.setText(tournee.nom);
+			jourLivraisonComboBox.setSelectedItem(tournee.jourLivraison);
+			jourPreparationComboBox.setSelectedItem(tournee.jourPreparation);
+			estLivreMatinCheckBox.setSelected(tournee.estLivreMatin);
+			colorComboBox.setSelectedItem(Color.valueOf(tournee.color));
+			nomField.setText(tournee.nom);
+			submitButton = new JButton("Modifier");
 		}
 		else {
-			tournee = new Tournee(JourSemaine.Lundi, JourSemaine.Lundi, "", "", false);
+			tournee = new Tournee(JourSemaine.Lundi, JourSemaine.Lundi, "", "Rouge", false);
+			Tournee.create(tournee);
+			submitButton = new JButton("Créer");
 		}
-		return createTourneePanel(tournee, jourLivraisonComboBox, nomField, jourPreparationComboBox, estLivreMatinCheckBox, panel);
-	}
-
-	private JPanel createTourneePanel(Tournee tournee, JComboBox<JourSemaine> jourLivraisonComboBox, JTextField nomField, JComboBox<JourSemaine> jourPreparationComboBox, JCheckBox estLivreMatinCheckBox, JPanel panel) {
 		JLabel depotsLabel = new JLabel("Depots");
 		panel.add(depotsLabel);
 		JPanel depotsPanel = new JPanel();
@@ -82,25 +113,26 @@ public class TourneeView extends BaseView<Tournee> {
 		scrollPane.setPreferredSize(new Dimension(300, 50));
 		panel.add(scrollPane);
 		fillDepot(tournee, listPanel);
+		Tournee finalTournee = tournee;
 		jourLivraisonComboBox.addActionListener(e -> {
 			listPanel.removeAll();
-			tournee.jourLivraison = (JourSemaine) jourLivraisonComboBox.getSelectedItem();
-			fillDepot(tournee, listPanel);
+			finalTournee.jourLivraison = (JourSemaine) jourLivraisonComboBox.getSelectedItem();
+			fillDepot(finalTournee, listPanel);
 			listPanel.revalidate();
 			listPanel.repaint();
 		});
-		UButton submitButton = new UButton("Valider");
 		submitButton.addActionListener(e -> {
-			tournee.nom = nomField.getText();
-			tournee.jourLivraison = (JourSemaine) jourLivraisonComboBox.getSelectedItem();
-			tournee.jourPreparation = (JourSemaine) jourPreparationComboBox.getSelectedItem();
-			tournee.estLivreMatin = estLivreMatinCheckBox.isSelected();
-			Tournee.update(tournee);
+			finalTournee.nom = nomField.getText();
+			finalTournee.jourLivraison = (JourSemaine) jourLivraisonComboBox.getSelectedItem();
+			finalTournee.jourPreparation = (JourSemaine) jourPreparationComboBox.getSelectedItem();
+			finalTournee.estLivreMatin = estLivreMatinCheckBox.isSelected();
+			Tournee.update(finalTournee);
 			displayView(false);
 		});
 		panel.add(submitButton);
 		return panel;
 	}
+
 
 	private static void fillDepot(Tournee tournee, JPanel listPanel) {
 		for (Depot depot : Depot.depots) {

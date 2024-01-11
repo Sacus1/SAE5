@@ -1,7 +1,6 @@
 package org.SAE.Adresse;
 
 import org.SAE.Main.BaseView;
-import org.SAE.Main.UButton;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,7 +24,7 @@ public class AdresseView extends BaseView<Adresse> {
 	}
 
 	@Override
-	protected ArrayList<Adresse> GetList() {
+	protected ArrayList<Adresse> getList() {
 		return (ArrayList<Adresse>) Adresse.adresses;
 	}
 
@@ -42,7 +41,7 @@ public class AdresseView extends BaseView<Adresse> {
 		JTextField adresseField = new JTextField();
 		JTextField villeField = new JTextField();
 		JTextField codePostalField = new JTextField();
-		UButton submitButton = new UButton("Submit");
+		JButton submitButton = new JButton("Créer");
 		panel.add(new JLabel("Adresse *"));
 		panel.add(adresseField);
 		panel.add(new JLabel("Ville *"));
@@ -81,7 +80,7 @@ public class AdresseView extends BaseView<Adresse> {
 		JTextField adresseField = new JTextField(adresse.rue);
 		JTextField villeField = new JTextField(adresse.ville);
 		JTextField codePostalField = new JTextField(adresse.codePostal);
-		UButton submitButton = new UButton("Submit");
+		JButton submitButton = new JButton("Modifier");
 		panel.add(new Label("Adresse *"));
 		panel.add(adresseField);
 		panel.add(new Label("Ville *"));

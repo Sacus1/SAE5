@@ -11,14 +11,11 @@ import org.SAE.Referent.Referent;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Jardin extends Base {
 
 	private static final String TABLE_NAME = "Jardin";
-	private static final String[] fields = {"Referent","Adresse siège social","Adresse gestion","Nom commercial",
-					"Raison sociale"};
 	private static final String[] dbFields = {"Referent_idReferent","Adresse_idAdresseSiegeSocial","Adresse_idAdresseGestion",
 					"nomCommercial","raison"};
 

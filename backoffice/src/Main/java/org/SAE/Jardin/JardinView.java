@@ -2,8 +2,6 @@ package org.SAE.Jardin;
 
 import org.SAE.Adresse.Adresse;
 import org.SAE.Main.BaseView;
-import org.SAE.Main.UButton;
-import org.SAE.Panier.Panier;
 import org.SAE.Panier.PanierView;
 import org.SAE.Referent.Referent;
 
@@ -23,7 +21,7 @@ public class JardinView extends BaseView<Jardin>{
 	}
 
 	@Override
-	protected ArrayList<Jardin> GetList() {
+	protected ArrayList<Jardin> getList() {
 		return (ArrayList<Jardin>) Jardin.jardins;
 	}
 
@@ -50,7 +48,7 @@ public class JardinView extends BaseView<Jardin>{
 		JTextField raisonSocialeField = new JTextField();
 		panel.add(new JLabel("Raison Sociale"));
 		panel.add(raisonSocialeField);
-		UButton createButton = new UButton("Create");
+		JButton createButton = new JButton("Créer");
 		createButton.addActionListener(e -> {
 			Jardin jardin = new Jardin(
 				(Referent) referentField.getSelectedItem(),
@@ -93,7 +91,7 @@ public class JardinView extends BaseView<Jardin>{
 		panel.add(new JLabel("Raison Sociale"));
 		panel.add(raisonSocialeField);
 		// panier
-		UButton panierButton = new UButton("Panier");
+		JButton panierButton = new JButton("Panier");
 		panierButton.addActionListener(e -> {
 			clear();
 			topPanel.remove(createButton);
@@ -102,7 +100,7 @@ public class JardinView extends BaseView<Jardin>{
 			refresh();
 		});
 		panel.add(panierButton);
-		UButton updateButton = new UButton("Update");
+		JButton updateButton = new JButton("Modifier");
 		updateButton.addActionListener(e -> {
 			jardin.referent = (Referent) referentField.getSelectedItem();
 			jardin.adresseSiegeSocial = (Adresse) adresseSiegeSocialField.getSelectedItem();

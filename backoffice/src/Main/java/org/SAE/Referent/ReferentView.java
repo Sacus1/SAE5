@@ -1,7 +1,6 @@
 package org.SAE.Referent;
 
 import org.SAE.Main.BaseView;
-import org.SAE.Main.UButton;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +17,7 @@ public class ReferentView extends BaseView<Referent> {
 	}
 
 	@Override
-	protected ArrayList<Referent> GetList() {
+	protected ArrayList<Referent> getList() {
 		return (ArrayList<Referent>) Referent.referents;
 	}
 
@@ -42,13 +41,13 @@ public class ReferentView extends BaseView<Referent> {
 		panel.add(emailLabel);
 		panel.add(emailField);
 		// add a button to create the referent
-		UButton createButton = getCreateButton(nomField, telephoneField, emailField);
+		JButton createButton = getCreateButton(nomField, telephoneField, emailField);
 		panel.add(createButton);
 		return panel;
 	}
 
-	private UButton getCreateButton(JTextField nomField, JTextField telephoneField, JTextField emailField) {
-		UButton createButton = new UButton("Create");
+	private JButton getCreateButton(JTextField nomField, JTextField telephoneField, JTextField emailField) {
+		JButton createButton = new JButton("Créer");
 		createButton.addActionListener(e -> {
 			Referent r = new Referent(nomField.getText(), telephoneField.getText(), emailField.getText());
 			Referent.create(r);
@@ -77,7 +76,7 @@ public class ReferentView extends BaseView<Referent> {
 		panel.add(emailLabel);
 		panel.add(emailField);
 		// add a button to create the referent
-		UButton createButton = new UButton("Modifier");
+		JButton createButton = new JButton("Modifier");
 		createButton.addActionListener(e -> {
 
 			referent.nom = nomField.getText();
