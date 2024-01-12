@@ -92,6 +92,10 @@ public class Jardin extends Base {
 
 	}
 
+	public static Jardin getJardinById(int jardinIdJardin) {
+		return jardins.stream().filter(j -> j.id == jardinIdJardin).findFirst().orElse(null);
+	}
+
 	@Override
 	protected void delete() {
 		SQL sql = Main.sql;

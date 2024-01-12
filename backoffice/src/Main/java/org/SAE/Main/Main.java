@@ -1,6 +1,8 @@
 package org.SAE.Main;
 
 import org.SAE.Abonnement.Abonnement;
+import org.SAE.Adhesion.Adhesion;
+import org.SAE.Adhesion.TypeAdhesion;
 import org.SAE.Adresse.Adresse;
 import org.SAE.Client.Client;
 import org.SAE.Depot.Depot;
@@ -57,7 +59,7 @@ public class Main {
 		// add buttons
 		JButton[] buttons = {new JButton("Depot"), new JButton("Referent"), new JButton("Adresse"),new JButton("Unité"),
 						new JButton("Abonnement"),new JButton("Jardin"),new JButton("Client"),new JButton("Produit"),new JButton(
-										"Tournée"),new JButton("Livraison")};
+										"Tournée"),new JButton("Livraison"),new JButton("Type d'adhésion")};
 		Arrays.sort(buttons, Comparator.comparing(JButton::getText));
 		leftPanel.setLayout(new GridLayout(buttons.length, 1));
 		for (JButton JButton : buttons) {
@@ -120,6 +122,9 @@ public class Main {
 			case "Livraison":
 				mainPanel.add(new org.SAE.Livraison.LivraisonView());
 				break;
+			case "Type d'adhésion":
+				mainPanel.add(new org.SAE.Adhesion.TypeAdhesionView());
+				break;
 			default:
 				break;
 		}
@@ -146,6 +151,8 @@ public class Main {
 		Abonnement.getFromDatabase();
 		Tournee.getFromDatabase();
 		Livraison.getFromDatabase();
+		TypeAdhesion.getFromDatabase();
+		Adhesion.getFromDatabase();
 		if (selectedButton != null)
 			activateButton(selectedButton);
 		else

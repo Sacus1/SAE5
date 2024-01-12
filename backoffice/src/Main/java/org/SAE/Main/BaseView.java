@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 public abstract class BaseView<T extends Base> extends JPanel {
 	public final JButton createButton;
-	static final int SCREEN_WIDTH = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.8);
+	protected static final int SCREEN_WIDTH = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.8);
 	static final int SCREEN_HEIGHT = (int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.8);
 	public static boolean inCreation = false;
 	protected static JPanel mainPanel;

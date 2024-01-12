@@ -116,6 +116,10 @@ public class Client extends Base {
 		getFromDatabase();
 	}
 
+	public static Client getClientById(int clientIdClient) {
+		return clients.stream().filter(c -> c.id == clientIdClient).findFirst().orElse(null);
+	}
+
 
 	public void delete() {
 		if (!Main.sql.deletePrepareStatement(TABLE_NAME, new String[]{"idClient = " + id}))
