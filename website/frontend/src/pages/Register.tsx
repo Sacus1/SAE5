@@ -1,53 +1,62 @@
 import { useState, ChangeEvent } from "react";
 const Register = () => {
   function MySelectComponent() {
+    const [tagInputVal, setTagInputVal] = useState("");
+
     const [selectedValue, setSelectedValue] = useState<string>("male"); // Default value with type string
 
     const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
       setSelectedValue(event.target.value);
     };
 
+    function onChangeTagInput(e: ChangeEvent<HTMLInputElement>) {
+      setTagInputVal(
+        e.target.value.replace(
+          /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/gi,
+          ""
+        )
+      );
+    }
+
     return (
       <form className="row g-3">
         <div className="col-md-4">
-          <label htmlFor="validationDefault01" className="form-label">
-            First name
+          <label htmlFor="nom" className="form-label">
+            Nom
           </label>
           <input
             type="text"
             className="form-control"
-            id="validationDefault01"
+            id="nom"
             required
             maxLength={127}
           />
         </div>
         <div className="col-md-4">
-          <label htmlFor="validationDefault02" className="form-label">
-            Last name
+          <label htmlFor="prenom" className="form-label">
+            Prenom
           </label>
           <input
             type="text"
             className="form-control"
-            id="validationDefault02"
+            id="prenom"
             required
             maxLength={127}
           />
         </div>
         <div className="col-md-4">
-          <label htmlFor="validationDefaultUsername" className="form-label">
-            Username
+          <label htmlFor="mailAdress" className="form-label">
+            Adresse Mail
           </label>
           <div className="input-group">
-            <span className="input-group-text" id="inputGroupPrepend2">
-              @
-            </span>
             <input
               type="text"
               className="form-control"
-              id="validationDefaultUsername"
-              aria-describedby="inputGroupPrepend2"
-              required
+              id="mailAdress"
               pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+              value={tagInputVal}
+              onChange={(e) => onChangeTagInput(e)}
+              required
             />
           </div>
         </div>
