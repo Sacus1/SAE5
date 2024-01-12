@@ -70,7 +70,7 @@ public class LivraisonView extends BaseView<Livraison> {
 	}
 
 	@Override
-	protected JPanel createEditPanel(Livraison object) {
+	protected JPanel createDetailPanel(Livraison object) {
 		return null;
 	}
 

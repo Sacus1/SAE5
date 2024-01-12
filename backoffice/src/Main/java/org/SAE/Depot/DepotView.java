@@ -66,7 +66,7 @@ public class DepotView extends BaseView<Depot> {
 		editButton.addActionListener(e -> {
 			displayView(true);
 			clear();
-			mainPanel.add(createEditPanel(t));
+			mainPanel.add(createDetailPanel(t));
 			refresh();
 		});
 		JButton deleteButton = new JButton("Supprimer");
@@ -142,7 +142,7 @@ public class DepotView extends BaseView<Depot> {
 	 * @return JPanel for editing a depot.
 	 */
 	@Override
-	protected JPanel createEditPanel(Depot depotToEdit) {
+	protected JPanel createDetailPanel(Depot depotToEdit) {
 		DepotFormComponents depotFormComponents = prepareDepotPanelData(depotToEdit);
 		// add fields to the panel
 		populateFields(depotToEdit, depotFormComponents.fieldPanels, depotFormComponents.panel);

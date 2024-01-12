@@ -74,7 +74,7 @@ public class ProduitView extends BaseView<Produit>{
 		return panel;
 	}
 	@Override
-	protected JPanel createEditPanel(Produit produit) {
+	protected JPanel createDetailPanel(Produit produit) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(5, 2));
 		// nom

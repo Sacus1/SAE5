@@ -27,7 +27,7 @@ public class TourneeView extends BaseView<Tournee> {
 		editButton.addActionListener(e -> {
 			displayView(true);
 			clear();
-			mainPanel.add(createEditPanel(t));
+			mainPanel.add(createDetailPanel(t));
 			refresh();
 		});
 		JButton deleteButton = new JButton("Supprimer");
@@ -62,7 +62,7 @@ public class TourneeView extends BaseView<Tournee> {
 
 
 	@Override
-	protected JPanel createEditPanel(Tournee tournee) {
+	protected JPanel createDetailPanel(Tournee tournee) {
 		return getPanel(tournee);
 	}
 

@@ -87,7 +87,7 @@ public class AbonnementView extends BaseView<Abonnement> {
 		return panel;
 	}
 	@Override
-	protected JPanel createEditPanel(Abonnement abonnement) {
+	protected JPanel createDetailPanel(Abonnement abonnement) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(0, 2));
 		JComboBox<Client> clientComboBox = new JComboBox<>();

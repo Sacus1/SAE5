@@ -36,7 +36,7 @@ public class PanierView extends BaseView<Panier> {
 		editButton.addActionListener(e -> {
 			displayView(true);
 			clear();
-			mainPanel.add(createEditPanel(panier));
+			mainPanel.add(createDetailPanel(panier));
 			refresh();
 		});
 		JButton deleteButton = new JButton("Supprimer");
@@ -122,7 +122,7 @@ public class PanierView extends BaseView<Panier> {
 	 * @param panier The Panier object to be edited.
 	 * @return A JPanel with the form for editing the Panier.
 	 */
-	public JPanel createEditPanel(Panier panier) {
+	public JPanel createDetailPanel(Panier panier) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(0, 2));
 		JTextField nomField = new JTextField();

@@ -57,7 +57,7 @@ public class ReferentView extends BaseView<Referent> {
 	}
 
 	@Override
-	protected JPanel createEditPanel(Referent referent) {
+	protected JPanel createDetailPanel(Referent referent) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(2, 2));
 		// create text fields

@@ -65,7 +65,7 @@ public class JardinView extends BaseView<Jardin>{
 	}
 
 	@Override
-	public JPanel createEditPanel(Jardin jardin) {
+	public JPanel createDetailPanel(Jardin jardin) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(0, 2));
 		// create the form

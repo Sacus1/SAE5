@@ -128,7 +128,7 @@ public class ClientView extends BaseView<Client> {
 
 
 	@Override
-	protected JPanel createEditPanel(Client client) {
+	protected JPanel createDetailPanel(Client client) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(0, 2));
 		JComboBox<Adresse> adresseComboBox = new JComboBox<>();

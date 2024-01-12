@@ -132,7 +132,7 @@ public abstract class BaseView<T extends Base> extends JPanel {
 		editButton.addActionListener(e -> {
 			displayView(true);
 			clear();
-			mainPanel.add(createEditPanel(t));
+			mainPanel.add(createDetailPanel(t));
 			refresh();
 		});
 		JButton deleteButton = new JButton("Supprimer");
@@ -164,7 +164,7 @@ public abstract class BaseView<T extends Base> extends JPanel {
 
 	protected abstract JPanel createFormPanel();
 
-	protected abstract JPanel createEditPanel(T object);
+	protected abstract JPanel createDetailPanel(T object);
 
 
 }
