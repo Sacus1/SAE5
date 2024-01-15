@@ -146,7 +146,7 @@ public class DepotView extends BaseView<Depot> {
 		DepotFormComponents depotFormComponents = prepareDepotPanelData(depotToEdit);
 		// add fields to the panel
 		populateFields(depotToEdit, depotFormComponents.fieldPanels, depotFormComponents.panel);
-		depotFormComponents.panel.setLayout(new GridLayout(depotFormComponents.fieldPanels.length / 2 + 1, 2));
+		depotFormComponents.panel.setLayout(new GridLayout(depotFormComponents.fieldPanels.length / 2 + 2, 2));
 		// Periode non disponible
 		depotFormComponents.panel.add(new Label("Periode non disponible"));
 		// liste des periodes non livrables
@@ -270,7 +270,7 @@ public class DepotView extends BaseView<Depot> {
 		// livraison
 		ArrayList<JourSemaine> joursLivraisons = createDeliveryDaysPanel(panel, depotToEdit);
 		// add image chooser
-		AtomicReference<File> image = createImageChooserPanel(panel);
+		AtomicReference<File> image = createImageChooserPanel(panel,depotToEdit);
 		return new DepotFormComponents(panel, addressChoice, referentChoice, fieldPanels, joursLivraisons, image);
 	}
 
@@ -304,22 +304,37 @@ public class DepotView extends BaseView<Depot> {
 	 * @param parentPanel The panel to which the image chooser is added.
 	 * @return An AtomicReference<File> containing the selected image file.
 	 */
-	private AtomicReference<File> createImageChooserPanel(JPanel parentPanel) {
+	private AtomicReference<File> createImageChooserPanel(JPanel parentPanel,Depot d) {
 		JPanel imagePanel = new JPanel();
 		imagePanel.setLayout(new GridLayout(1, 2));
 		imagePanel.add(new Label("Image"));
-		JButton imageButton = new JButton("Select");
+		JButton imageButton = null;
+		if (d != null && d.image != null && d.image.exists()) {
+			// copy and resize image
+			Image image = new ImageIcon(d.image.getAbsolutePath()).getImage();
+			Image newImage = image.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+			ImageIcon imageIcon = new ImageIcon(newImage);
+			imageButton = new JButton(imageIcon);
+		} else {
+			imageButton = new JButton("Select");
+		}
 		AtomicReference<File> image = new AtomicReference<>();
+		JButton finalImageButton = imageButton;
 		imageButton.addActionListener(e -> {
 			JFileChooser fileChooser = new JFileChooser();
 			fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
 			int result = fileChooser.showOpenDialog(this);
-			if (result == JFileChooser.APPROVE_OPTION) image.set(fileChooser.getSelectedFile());
+			if (result == JFileChooser.APPROVE_OPTION) {
+				image.set(fileChooser.getSelectedFile());
+				Image imager = new ImageIcon(fileChooser.getSelectedFile().getAbsolutePath()).getImage();
+				Image newImage = imager.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+				ImageIcon imageIcon = new ImageIcon(newImage);
+				finalImageButton.setIcon(imageIcon);
+			}
 		});
 		imagePanel.add(imageButton);
 		parentPanel.add(imagePanel);
 		return image;
-
 	}
 
 	/**

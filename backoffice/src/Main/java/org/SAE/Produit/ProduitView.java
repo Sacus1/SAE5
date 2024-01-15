@@ -1,4 +1,5 @@
 package org.SAE.Produit;
+
 import org.SAE.Main.BaseView;
 import org.SAE.Unite.Unite;
 
@@ -44,17 +45,7 @@ public class ProduitView extends BaseView<Produit>{
 		panel.add(new JLabel("Unite"));
 		panel.add(uniteChoice);
 		// image choice
-		JButton imageButton = new JButton("Choose image");
-		AtomicReference<File> image = new AtomicReference<>();
-		imageButton.addActionListener(e -> {
-			JFileChooser fileChooser = new JFileChooser();
-			fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-			int result = fileChooser.showOpenDialog(this);
-			if (result == JFileChooser.APPROVE_OPTION) {
-				image.set(fileChooser.getSelectedFile());
-			}
-		});
-		panel.add(imageButton);
+		AtomicReference<File> image = createImageChooserPanel(panel, null);
 		// create a button to create the produit
 		JButton createButton = new JButton("Créer");
 		createButton.addActionListener(e -> {
@@ -96,16 +87,7 @@ public class ProduitView extends BaseView<Produit>{
 		uniteChoice.select(unite.toString());
 		panel.add(uniteChoice);
 		// image choice
-		JButton imageButton = new JButton("Choose image");
-		AtomicReference<File> image = new AtomicReference<>();
-		imageButton.addActionListener(e -> {
-			JFileChooser fileChooser = new JFileChooser();
-			fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-			int result = fileChooser.showOpenDialog(this);
-			if (result == JFileChooser.APPROVE_OPTION) {
-				image.set(fileChooser.getSelectedFile());
-			}
-		});
+		AtomicReference<File> image = createImageChooserPanel(panel, produit);
 		// create button
 		JButton updateButton = new JButton("Modifier");
 		updateButton.addActionListener(e -> {
@@ -118,5 +100,34 @@ public class ProduitView extends BaseView<Produit>{
 		});
 		panel.add(updateButton);
 		return panel;
+	}
+	private AtomicReference<File> createImageChooserPanel(JPanel parentPanel, Produit p) {
+		parentPanel.add(new Label("Image"));
+		JButton imageButton = null;
+		if (p != null && p.image != null && p.image.exists()) {
+			// copy and resize image
+			Image image = new ImageIcon(p.image.getAbsolutePath()).getImage();
+			Image newImage = image.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+			ImageIcon imageIcon = new ImageIcon(newImage);
+			imageButton = new JButton(imageIcon);
+		} else {
+			imageButton = new JButton("Select");
+		}
+		AtomicReference<File> image = new AtomicReference<>();
+		JButton finalImageButton = imageButton;
+		imageButton.addActionListener(e -> {
+			JFileChooser fileChooser = new JFileChooser();
+			fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+			int result = fileChooser.showOpenDialog(this);
+			if (result == JFileChooser.APPROVE_OPTION) {
+				image.set(fileChooser.getSelectedFile());
+				Image imager = new ImageIcon(fileChooser.getSelectedFile().getAbsolutePath()).getImage();
+				Image newImage = imager.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+				ImageIcon imageIcon = new ImageIcon(newImage);
+				finalImageButton.setIcon(imageIcon);
+			}
+		});
+		parentPanel.add(imageButton);
+		return image;
 	}
 }

@@ -60,21 +60,34 @@ public class PanierView extends BaseView<Panier> {
  * @param parentPanel The panel to which the image chooser is added.
  * @return An AtomicReference<File> containing the selected image file.
  */
-	private AtomicReference<File> createImageChooserPanel(JPanel parentPanel) {
-	 JPanel img = new JPanel();
-	 img.setLayout(new GridLayout(1, 2));
-	 img.add(new Label("Image"));
-	 JButton imageButton = new JButton("Select");
-	 AtomicReference<File> image = new AtomicReference<>();
-	 imageButton.addActionListener(e -> {
-	  JFileChooser fileChooser = new JFileChooser();
-	  fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-	  int result = fileChooser.showOpenDialog(this);
-	  if (result == JFileChooser.APPROVE_OPTION) image.set(fileChooser.getSelectedFile());
-	 });
-	 parentPanel.add(img);
-	 parentPanel.add(imageButton);
-	 return image;
+	private AtomicReference<File> createImageChooserPanel(JPanel parentPanel, Panier p) {
+		parentPanel.add(new Label("Image"));
+		JButton imageButton = null;
+		if (p != null && p.image != null && p.image.exists()) {
+			// copy and resize image
+			Image image = new ImageIcon(p.image.getAbsolutePath()).getImage();
+			Image newImage = image.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+			ImageIcon imageIcon = new ImageIcon(newImage);
+			imageButton = new JButton(imageIcon);
+		} else {
+			imageButton = new JButton("Select");
+		}
+		AtomicReference<File> image = new AtomicReference<>();
+		JButton finalImageButton = imageButton;
+		imageButton.addActionListener(e -> {
+			JFileChooser fileChooser = new JFileChooser();
+			fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+			int result = fileChooser.showOpenDialog(this);
+			if (result == JFileChooser.APPROVE_OPTION) {
+				image.set(fileChooser.getSelectedFile());
+				Image imager = new ImageIcon(fileChooser.getSelectedFile().getAbsolutePath()).getImage();
+				Image newImage = imager.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+				ImageIcon imageIcon = new ImageIcon(newImage);
+				finalImageButton.setIcon(imageIcon);
+			}
+		});
+		parentPanel.add(imageButton);;
+		return image;
 	}
 
 	/**
@@ -93,7 +106,7 @@ public class PanierView extends BaseView<Panier> {
 		panel.add(nomField);
 		panel.add(new JLabel("Prix *"));
 		panel.add(prixField);
-		AtomicReference<File> image = createImageChooserPanel( panel);
+		AtomicReference<File> image = createImageChooserPanel( panel, null);
 		JButton submitButton = new JButton("Modifier");
 		panel.add(submitButton);
 		submitButton.addActionListener(e -> {
@@ -133,7 +146,7 @@ public class PanierView extends BaseView<Panier> {
 		panel.add(nomField);
 		panel.add(new JLabel("Prix *"));
 		panel.add(prixField);
-		AtomicReference<File> image = createImageChooserPanel( panel);
+		AtomicReference<File> image = createImageChooserPanel( panel, panier);
 		// produit
 		JButton addProduitButton = new JButton("Add Produit");
 		// list of produits in scrollable panel
