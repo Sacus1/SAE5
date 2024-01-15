@@ -95,6 +95,10 @@ public class DepotView extends BaseView<Depot> {
 	 */
 	@Override
 	protected JPanel createFormPanel() {
+		if (Adresse.adresses.isEmpty() || Referent.referents.isEmpty()) {
+			Logger.error("Veuillez créer une adresse et un referent avant de créer un depot");
+			return null;
+		}
 		DepotFormComponents depotFormComponents = prepareDepotPanelData(null);
 		for (int i = 0; i < Depot.fields.length; i++) {
 			depotFormComponents.fieldPanels[i] = createFieldPanel(Depot.fields[i],

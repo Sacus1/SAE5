@@ -1,6 +1,7 @@
 package org.SAE.Produit;
 
 import org.SAE.Main.BaseView;
+import org.SAE.Main.Logger;
 import org.SAE.Unite.Unite;
 
 import javax.swing.*;
@@ -28,7 +29,7 @@ public class ProduitView extends BaseView<Produit>{
 	@Override
 	protected JPanel createFormPanel() {
 		if (Unite.unites.isEmpty()) {
-			JOptionPane.showMessageDialog(this, "Veuillez créer une unité avant de créer un produit");
+			Logger.error( "Veuillez créer une unité avant de créer un produit");
 			return null;
 		}
 		JPanel panel = new JPanel();

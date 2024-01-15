@@ -33,6 +33,14 @@ public class AdhesionView extends BaseView<Adhesion> {
 
 	@Override
 	protected JPanel createFormPanel() {
+		if (Jardin.jardins.isEmpty()) {
+			org.SAE.Main.Logger.error("Veuillez créer un jardin avant de créer une adhésion");
+			return null;
+		}
+		if (TypeAdhesion.typeAdhesions.isEmpty()) {
+			org.SAE.Main.Logger.error("Veuillez créer un type d'adhésion avant de créer une adhésion");
+			return null;
+		}
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(0, 2));
 		JComboBox<TypeAdhesion> typeAdhesionComboBox = new JComboBox<>();

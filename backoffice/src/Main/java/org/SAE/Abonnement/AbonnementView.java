@@ -31,6 +31,10 @@ public class AbonnementView extends BaseView<Abonnement> {
 
 	@Override
 	protected JPanel createFormPanel() {
+		if (Client.clients.isEmpty() || Panier.paniers.isEmpty()) {
+			org.SAE.Main.Logger.error("Veuillez créer un client et un panier avant de créer un abonnement");
+			return null;
+		}
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(0, 2));
 		JComboBox<Client> clientComboBox = new JComboBox<>();
