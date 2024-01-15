@@ -100,6 +100,7 @@ public class Jardin extends Base {
 	protected void delete() {
 		SQL sql = Main.sql;
 		try {
+			sql.deletePrepareStatement(Panier.TABLE_NAME, new String[]{"Jardin_idJardin = " + id});
 			sql.deletePrepareStatement(TABLE_NAME, new String[]{"idJardin = " + id});
 		} catch (Exception e) {
 			Logger.error("Error while deleting Jardin: " + e.getMessage());
