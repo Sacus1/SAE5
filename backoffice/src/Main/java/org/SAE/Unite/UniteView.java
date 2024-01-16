@@ -23,7 +23,7 @@ public class UniteView extends BaseView<Unite> {
 	}
 
 	@Override
-	protected JPanel createEditPanel(Unite unite) {
+	protected JPanel createDetailPanel(Unite unite) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(1, 2));
 		// nom

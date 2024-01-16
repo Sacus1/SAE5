@@ -92,10 +92,15 @@ public class Jardin extends Base {
 
 	}
 
+	public static Jardin getJardinById(int jardinIdJardin) {
+		return jardins.stream().filter(j -> j.id == jardinIdJardin).findFirst().orElse(null);
+	}
+
 	@Override
 	protected void delete() {
 		SQL sql = Main.sql;
 		try {
+			sql.deletePrepareStatement(Panier.TABLE_NAME, new String[]{"Jardin_idJardin = " + id});
 			sql.deletePrepareStatement(TABLE_NAME, new String[]{"idJardin = " + id});
 		} catch (Exception e) {
 			Logger.error("Error while deleting Jardin: " + e.getMessage());

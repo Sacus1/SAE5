@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 public abstract class BaseView<T extends Base> extends JPanel {
 	public final JButton createButton;
-	static final int SCREEN_WIDTH = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.8);
+	protected static final int SCREEN_WIDTH = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.8);
 	static final int SCREEN_HEIGHT = (int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.8);
 	public static boolean inCreation = false;
 	protected static JPanel mainPanel;
@@ -29,6 +29,10 @@ public abstract class BaseView<T extends Base> extends JPanel {
 		setLayout(new BorderLayout());
 		initializePanels();
 		setupCreateButton();
+		searchBar = new JTextField();
+		searchBar.setMaximumSize(new Dimension(1000, 30));
+		searchBar.setPreferredSize(new Dimension(800, 30));
+		searchBar.addActionListener(e -> search());
 	}
 
 	/**
@@ -36,6 +40,7 @@ public abstract class BaseView<T extends Base> extends JPanel {
 	 */
 	private static void initializePanels() {
 		topPanel = new JPanel();
+		topPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		bottomPanel = new JPanel();
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -73,18 +78,12 @@ public abstract class BaseView<T extends Base> extends JPanel {
 			inCreation = true;
 			return;
 		}
-		clear();
-		// search bar
-		searchBar = new JTextField();
-		searchBar.setMaximumSize(new Dimension(1000, 30));
-		searchBar.setPreferredSize(new Dimension(1000, 30));
-		searchBar.addActionListener(e -> search());
 		topPanel.add(searchBar);
 		searchBar.setText("");
 		search();
-		refresh();
 		createButton.setText("Créer " + name);
 		inCreation = false;
+		refresh();
 	}
 
 	private void search() {
@@ -133,7 +132,7 @@ public abstract class BaseView<T extends Base> extends JPanel {
 		editButton.addActionListener(e -> {
 			displayView(true);
 			clear();
-			mainPanel.add(createEditPanel(t));
+			mainPanel.add(createDetailPanel(t));
 			refresh();
 		});
 		JButton deleteButton = new JButton("Supprimer");
@@ -165,7 +164,7 @@ public abstract class BaseView<T extends Base> extends JPanel {
 
 	protected abstract JPanel createFormPanel();
 
-	protected abstract JPanel createEditPanel(T object);
+	protected abstract JPanel createDetailPanel(T object);
 
 
 }

@@ -27,6 +27,10 @@ public class JardinView extends BaseView<Jardin>{
 
 	@Override
 	public JPanel createFormPanel() {
+		if (Referent.referents.isEmpty() || Adresse.adresses.isEmpty()) {
+			org.SAE.Main.Logger.error("Veuillez créer un referent et une adresse avant de créer un jardin");
+			return null;
+		}
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(0, 2));
 		// create the form
@@ -65,7 +69,7 @@ public class JardinView extends BaseView<Jardin>{
 	}
 
 	@Override
-	public JPanel createEditPanel(Jardin jardin) {
+	public JPanel createDetailPanel(Jardin jardin) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(0, 2));
 		// create the form

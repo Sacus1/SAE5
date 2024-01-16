@@ -1,5 +1,6 @@
 package org.SAE.Client;
 
+import org.SAE.Adhesion.AdhesionView;
 import org.SAE.Adresse.Adresse;
 import org.SAE.Main.BaseView;
 import org.jdatepicker.impl.JDatePanelImpl;
@@ -75,9 +76,6 @@ public class ClientView extends BaseView<Client> {
 		panel.add(datePicker);
 		panel.add(new JLabel("Est dispensé"));
 		panel.add(estDispenseCheckBox);
-		JButton cancelJButton = new JButton("Cancel");
-		panel.add(cancelJButton);
-		cancelJButton.addActionListener(e -> displayView(false));
 		JButton createJButton = new JButton("Créer");
 		panel.add(createJButton);
 		createJButton.addActionListener(e -> {
@@ -128,7 +126,7 @@ public class ClientView extends BaseView<Client> {
 
 
 	@Override
-	protected JPanel createEditPanel(Client client) {
+	protected JPanel createDetailPanel(Client client) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(0, 2));
 		JComboBox<Adresse> adresseComboBox = new JComboBox<>();
@@ -186,9 +184,17 @@ public class ClientView extends BaseView<Client> {
 		professionField.setText(client.profession);
 		model.setValue(client.dateNaissance);
 		estDispenseCheckBox.setSelected(client.estDispense);
-		JButton cancelJButton = new JButton("Cancel");
-		panel.add(cancelJButton);
-		cancelJButton.addActionListener(e -> displayView(false));
+		// Adhesion list
+		// panier
+		JButton adhesionButton = new JButton("Adhesion");
+		adhesionButton.addActionListener(e -> {
+			clear();
+			topPanel.remove(createButton);
+			topPanel.add(new JLabel("Adhesion de " + client.raisonSociale), "West");
+			mainPanel.add(new AdhesionView(client));
+			refresh();
+		});
+		panel.add(adhesionButton);
 		JButton createJButton = new JButton("Modifier");
 		panel.add(createJButton);
 		createJButton.addActionListener(e -> {

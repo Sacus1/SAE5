@@ -74,7 +74,7 @@ public class AdresseView extends BaseView<Adresse> {
 	 * @return A JPanel with the form for editing the Adresse.
 	 */
 	@Override
-	protected JPanel createEditPanel(Adresse adresse) {
+	protected JPanel createDetailPanel(Adresse adresse) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(4, 2));
 		JTextField adresseField = new JTextField(adresse.rue);

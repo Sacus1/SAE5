@@ -29,28 +29,28 @@ public class LivraisonView extends BaseView<Livraison> {
 		// buttons to change etat
 		JButton button = new JButton("En cours");
 		button.addActionListener(e -> {
-			l.etat = "En cours";
+			l.etat = Etat.EN_COURS;
 			Livraison.update(l);
 			displayView(false);
 		});
 		panelButton.add(button);
 		button = new JButton("Livré");
 		button.addActionListener(e -> {
-			l.etat = "Livré";
+			l.etat = Etat.LIVRE;
 			Livraison.update(l);
 			displayView(false);
 		});
 		panelButton.add(button);
 		button = new JButton("Annulé");
 		button.addActionListener(e -> {
-			l.etat = "Annulé";
+			l.etat = Etat.ANNULE;
 			Livraison.update(l);
 			displayView(false);
 		});
 		panelButton.add(button);
 		button = new JButton("En attente");
 		button.addActionListener(e -> {
-			l.etat = "En attente";
+			l.etat = Etat.EN_ATTENTE;
 			Livraison.update(l);
 			displayView(false);
 		});
@@ -70,7 +70,7 @@ public class LivraisonView extends BaseView<Livraison> {
 	}
 
 	@Override
-	protected JPanel createEditPanel(Livraison object) {
+	protected JPanel createDetailPanel(Livraison object) {
 		return null;
 	}
 

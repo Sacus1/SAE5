@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 public class Panier extends Base {
-	static final String TABLE_NAME = "Panier";
+	public static final String TABLE_NAME = "Panier";
 	static final String[] fields = {"Nom", "Prix", "Image", "Jardin"};
 	static final String[] dbFields = {"nom", "prix", "image", "Jardin_idJardin"};
 	static final ArrayList<String> requiredFieldsList = new ArrayList<>(Arrays.asList("Nom", "Prix", "Jardin"));

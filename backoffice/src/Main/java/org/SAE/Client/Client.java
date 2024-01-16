@@ -9,15 +9,12 @@ import org.SAE.Main.SQL;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Client extends Base {
 	static final String TABLE_NAME = "Client";
 	static final String[] dbFields = {"Adresse_idAdresse", "raisonSociale", "civilite", "nom", "prenom", "telephone"
 					, "telephone2", "telephone3", "mail", "profession", "dateNaissance", "estDispense"};
-	static final ArrayList<String> requiredFieldsList = new ArrayList<>(Arrays.asList("civilite", "nom", "prenom",
-					"adresseIdAdresse", "telephone", "mail"));
 	public final int id;
 	public Adresse adresse;
 	String raisonSociale;
@@ -117,6 +114,10 @@ public class Client extends Base {
 										client.profession, client.dateNaissance, client.estDispense}))
 			Logger.error("Can't create client");
 		getFromDatabase();
+	}
+
+	public static Client getClientById(int clientIdClient) {
+		return clients.stream().filter(c -> c.id == clientIdClient).findFirst().orElse(null);
 	}
 
 
