@@ -102,10 +102,17 @@ import VirtualScroller from 'primevue/virtualscroller';
 
 import BlockViewer from '@/components/BlockViewer.vue';
 
+import { Buffer } from 'buffer';
+import { createPinia } from 'pinia';
+
 import '@/assets/styles.scss';
 
 const app = createApp(App);
 
+globalThis.Buffer = Buffer;
+const pinia = createPinia();
+
+app.use(pinia);
 app.use(router);
 app.use(PrimeVue, { ripple: true });
 app.use(ToastService);

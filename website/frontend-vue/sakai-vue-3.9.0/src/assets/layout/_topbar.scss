@@ -24,6 +24,7 @@
         img {
             height: 2.5rem;
             margin-right: .5rem;
+            margin-left: 3rem;
         }
 
         &:focus {
@@ -38,7 +39,7 @@
         position: relative;
         color: var(--text-color-secondary);
         border-radius: 50%;
-        width: 3rem;
+        width: rem;
         height: 3rem;
         cursor: pointer;
         transition: background-color $transitionDuration;

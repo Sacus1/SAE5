@@ -2,12 +2,22 @@
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { useLayout } from '@/layout/composables/layout';
 import { useRouter } from 'vue-router';
+import { useAuth } from '@/service/auth';
+import { useProfileImageStore } from '@/stores/profileImage'
+import { storeToRefs } from 'pinia'
+
 
 const { layoutConfig, onMenuToggle } = useLayout();
+
+const { logout } = useAuth();
+
 
 const outsideClickListener = ref(null);
 const topbarMenuActive = ref(false);
 const router = useRouter();
+const profileImageStore = useProfileImageStore();
+const {profileImage} = storeToRefs(profileImageStore);
+const token = localStorage.getItem('token') || null;
 
 onMounted(() => {
     bindOutsideClickListener();
@@ -16,23 +26,26 @@ onMounted(() => {
 onBeforeUnmount(() => {
     unbindOutsideClickListener();
 });
+const disconnect = () =>{
+    logout();
+    router.push('/login');
+}
 
-const logoUrl = computed(() => {
-    return `layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
-});
 
 const onTopBarMenuButton = () => {
     topbarMenuActive.value = !topbarMenuActive.value;
 };
-const onSettingsClick = () => {
-    topbarMenuActive.value = false;
-    router.push('/documentation');
-};
+
+const onProfileclick = () => {
+    onTopBarMenuButton();
+    router.push('/profil');
+}
 const topbarMenuClasses = computed(() => {
     return {
         'layout-topbar-menu-mobile-active': topbarMenuActive.value
     };
 });
+
 
 const bindOutsideClickListener = () => {
     if (!outsideClickListener.value) {
@@ -62,33 +75,30 @@ const isOutsideClicked = (event) => {
 
 <template>
     <div class="layout-topbar">
-        <router-link to="/" class="layout-topbar-logo">
-            <img :src="logoUrl" alt="logo" />
-            <span>SAKAI</span>
-        </router-link>
-
+        
         <button class="p-link layout-menu-button layout-topbar-button" @click="onMenuToggle()">
             <i class="pi pi-bars"></i>
         </button>
 
+        <router-link to="/" class="layout-topbar-logo">
+            <img src="/logo-arrosoir-cocagne-vert.svg" alt="logo" />
+            <span>Jardins de Cocagne</span>
+        </router-link>
+        
+
         <button class="p-link layout-topbar-menu-button layout-topbar-button" @click="onTopBarMenuButton()">
             <i class="pi pi-ellipsis-v"></i>
         </button>
-
+        
         <div class="layout-topbar-menu" :class="topbarMenuClasses">
-            <button @click="onTopBarMenuButton()" class="p-link layout-topbar-button">
-                <i class="pi pi-calendar"></i>
-                <span>Calendar</span>
-            </button>
-            <button @click="onTopBarMenuButton()" class="p-link layout-topbar-button">
-                <i class="pi pi-user"></i>
+            <Button v-if="token" label="Se Déconnecter" severity="danger" class="w-full p-3 text-xl" @click="disconnect"></Button>
+
+            <button @click="onProfileclick()" class="p-link layout-topbar-button">
+                <Avatar :image="profileImage" size="large" shape="circle"></Avatar>
                 <span>Profile</span>
             </button>
-            <button @click="onSettingsClick()" class="p-link layout-topbar-button">
-                <i class="pi pi-cog"></i>
-                <span>Settings</span>
-            </button>
         </div>
+        
     </div>
 </template>
 

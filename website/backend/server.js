@@ -14,9 +14,17 @@ app.use(express.urlencoded({ extended: false })); // Parse URL-encoded
 
 app.use(express.static("public"));
 
-const userRouter = require("./routes/login");
+const loginRouter = require("./routes/login");
 
-app.use("/login", userRouter);
+app.use("/login", loginRouter);
+
+const registerRouter = require("./routes/register");
+
+app.use("/register", registerRouter);
+
+const profileRouter = require("./routes/profil");
+
+app.use("/profil", profileRouter);
 
 const PORT = 3001;
 app.listen(PORT, () => {

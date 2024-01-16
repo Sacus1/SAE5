@@ -1,5 +1,5 @@
 import { ref } from 'vue';
-import { loginRequest } from '@/api/authAPI';
+import { loginRequest, registerRequest, getClientData } from '@/api/authAPI';
 
 const token = ref(localStorage.getItem('token') || null);
 
@@ -15,7 +15,6 @@ export const useAuth = () => {
             token.value = response.data.token;
             localStorage.setItem('token', token.value);
             // You might want to store user information in localStorage as well.
-            // localStorage.setItem('user', JSON.stringify(response.data.user));
             return response;
         } catch (error) {
             console.error('Login failed:', error);
@@ -26,11 +25,51 @@ export const useAuth = () => {
     const logout = () => {
         token.value = null;
         localStorage.removeItem('token');
+
         // Clear other stored user information if needed.
-        // localStorage.removeItem('user');
+    };
+
+    const register = async ({ email, password, nom, prenom, telephone, telephone2, telephone3, dateNaissance, profession, adresse, ville, codePostal, civilite }) => {
+        try {
+            const payload = {
+                email: email,
+                password: password,
+                nom: nom,
+                prenom: prenom,
+                telephone: telephone,
+                telephone2: telephone2,
+                telephone3: telephone3,
+                dateNaissance: dateNaissance,
+                profession: profession,
+                adresse: adresse,
+                ville: ville,
+                codePostal: codePostal,
+                civilite: civilite
+            };
+
+            const response = await registerRequest(payload);
+            token.value = response.data.token;
+            localStorage.setItem('token', token.value);
+            // You might want to store user information in localStorage as well.
+            return response;
+        } catch (error) {
+            console.error('Registration failed:', error);
+            throw error;
+        }
+    };
+
+    const fetchClientData = async () => {
+        try {
+            const clientData = await getClientData();
+            // Use the clientData to set placeholders or perform other actions
+            return clientData;
+        } catch (error) {
+            console.error('Failed to fetch client data:', error);
+            throw error;
+        }
     };
 
     const getAccessToken = () => token.value;
 
-    return { login, logout, getAccessToken };
+    return { login, logout, getAccessToken, register, fetchClientData };
 };

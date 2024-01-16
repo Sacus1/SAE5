@@ -1,9 +1,10 @@
 <script setup>
 import { useAuth } from '@/service/auth';
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const { login } = useAuth();
-
 const email = ref('');
 const password = ref('');
 
@@ -11,12 +12,16 @@ const handleLogin = async () => {
   try {
     await login(email.value, password.value);
     // Optionally, you can navigate to another route upon successful login.
-    // router.push('/dashboard');
+    router.push('/');
   } catch (error) {
     // Handle login error, e.g., show an error message.
     console.error('Login failed:', error);
   }
 };
+
+const redirectToRegister = () => {
+    router.push('/register');
+}
 
 </script>
 
@@ -41,7 +46,10 @@ const handleLogin = async () => {
                             
                             <a class="font-medium no-underline ml-2 text-right cursor-pointer" style="color: var(--primary-color)">Forgot password?</a>
                         </div>
-                        <Button label="Sign In" class="w-full p-3 text-xl" @click="handleLogin"></Button>
+                        <div class="flex align-items-center justify-content-between mb-5 gap-5">
+                            <Button label="Sign In" class="w-full p-3 text-xl" @click="handleLogin"></Button>
+                            <Button label="Register" class="w-full p-3 text-xl" @click="redirectToRegister"></Button>
+                        </div>
                     </div>
                 </div>
             </div>
