@@ -21,7 +21,7 @@ router.route("/").post((req, res) => {
     civilite,
   } = req.body;
   if (!dateNaissance) {
-    res.status(500).send("Date de naissance incorrecte");
+    res.status(400).send("Date de naissance incorrecte");
   } else {
     const formattedDateNaissance = new Date(dateNaissance)
       .toISOString()
