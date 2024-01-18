@@ -3,6 +3,30 @@ const router = express.Router();
 const connection = require("../database/database");
 const { DateTime } = require("luxon");
 
+/**
+ * @swagger
+ * /:
+ *   post:
+ *     summary: Fetch client data using a token
+ *     description: This route fetches client data using a token. It first checks if the token is valid. If it is, it fetches the client data from the database and sends it as a response.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               token:
+ *                 type: string
+ *                 description: The client's token.
+ *     responses:
+ *       200:
+ *         description: The client data was fetched successfully.
+ *       401:
+ *         description: Invalid token.
+ *       500:
+ *         description: There was an error executing the query.
+ */
 router.route("/").post((req, res) => {
   const { token } = req.body;
 
@@ -54,6 +78,33 @@ router.route("/").post((req, res) => {
   });
 });
 
+/**
+ * @swagger
+ * /:
+ *   put:
+ *     summary: Update client data using a token
+ *     description: This route updates client data using a token. It first checks if the token is valid. If it is, it updates the client data in the database and sends a success message as a response.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               token:
+ *                 type: string
+ *                 description: The client's token.
+ *               clientData:
+ *                 type: object
+ *                 description: The new client data.
+ *     responses:
+ *       200:
+ *         description: The client data was updated successfully.
+ *       401:
+ *         description: Invalid token.
+ *       500:
+ *         description: There was an error executing the query.
+ */
 router.route("/").put(async (req, res) => {
   const { token, clientData } = req.body;
   const {
