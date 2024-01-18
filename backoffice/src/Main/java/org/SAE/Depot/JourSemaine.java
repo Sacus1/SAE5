@@ -7,5 +7,19 @@ public enum JourSemaine {
     Jeudi,
     Vendredi,
     Samedi,
-    Dimanche
+    Dimanche;
+
+
+    static JourSemaine dayOfWeek(String string) {
+	    return switch (string) {
+		    case "MONDAY" -> Lundi;
+		    case "TUESDAY" -> Mardi;
+		    case "WEDNESDAY" -> Mercredi;
+		    case "THURSDAY" -> Jeudi;
+		    case "FRIDAY" -> Vendredi;
+		    case "SATURDAY" -> Samedi;
+		    case "SUNDAY" -> Dimanche;
+		    default -> null;
+	    };
+    }
 }

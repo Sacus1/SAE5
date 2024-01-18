@@ -15,8 +15,9 @@ import java.awt.*;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Properties;
+import java.time.LocalDate;
+import java.time.temporal.IsoFields;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -77,9 +78,7 @@ public class DepotView extends BaseView<Depot> {
 			displayView(false);
 		});
 		archiveButton.addActionListener(e -> {
-			t.isArchived = !t.isArchived;
-			Depot.update(t);
-			Depot.getFromDatabase();
+			t.archive();
 			displayView(false);
 		});
 
@@ -88,6 +87,7 @@ public class DepotView extends BaseView<Depot> {
 		panel.add(archiveButton);
 		return panel;
 	}
+
 	/**
 	 * Creates and returns a panel for creating a new depot.
 	 *
@@ -112,7 +112,6 @@ public class DepotView extends BaseView<Depot> {
 		depotFormComponents.panel.add(createButton);
 		return depotFormComponents.panel();
 	}
-
 
 
 	/**
@@ -184,9 +183,53 @@ public class DepotView extends BaseView<Depot> {
 			}
 		}
 		periodesNonLivrables.add(addPeriode);
+		// add calendar button
+		JButton calendarButton = new JButton("Calendrier");
+		calendarButton.addActionListener(e -> {
+			displayView(true);
+			clear();
+			Object[][] data = fillData(depotToEdit);
+			mainPanel.add(new Calendrier(data, depotToEdit.nom));
+			refresh();
+		});
+		depotFormComponents.panel.add(calendarButton);
 		JButton createButton = getEditButton(depotToEdit, depotFormComponents);
 		depotFormComponents.panel().add(createButton);
 		return depotFormComponents.panel();
+	}
+
+	private Object[][]  fillData(Depot depotToEdit) {
+		Object[][] data = new Object[31][12];
+		int year = new Date(System.currentTimeMillis()).getYear() + 1900;
+		Set<JourSemaine> deliveryDays = new HashSet<>(Arrays.asList(depotToEdit.jourLivraison));
+
+		for (int i = 0; i < 12; i++) {
+			LocalDate date = LocalDate.of(year, i + 1, 1);
+			int j = 0;
+
+			while (date.getMonthValue() == i + 1) {
+				if (deliveryDays.contains(JourSemaine.dayOfWeek(date.getDayOfWeek().toString()))) {
+					// format : Semaine :<week> \n <DayOfWeek> \n <day>
+					data[j][i] = "<html>Semaine " + date.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR) + "<br>" +JourSemaine.dayOfWeek(date.getDayOfWeek().toString()) +
+									"<br>" + date.getDayOfMonth() + "</html>";
+					j++;
+				}
+				date = date.plusDays(1);
+			}
+		}
+		// reduce data size to fit the table
+		int lastRow = 0;
+		for (int i = 0; i < data.length; i++) {
+			if (data[i][0] == null) {
+				lastRow = i;
+				break;
+			}
+		}
+		Object[][] newData = new Object[lastRow][12];
+		for (int i = 0; i < lastRow; i++) {
+			System.arraycopy(data[i], 0, newData[i], 0, 12);
+		}
+		return newData;
 	}
 
 	private JButton getEditButton(Depot depotToEdit, DepotFormComponents depotFormComponents) {
@@ -274,7 +317,7 @@ public class DepotView extends BaseView<Depot> {
 		// livraison
 		ArrayList<JourSemaine> joursLivraisons = createDeliveryDaysPanel(panel, depotToEdit);
 		// add image chooser
-		AtomicReference<File> image = createImageChooserPanel(panel,depotToEdit);
+		AtomicReference<File> image = createImageChooserPanel(panel, depotToEdit);
 		return new DepotFormComponents(panel, addressChoice, referentChoice, fieldPanels, joursLivraisons, image);
 	}
 
@@ -308,7 +351,7 @@ public class DepotView extends BaseView<Depot> {
 	 * @param parentPanel The panel to which the image chooser is added.
 	 * @return An AtomicReference<File> containing the selected image file.
 	 */
-	private AtomicReference<File> createImageChooserPanel(JPanel parentPanel,Depot d) {
+	private AtomicReference<File> createImageChooserPanel(JPanel parentPanel, Depot d) {
 		JPanel imagePanel = new JPanel();
 		imagePanel.setLayout(new GridLayout(1, 2));
 		imagePanel.add(new Label("Image"));
@@ -442,6 +485,7 @@ public class DepotView extends BaseView<Depot> {
 			}
 		return adresseChoice;
 	}
+
 	/**
 	 * Creates and returns a panel for a field.
 	 *
