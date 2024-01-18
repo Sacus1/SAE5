@@ -10,7 +10,6 @@ router.route("/").post(async (req, res) => {
   const queryUserId = "SELECT idClient FROM `Client` WHERE token = ?";
   connection.execute(queryUserId, [token], async (err, userRows) => {
     if (err) {
-      console.log(err);
       return res.status(500).send(err);
     }
 
@@ -29,22 +28,12 @@ router.route("/").post(async (req, res) => {
     // Create a new adhesion
     const insertQuery =
       "INSERT INTO `Adhesion` (Client_idClient, TypeAdhesion_idTypeAdhesion, Jardin_idJardin, debut, fin, enCours) VALUES (?, ?, ?, ?, ?, ?)";
-    console.log("Query:", insertQuery);
-    console.log("Values:", [
-      userId,
-      typeAdhesionId,
-      jardinId,
-      startDate,
-      endDate,
-      true,
-    ]);
 
     connection.execute(
       insertQuery,
       [userId, typeAdhesionId, jardinId, startDate, endDate, true],
       async (err, result) => {
         if (err) {
-          console.log(err);
           return res.status(500).send(err);
         }
 
@@ -59,13 +48,10 @@ router.route("/").get(async (req, res) => {
   const token =
     req.headers.authorization && req.headers.authorization.split(" ")[1];
 
-  console.log("Token:", token);
-
   // Utilize the token to retrieve the client's ID
   const queryUserId = "SELECT idClient FROM `Client` WHERE token = ?";
   connection.execute(queryUserId, [token], async (err, userRows) => {
     if (err) {
-      console.log(err);
       return res.status(500).send(err);
     }
 
@@ -92,15 +78,12 @@ router.route("/").get(async (req, res) => {
 
     connection.execute(adhesionsQuery, [userId], async (err, adhesionRows) => {
       if (err) {
-        console.log(err);
         return res.status(500).send(err);
       }
-      console.log(adhesionRows[0].debut);
-      console.log(DateTime.fromJSDate(adhesionRows[0].debut));
       // Transform adhesionRows into the desired format
       const formattedAdhesions = adhesionRows.map((adhesion) => {
         return {
-          id: adhesion.id, // Replace with the actual field name from your database
+          id: adhesion.idAdhesion, // Replace with the actual field name from your database
           jardin: adhesion.nomJardin,
           type: adhesion.nomTypeAdhesion,
           prix: adhesion.tarif,
@@ -114,10 +97,52 @@ router.route("/").get(async (req, res) => {
         };
       });
 
-      console.log(formattedAdhesions);
       // Send the formatted adhesions data back to the client
       res.status(200).json(formattedAdhesions);
     });
+  });
+});
+
+router.route("/:adhesionId").delete(async (req, res) => {
+  const token =
+    req.headers.authorization && req.headers.authorization.split(" ")[1];
+
+  // Utilize the token to retrieve the client's ID
+  const queryUserId = "SELECT idClient FROM `Client` WHERE token = ?";
+  connection.execute(queryUserId, [token], async (err, userRows) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+
+    if (userRows.length === 0) {
+      return res.status(401).send("Invalid token");
+    }
+
+    const userId = userRows[0].idClient;
+
+    // Extract adhesion ID from the request parameters
+    const adhesionId = req.params.adhesionId;
+
+    // Query to delete the adhesion with the specified ID
+    const deleteQuery =
+      "DELETE FROM `Adhesion` WHERE idAdhesion = ? AND Client_idClient = ?";
+    connection.execute(
+      deleteQuery,
+      [adhesionId, userId],
+      async (err, result) => {
+        if (err) {
+          return res.status(500).send(err);
+        }
+
+        if (result.affectedRows === 0) {
+          // No adhesion with the specified ID found for the current user
+          return res.status(404).send("Adhesion not found");
+        }
+
+        // Adhesion deleted successfully
+        res.status(200).send("Adhesion deleted successfully");
+      }
+    );
   });
 });
 

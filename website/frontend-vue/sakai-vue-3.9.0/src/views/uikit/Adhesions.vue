@@ -1,30 +1,18 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import {fetchAdhesionData} from '@/api/adhesionAPI';
+import {fetchAdhesionData, deleteAdhesionById} from '@/api/adhesionAPI';
 
 
-const adhesions = ref([{
-    id: 1,
-    jardin:"Nom du jardin",
-    type:"Type d'adhésion",
-    prix:"Prix",
-    debut:"Date de début",
-    fin:"Date de fin",
-    enCours:true
-},
-{
-    id: 2,
-    jardin:"Nom du jardin 2",
-    type:"Type d'adhésion 2",
-    prix:"Prix 2",
-    debut:"Date de début 2",
-    fin:"Date de fin 2",
-    enCours:false
-}]);
+const adhesions = ref([]);
 
 const annulerAdhesion = async(id) =>{
-    console.log(id);
+    deleteAdhesionById(id);
+
+    const index = adhesions.value.findIndex((adhesion) => adhesion.id === id);
+    if (index !== -1) {
+        adhesions.value.splice(index, 1);
+    }
 }
 
 onMounted(async () => {

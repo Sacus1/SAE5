@@ -47,3 +47,17 @@ export const fetchAdhesionData = async () => {
         throw error;
     }
 };
+
+export const deleteAdhesionById = async (adhesionId) => {
+    try {
+        const response = await axios.delete(`${BASE_URL}/adhesions/${adhesionId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error(`Failed to delete adhesion with ID ${adhesionId}:`, error);
+        throw error;
+    }
+};
