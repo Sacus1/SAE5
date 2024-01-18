@@ -1,0 +1,21 @@
+version: '1.0'
+services:
+  db:
+    build: ./db
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+  app:
+    build: ./backoffice
+    environment:
+      DATABASE_PASSWORD: password
+    depends_on:
+      - db
+    links:
+      - db
+
+volumes:
+    db_data:
