@@ -4,6 +4,44 @@ const { v4: uuidv4 } = require("uuid");
 const connection = require("../database/database");
 const argon2 = require("argon2");
 
+/**
+ * @swagger
+ * /login:
+ *   post:
+ *     summary: Logs in a user
+ *     description: This endpoint logs in a user by verifying the provided email and password. If the login is successful, a UUID token is generated and sent in the response.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - mail
+ *               - password
+ *             properties:
+ *               mail:
+ *                 type: string
+ *                 description: The user's email
+ *               password:
+ *                 type: string
+ *                 description: The user's password
+ *     responses:
+ *       200:
+ *         description: Login successful. Returns a token.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   description: The token generated for the session
+ *       401:
+ *         description: Invalid email or password
+ *       500:
+ *         description: Internal Server Error
+ */
 router.route("/").post(async (req, res) => {
   const { mail, password } = req.body;
 

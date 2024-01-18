@@ -7,6 +7,26 @@ const fs = require("fs");
 // Set up multer to handle file uploads
 const upload = multer({ dest: "uploads/" });
 
+/**
+ * @swagger
+ * /:
+ *   put:
+ *     summary: Endpoint to update profile image
+ *     consumes:
+ *       - multipart/form-data
+ *     parameters:
+ *       - in: formData
+ *         name: image
+ *         type: file
+ *         description: The file to upload.
+ *     responses:
+ *       200:
+ *         description: Profile image updated successfully
+ *       401:
+ *         description: Invalid token
+ *       500:
+ *         description: Failed to validate token or Failed to update profile image
+ */
 // Endpoint to update profile image
 router.put("/", upload.single("image"), (req, res) => {
   const body = req.body.data;
@@ -55,6 +75,28 @@ router.put("/", upload.single("image"), (req, res) => {
   });
 });
 
+/**
+ * @swagger
+ * /:
+ *   post:
+ *     summary: Endpoint to retrieve profile image
+ *     parameters:
+ *       - in: body
+ *         name: token
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Token of the client
+ *     responses:
+ *       200:
+ *         description: Profile image retrieved successfully
+ *       401:
+ *         description: Invalid token
+ *       404:
+ *         description: Profile image not found or Client not found
+ *       500:
+ *         description: Failed to validate token or Failed to get profile image
+ */
 // Endpoint to retrieve profile image
 router.post("/", (req, res) => {
   const token = req.body.token;

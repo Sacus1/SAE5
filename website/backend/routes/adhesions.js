@@ -1,3 +1,79 @@
+/**
+ * @swagger
+ *
+ * /adhesions:
+ *   post:
+ *     description: Creates a new adhesion
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: token
+ *         description: Client's token.
+ *         in: formData
+ *         required: true
+ *         type: string
+ *       - name: typeAdhesionId
+ *         description: Type of adhesion.
+ *         in: formData
+ *         required: true
+ *         type: string
+ *       - name: jardinId
+ *         description: Garden's ID.
+ *         in: formData
+ *         required: true
+ *         type: string
+ *     responses:
+ *       201:
+ *         description: Adhesion added successfully
+ *       500:
+ *         description: Server error
+ *       401:
+ *         description: Invalid token
+ *
+ *   get:
+ *     description: Retrieves user's adhesions with garden, type, and tarif information
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: token
+ *         description: Client's token.
+ *         in: header
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Successful operation
+ *       500:
+ *         description: Server error
+ *       401:
+ *         description: Invalid token
+ *
+ * /adhesions/{adhesionId}:
+ *   delete:
+ *     description: Deletes the adhesion with the specified ID
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: token
+ *         description: Client's token.
+ *         in: header
+ *         required: true
+ *         type: string
+ *       - name: adhesionId
+ *         description: Adhesion's ID.
+ *         in: path
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Adhesion deleted successfully
+ *       500:
+ *         description: Server error
+ *       401:
+ *         description: Invalid token
+ *       404:
+ *         description: Adhesion not found
+ */
 const express = require("express");
 const router = express.Router();
 const connection = require("../database/database");

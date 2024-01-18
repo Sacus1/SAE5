@@ -1,7 +1,7 @@
 version: '1.0'
 services:
   db:
-    build: ./database
+    build: ../database
     environment:
       MYSQL_ROOT_PASSWORD: password
     ports:
