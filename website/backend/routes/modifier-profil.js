@@ -5,7 +5,7 @@ const { DateTime } = require("luxon");
 
 /**
  * @swagger
- * /:
+ * /modifier-profil
  *   post:
  *     summary: Fetch client data using a token
  *     description: This route fetches client data using a token. It first checks if the token is valid. If it is, it fetches the client data from the database and sends it as a response.
@@ -80,7 +80,7 @@ router.route("/").post((req, res) => {
 
 /**
  * @swagger
- * /:
+ * /modifier-profil:
  *   put:
  *     summary: Update client data using a token
  *     description: This route updates client data using a token. It first checks if the token is valid. If it is, it updates the client data in the database and sends a success message as a response.

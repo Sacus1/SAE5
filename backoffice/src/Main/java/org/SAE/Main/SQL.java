@@ -35,8 +35,20 @@ public class SQL {
 			con = DriverManager.getConnection(url, user, password);
 		} catch (SQLException e) {
 			System.err.println("Main.SQL Exception : " + e.getMessage());
-			// close the application
-			System.exit(1);
+			// try to connect again after 5 seconds and close the application if it fails
+			new Thread(() -> {
+				try {
+					Thread.sleep(5000);
+				} catch (InterruptedException interruptedException) {
+					interruptedException.printStackTrace();
+				}
+				try {
+					con = DriverManager.getConnection(url, user, password);
+				} catch (SQLException sqlException) {
+					System.err.println("Main.SQL Exception : " + sqlException.getMessage());
+					System.exit(1);
+				}
+			}).start();
 		}
 	}
 

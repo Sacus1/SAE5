@@ -31,6 +31,10 @@ public class ClientView extends BaseView<Client> {
 
 	@Override
 	protected JPanel createFormPanel() {
+		if (Adresse.adresses.isEmpty()) {
+			org.SAE.Main.Logger.error("Veuillez créer une adresse avant de créer un client");
+			return null;
+		}
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(0, 2));
 		JComboBox<Adresse> adresseComboBox = new JComboBox<>();

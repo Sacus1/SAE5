@@ -9,7 +9,7 @@ const upload = multer({ dest: "uploads/" });
 
 /**
  * @swagger
- * /:
+ * /profil:
  *   put:
  *     summary: Endpoint to update profile image
  *     consumes:
@@ -77,7 +77,7 @@ router.put("/", upload.single("image"), (req, res) => {
 
 /**
  * @swagger
- * /:
+ * /profil:
  *   post:
  *     summary: Endpoint to retrieve profile image
  *     parameters:

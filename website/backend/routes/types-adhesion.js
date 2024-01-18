@@ -1,6 +1,6 @@
 /**
  * @swagger
- * /register:
+ * /types-adhesion:
  *   post:
  *     summary: Register a new client
  *     description: This endpoint allows a new client to register. It first checks if the email is already registered. If not, it proceeds with the registration process.
