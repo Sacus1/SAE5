@@ -18,19 +18,19 @@ app.use(express.static("public"));
 const swaggerOptions = {
   swaggerDefinition: {
     info: {
-      title: 'My API',
-      version: '1.0.0',
-      description: 'API documentation',
+      title: "My API",
+      version: "1.0.0",
+      description: "API documentation",
     },
   },
-  apis: ['./routes/*.js'], // Path to the API docs
+  apis: ["./routes/*.js"], // Path to the API docs
 };
 
 // Initialize swagger-jsdoc
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
 
 // Use swagger-ui-express for your app's documentation endpoint
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 const loginRouter = require("./routes/login");
 
@@ -59,6 +59,14 @@ app.use("/types-adhesion", typesAdhesionRouter);
 const adhesionsRouter = require("./routes/adhesions");
 
 app.use("/adhesions", adhesionsRouter);
+
+const paniersRouter = require("./routes/paniers");
+
+app.use("/paniers", paniersRouter);
+
+app.use(express.json({ limit: "1024Mb" }));
+app.use(express.urlencoded({ extended: true, limit: "1024Mb" }));
+app.use(express.raw({ limit: "1024Mb" }));
 
 const PORT = 3001;
 app.listen(PORT, () => {
