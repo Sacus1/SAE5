@@ -1,5 +1,5 @@
 import { ref } from 'vue';
-import { loginRequest, registerRequest, getClientData } from '@/api/authAPI';
+import { loginRequest, registerRequest, getClientData, updateClientDataRequest } from '@/api/authAPI';
 
 const token = ref(localStorage.getItem('token') || null);
 
@@ -60,7 +60,7 @@ export const useAuth = () => {
 
     const fetchClientData = async () => {
         try {
-            const clientData = await getClientData();
+            const clientData = await getClientData(token.value);
             // Use the clientData to set placeholders or perform other actions
             return clientData;
         } catch (error) {
@@ -69,7 +69,18 @@ export const useAuth = () => {
         }
     };
 
-    const getAccessToken = () => token.value;
+    const updateClientData = async (clientData) => {
+        try {
+            // Assuming there is an API endpoint for updating client data
+            const response = await updateClientDataRequest(clientData, token.value);
 
-    return { login, logout, getAccessToken, register, fetchClientData };
+            // You might want to handle the response or return a specific value.
+            return response;
+        } catch (error) {
+            console.error('Failed to update client data:', error);
+            throw error;
+        }
+    };
+
+    return { login, logout, register, fetchClientData, updateClientData };
 };

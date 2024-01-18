@@ -22,9 +22,13 @@ const registerRouter = require("./routes/register");
 
 app.use("/register", registerRouter);
 
-const profileRouter = require("./routes/profil");
+const profilRouter = require("./routes/profil");
 
-app.use("/profil", profileRouter);
+app.use("/profil", profilRouter);
+
+const modifierProfilRouter = require("./routes/modifier-profil");
+
+app.use("/modifier-profil", modifierProfilRouter);
 
 const PORT = 3001;
 app.listen(PORT, () => {

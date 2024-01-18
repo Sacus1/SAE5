@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const multer = require("multer"); // Import multer for handling file uploads
+const multer = require("multer");
 const connection = require("../database/database");
 const fs = require("fs");
 
@@ -13,63 +13,87 @@ router.put("/", upload.single("image"), (req, res) => {
   const token = JSON.parse(body).token;
   const fileData = req.file;
 
-  // Read the file content
-  const fileContent = fs.readFileSync(fileData.path);
-  const blob = new Blob([fileContent], { type: "image/jpeg" }); // Adjust the type based on your image format
+  // Check if the token is valid before proceeding
+  const checkTokenQuery = "SELECT * FROM `Client` WHERE `token` = ?";
+  connection.execute(checkTokenQuery, [token], (err, rows) => {
+    if (err) {
+      res.status(500).send("Failed to validate token");
+      return;
+    }
 
-  // Convert the Blob to a Buffer
-  blob
-    .arrayBuffer()
-    .then((arrayBuffer) => {
-      const buffer = Buffer.from(arrayBuffer);
+    if (rows.length === 0) {
+      // Invalid token
+      res.status(401).send("Invalid token");
+      return;
+    }
 
-      // Implement your logic to update the profile image in the database
-      const query = "UPDATE `Client` SET imageProfil = ? WHERE token = ?";
+    // Token is valid, continue with image update logic
+    const fileContent = fs.readFileSync(fileData.path);
+    const blob = new Blob([fileContent], { type: "image/jpeg" });
 
-      connection.execute(query, [buffer, token], (err) => {
-        if (err) {
-          console.error("Failed to update profile image:", err);
-          res.status(500).send("Failed to update profile image");
-        } else {
-          // Remove the file after reading its content
+    blob
+      .arrayBuffer()
+      .then((arrayBuffer) => {
+        const buffer = Buffer.from(arrayBuffer);
+
+        const query = "UPDATE `Client` SET imageProfil = ? WHERE token = ?";
+
+        connection.execute(query, [buffer, token], (err) => {
+          if (err) {
+            console.error("Failed to update profile image:", err);
+            res.status(500).send("Failed to update profile image");
+          } else {
+            res.status(200).send("Profile image updated successfully");
+          }
           fs.unlinkSync(fileData.path);
-
-          res.status(200).send("Profile image updated successfully");
-        }
+        });
+      })
+      .catch((error) => {
+        console.error("Error converting Blob to Buffer:", error);
+        res.status(500).send("Failed to update profile image");
       });
-    })
-    .catch((error) => {
-      console.error("Error converting Blob to Buffer:", error);
-      res.status(500).send("Failed to update profile image");
-    });
+  });
 });
-
-// Add closing brace for router.put here
 
 // Endpoint to retrieve profile image
 router.post("/", (req, res) => {
   const token = req.body.token;
 
-  // Implement your logic to retrieve the profile image from the database
-  const selectQuery = "SELECT imageProfil FROM `Client` WHERE token = ?";
-
-  connection.query(selectQuery, [token], (err, results) => {
+  // Check if the token is valid before proceeding
+  const checkTokenQuery = "SELECT * FROM `Client` WHERE `token` = ?";
+  connection.execute(checkTokenQuery, [token], (err, rows) => {
     if (err) {
-      console.error("Failed to get profile image:", err);
-      res.status(500).send("Failed to get profile image");
-    } else {
-      if (results.length > 0) {
-        const imageContent = results[0].imageProfil;
-
-        // Set the appropriate Content-Type header based on your image type
-        res.setHeader("Content-Type", "image/jpeg"); // Adjust based on your image type
-
-        // Send the profile image to the frontend
-        res.status(200).send(imageContent);
-      } else {
-        res.status(404).send("Profile image not found");
-      }
+      res.status(500).send("Failed to validate token");
+      return;
     }
+
+    if (rows.length === 0) {
+      // Invalid token
+      res.status(401).send("Invalid token");
+      return;
+    }
+
+    // Token is valid, continue with image retrieval logic
+    const selectQuery = "SELECT imageProfil FROM `Client` WHERE token = ?";
+
+    connection.query(selectQuery, [token], (err, results) => {
+      if (err) {
+        console.error("Failed to get profile image:", err);
+        res.status(500).send("Failed to get profile image");
+      } else {
+        if (results.length > 0) {
+          const imageContent = results[0].imageProfil;
+          if (!imageContent) {
+            res.status(404).send("Profile image not found");
+          } else {
+            res.setHeader("Content-Type", "image/jpeg");
+            res.status(200).send(imageContent);
+          }
+        } else {
+          res.status(404).send("Client not found");
+        }
+      }
+    });
   });
 });
 

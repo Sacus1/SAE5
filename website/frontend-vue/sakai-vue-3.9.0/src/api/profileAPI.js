@@ -44,6 +44,3 @@ export const getProfileImage = async (token) => {
         }
     }
 };
-
-// Add other profile-related API functions if needed
-// For example, fetching user profile data, updating other profile information, etc.

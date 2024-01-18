@@ -36,12 +36,22 @@ export const registerRequest = async ({ email, password, nom, prenom, telephone,
     }
 };
 
-export const getClientData = async () => {
+export const getClientData = async (token) => {
     try {
-        const response = await axios.get(`${BASE_URL}/clientData`);
+        const response = await axios.post(`${BASE_URL}/modifier-profil`, { token });
         return response.data;
     } catch (error) {
         console.error('Failed to fetch client data:', error);
+        throw error;
+    }
+};
+
+export const updateClientDataRequest = async (clientData, token) => {
+    try {
+        const response = await axios.put(`${BASE_URL}/modifier-profil`, { clientData, token });
+        return response;
+    } catch (error) {
+        console.error('Update client data request failed:', error);
         throw error;
     }
 };
