@@ -1,3 +1,4 @@
 .env
 commit.sh
-*/.idea/*
+**/.idea/**
+*.csv
