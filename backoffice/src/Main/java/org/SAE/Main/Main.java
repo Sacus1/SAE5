@@ -39,6 +39,7 @@ public class Main {
 		String username = System.getenv("DATABASE_USERNAME");
 		if (username == null) username = "root";
 		String password = System.getenv("DATABASE_PASSWORD");
+		if (password == null) password = "password";
 		sql = new SQL(url, username, password);
 		// load all data from the database
 		frame = new JFrame("Gestion");
