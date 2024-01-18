@@ -12,7 +12,21 @@ const model = ref([
         label: 'Compte',
         items: [
             { label: 'Profil', icon: 'pi pi-fw pi-id-card', to: '/profil' },
-            { label: 'Modifier', icon: 'pi pi-fw pi-pencil', to: '/modifier-profil' },
+            { label: 'Modifier', icon: 'pi pi-fw pi-user-edit', to: '/modifier-profil' },
+        ]
+    },
+    {
+        label: 'Jardins',
+        items: [
+            { label: 'Nouvelle Adhésion', icon: 'pi pi-fw pi-plus', to: '/nouvelle-adhesion' },
+            { label: 'Adhésions', icon: 'pi pi-fw pi-credit-card', to: '/adhesions' },
+        ]
+    },
+    {
+        label: 'Abonnements',
+        items: [
+            { label: 'Paniers', icon: 'pi pi-fw pi-shopping-bag', to: '/paniers' },
+            { label: 'Vos Abonnements', icon: 'pi pi-fw pi-tags', to: '/abonnements' },
         ]
     }
 ]);

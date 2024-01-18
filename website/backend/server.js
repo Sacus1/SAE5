@@ -30,6 +30,18 @@ const modifierProfilRouter = require("./routes/modifier-profil");
 
 app.use("/modifier-profil", modifierProfilRouter);
 
+const jardinsRouter = require("./routes/jardins");
+
+app.use("/jardins", jardinsRouter);
+
+const typesAdhesionRouter = require("./routes/types-adhesion");
+
+app.use("/types-adhesion", typesAdhesionRouter);
+
+const adhesionsRouter = require("./routes/adhesions");
+
+app.use("/adhesions", adhesionsRouter);
+
 const PORT = 3001;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

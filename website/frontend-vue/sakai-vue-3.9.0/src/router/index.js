@@ -29,7 +29,35 @@ const router = createRouter({
                 },
 
                 {
-                    path: '/pages/empty',
+                    path: '/nouvelle-adhesion',
+                    name: 'nouvelle-adhesion',
+                    component: () => import('@/views/uikit/NouvelleAdhesion.vue'),
+                    meta: { requiresAuth: true }
+                },
+
+                {
+                    path: '/adhesions',
+                    name: 'adhesions',
+                    component: () => import('@/views/uikit/Adhesions.vue'),
+                    meta: { requiresAuth: true }
+                },
+
+                {
+                    path: '/paniers',
+                    name: 'paniers',
+                    component: () => import('@/views/uikit/Paniers.vue'),
+                    meta: { requiresAuth: true }
+                },
+
+                {
+                    path: '/abonnements',
+                    name: 'abonnements',
+                    component: () => import('@/views/uikit/Abonnements.vue'),
+                    meta: { requiresAuth: true }
+                },
+
+                {
+                    path: '/empty',
                     name: 'empty',
                     component: () => import('@/views/pages/Empty.vue')
                 }
