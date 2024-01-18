@@ -1,3 +1,40 @@
+/**
+ * @swagger
+ * /jardins:
+ *   post:
+ *     summary: Retrieve a list of gardens that the client has not joined
+ *     description: This endpoint retrieves a list of gardens that the client, identified by a token sent in the request body, has not joined.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               token:
+ *                 type: string
+ *                 description: The token of the client.
+ *     responses:
+ *       200:
+ *         description: Returns a JSON array of garden objects. Each garden object has a "name" and "value" property.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   name:
+ *                     type: string
+ *                     description: The commercial name of the garden.
+ *                   value:
+ *                     type: integer
+ *                     description: The ID of the garden.
+ *       401:
+ *         description: Invalid token.
+ *       500:
+ *         description: An error occurred.
+ */
 const express = require("express");
 const router = express.Router();
 const connection = require("../database/database");
