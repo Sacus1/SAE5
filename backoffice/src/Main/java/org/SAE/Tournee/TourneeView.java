@@ -23,9 +23,9 @@ public class TourneeView extends BaseView<Tournee> {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(1, 2));
 		JLabel label = new JLabel(t.toString());
+		label.setHorizontalAlignment(JLabel.CENTER);
 		JButton editButton = new JButton("Détailler");
 		editButton.addActionListener(e -> {
-			displayView(true);
 			clear();
 			mainPanel.add(createDetailPanel(t));
 			refresh();
@@ -57,16 +57,16 @@ public class TourneeView extends BaseView<Tournee> {
 
 	@Override
 	protected JPanel createFormPanel() {
-		return getPanel(null);
+		return getPanel(null,false);
 	}
 
 
 	@Override
 	protected JPanel createDetailPanel(Tournee tournee) {
-		return getPanel(tournee);
+		return getPanel(tournee,true);
 	}
 
-	private JPanel getPanel(Tournee tournee) {
+	private JPanel getPanel(Tournee tournee,boolean isDetail) {
 		JPanel panel = new JPanel();
 		JTextField nomField = new JTextField();
 		panel.setLayout(new GridLayout(0, 2));
@@ -90,7 +90,7 @@ public class TourneeView extends BaseView<Tournee> {
 		panel.add(new JLabel("Est livré le matin"));
 		panel.add(estLivreMatinCheckBox);
 		JButton submitButton;
-		if (tournee != null){
+		if (isDetail){
 			jourLivraisonComboBox.setSelectedItem(tournee.jourLivraison);
 			jourPreparationComboBox.setSelectedItem(tournee.jourPreparation);
 			estLivreMatinCheckBox.setSelected(tournee.estLivreMatin);

@@ -5,13 +5,13 @@ import javax.swing.*;
 public class Calendrier extends javax.swing.JPanel {
 	public Object[][] data;
 	public String[] columnNames = new String[12];
-	int frequency = 15;
 	int year = 2023;
 	String depotName;
 
-	public Calendrier(Object[][] data, String depotName) {
+	public Calendrier(Object[][] data, String depotName,int year) {
 		this.data = data;
 		this.depotName = depotName;
+		this.year = year;
 		columnNames[0] = "Janvier";
 		columnNames[1] = "Février";
 		columnNames[2] = "Mars";
@@ -32,7 +32,7 @@ public class Calendrier extends javax.swing.JPanel {
 
 	private void initComponents() {
 		setLayout(new java.awt.BorderLayout());
-		JLabel label = new JLabel("Planning + " + year + " de livraison des paniers tous les " + frequency + " jours au " + depotName);
+		JLabel label = new JLabel("Planning + " + year + " de livraison des paniers du " + depotName);
 		label.setHorizontalAlignment(SwingConstants.CENTER);
 		label.setPreferredSize(new java.awt.Dimension(200, 100));
 		add(label, java.awt.BorderLayout.NORTH);

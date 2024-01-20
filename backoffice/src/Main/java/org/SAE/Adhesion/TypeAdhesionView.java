@@ -22,6 +22,7 @@ public class TypeAdhesionView extends BaseView<TypeAdhesion> {
 		panel.setLayout(new GridLayout(1, 2));
 		JLabel label = new JLabel("<html>" + t.toString().replace("<", "&lt;").replace(">", "&gt;").replace("\n"
 						, "<br/>") + "</html>");
+		label.setHorizontalAlignment(JLabel.CENTER);
 		JButton deleteButton = new JButton("Supprimer");
 		deleteButton.addActionListener(e -> {
 			t.delete();

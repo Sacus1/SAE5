@@ -62,7 +62,9 @@ public class DepotView extends BaseView<Depot> {
 	protected JPanel createListPanel(Depot t) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(1, 4));
-		panel.add(new Label(t.toString()));
+		JLabel label = new JLabel(t.toString());
+		panel.add(label);
+		label.setHorizontalAlignment(JLabel.CENTER);
 		JButton editButton = new JButton("Détailler");
 		editButton.addActionListener(e -> {
 			displayView(true);
@@ -149,7 +151,7 @@ public class DepotView extends BaseView<Depot> {
 		DepotFormComponents depotFormComponents = prepareDepotPanelData(depotToEdit);
 		// add fields to the panel
 		populateFields(depotToEdit, depotFormComponents.fieldPanels, depotFormComponents.panel);
-		depotFormComponents.panel.setLayout(new GridLayout(depotFormComponents.fieldPanels.length / 2 + 2, 2));
+		depotFormComponents.panel.setLayout(new GridLayout(depotFormComponents.fieldPanels.length / 2 + 4, 2));
 		// Periode non disponible
 		depotFormComponents.panel.add(new Label("Periode non disponible"));
 		// liste des periodes non livrables
@@ -188,8 +190,9 @@ public class DepotView extends BaseView<Depot> {
 		calendarButton.addActionListener(e -> {
 			displayView(true);
 			clear();
-			Object[][] data = fillData(depotToEdit);
-			mainPanel.add(new Calendrier(data, depotToEdit.nom));
+			int year = new Date(System.currentTimeMillis()).getYear() + 1900;
+			Object[][] data = fillData(depotToEdit, year);
+			mainPanel.add(new Calendrier(data, depotToEdit.nom, year));
 			refresh();
 		});
 		depotFormComponents.panel.add(calendarButton);
@@ -198,11 +201,9 @@ public class DepotView extends BaseView<Depot> {
 		return depotFormComponents.panel();
 	}
 
-	private Object[][]  fillData(Depot depotToEdit) {
+	private Object[][]  fillData(Depot depotToEdit,int year) {
 		Object[][] data = new Object[31][12];
-		int year = new Date(System.currentTimeMillis()).getYear() + 1900;
 		Set<JourSemaine> deliveryDays = new HashSet<>(Arrays.asList(depotToEdit.jourLivraison));
-
 		for (int i = 0; i < 12; i++) {
 			LocalDate date = LocalDate.of(year, i + 1, 1);
 			int j = 0;

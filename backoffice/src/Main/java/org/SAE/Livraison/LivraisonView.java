@@ -25,7 +25,9 @@ public class LivraisonView extends BaseView<Livraison> {
 		panelLabel.setBorder(BorderFactory.createLineBorder(Color.black));
 		JPanel panelButton = new JPanel();
 		panelButton.setBorder(BorderFactory.createLineBorder(Color.black));
-		panelLabel.add(new JLabel("<html>"+String.valueOf(l).replace("\n", "<br>")+"</html>", SwingConstants.CENTER));
+		JLabel label = new JLabel("<html>" + String.valueOf(l).replace("\n", "<br>") + "</html>", SwingConstants.CENTER);
+		panelLabel.add(label);
+		label.setHorizontalAlignment(JLabel.CENTER);
 		// buttons to change etat
 		JButton button = new JButton("En cours");
 		button.addActionListener(e -> {

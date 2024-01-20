@@ -229,7 +229,7 @@ public class SQL {
 	}
 	public int getNextId(String tableName) {
 		try {
-			ResultSet res = selectRaw("SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'SAE' AND TABLE_NAME = '" + tableName + "';");
+			ResultSet res = selectRaw("SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'SAE' AND TABLE_NAME = '" + tableName + "';");;
 			if (res.next()) return res.getInt("AUTO_INCREMENT");
 		} catch (SQLException e) {
 			System.err.println("Main.SQL Exception : " + e.getMessage());

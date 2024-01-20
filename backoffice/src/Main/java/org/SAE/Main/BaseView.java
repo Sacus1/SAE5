@@ -128,6 +128,8 @@ public abstract class BaseView<T extends Base> extends JPanel {
 		panel.setLayout(new GridLayout(1, 2));
 		JLabel label = new JLabel("<html>" + t.toString().replace("<", "&lt;").replace(">", "&gt;").replace("\n"
 						, "<br/>") + "</html>");
+		// center label
+		label.setHorizontalAlignment(JLabel.CENTER);
 		JButton editButton = new JButton("Détailler");
 		editButton.addActionListener(e -> {
 			displayView(true);
